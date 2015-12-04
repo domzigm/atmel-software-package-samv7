@@ -146,7 +146,7 @@ const CDCDSerialDriverConfigurationDescriptors configurationDescriptorsFS = {
 		CDCGenericDescriptor_INTERFACE,
 		CDCGenericDescriptor_CALLMANAGEMENT,
 		CDCCallManagementDescriptor_SELFCALLMANAGEMENT,
-		0 /* No associated data interface */
+		1 /* No associated data interface */
 	},
 	/* Class-specific abstract control management functional descriptor */
 	{
@@ -249,7 +249,7 @@ const CDCDSerialDriverConfigurationDescriptors otherSpeedDescriptorsFS = {
 		CDCGenericDescriptor_INTERFACE,
 		CDCGenericDescriptor_CALLMANAGEMENT,
 		CDCCallManagementDescriptor_SELFCALLMANAGEMENT,
-		0 /* No associated data interface */
+		1 /* No associated data interface */
 	},
 	/* Class-specific abstract control management functional descriptor */
 	{
@@ -352,7 +352,7 @@ const CDCDSerialDriverConfigurationDescriptors configurationDescriptorsHS = {
 		CDCGenericDescriptor_INTERFACE,
 		CDCGenericDescriptor_CALLMANAGEMENT,
 		CDCCallManagementDescriptor_SELFCALLMANAGEMENT,
-		0 /* No associated data interface */
+		1 /* No associated data interface */
 	},
 	/* Class-specific abstract control management functional descriptor */
 	{
@@ -455,7 +455,7 @@ const CDCDSerialDriverConfigurationDescriptors otherSpeedDescriptorsHS = {
 		CDCGenericDescriptor_INTERFACE,
 		CDCGenericDescriptor_CALLMANAGEMENT,
 		CDCCallManagementDescriptor_SELFCALLMANAGEMENT,
-		0 /* No associated data interface */
+		1 /* No associated data interface */
 	},
 	/* Class-specific abstract control management functional descriptor */
 	{
