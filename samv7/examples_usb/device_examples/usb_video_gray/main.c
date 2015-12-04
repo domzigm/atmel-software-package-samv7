@@ -119,25 +119,14 @@
 
 #include "board.h"
 
-#include <USBDescriptors.h>
-#include <USBRequests.h>
-#include "USBD.h"
-#include <USBD_HAL.h>
-#include <USBDDriver.h>
-#include <VIDEODescriptors.h>
-#include <USBVideo.h>
+#include <UVCDriver.h>
+#include <UVCFunction.h>
 
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
 
 /*----------------------------------------------------------------------------
  *        Local definitions
  *----------------------------------------------------------------------------*/
 
-#define VIDEO_WIDTH     320
-#define VIDEO_HEIGHT    240
 
 /** TWI clock frequency in Hz. */
 #define TWCK            400000
@@ -152,14 +141,7 @@
 #define CAMX_MT9V022_SLAVE_ADDR  (0x30>>1)
 
 /** ISI DMA buffer base address */
-#define ISI_BASE    SDRAM_CS_ADDR
-
-/** ISI DMA buffer base address */
 #define USB_BASE    (ISI_BASE + VIDEO_WIDTH * VIDEO_HEIGHT)
-
-/** Frame Buffer Descriptors , it depends on size of external memory, more
-        is better */
-#define ISI_MAX_PREV_BUFFER    10
 
 /*----------------------------------------------------------------------------
  *          External variables
@@ -180,55 +162,15 @@ const Pin pPinsISI[] = {BOARD_ISI_PINS};
 /** TWI driver instance.*/
 static Twid twid;
 
-COMPILER_ALIGNED(32) ISI_FrameBufferDescriptors  preBufDescList;
+COMPILER_ALIGNED(32)
+static ISI_FrameBufferDescriptors  preBufDescList;
 
 COMPILER_ALIGNED(32)
 static uint8_t pXfrBuffers[FRAME_PACKET_SIZE_HS * (ISO_HIGH_BW_MODE + 1)][1];
 
-/** Xfr Maximum packet size */
-static uint32_t frmMaxPktSize = FRAME_PACKET_SIZE_HS * (ISO_HIGH_BW_MODE + 1);
-
-/** Alternate interfaces */
-static uint8_t bAlternateInterfaces[4];
-
-/** Probe & Commit Controls */
-
-static USBVideoProbeData viddProbeData = {
-	0, /* bmHint: All parameters fixed: sent by host */
-	0x01,   /* bFormatIndex: Format #1 */
-	0x01,   /* bFrameIndex: Frame #1 */
-	FRAME_INTERVALC(4), /* dwFrameInterval: in 100ns */
-	0, /* wKeyFrameRate: not used */
-	0, /* wPFrameRate: not used */
-	10000, /* wCompQuality: highest */
-	0, /* wCompWindowSize: ?K */
-	100, /* wDelay: Internal VS latency in ms */
-	FRAME_BUFFER_SIZEC(800, 600), /* dwMaxVideoFrameSize: in bytes */
-	FRAME_PACKET_SIZE_FS /* dwMaxPayloadTransferSize: in bytes */
-};
-
-/** Buffer for USB requests data */
-
-COMPILER_ALIGNED(32) static uint8_t pControlBuffer[32];
-
-/** Byte index in frame */
-static uint32_t frmI = 0;
-/** Frame count */
-static uint32_t frmC;
-
-/** Frame size: Width, Height */
-static uint32_t frmW = VIDEO_WIDTH, frmH = VIDEO_HEIGHT;
-
-/** USB transferring frame data */
-static uint8_t bFrameXfring = 0;
-
-/** USB Streaming interface ON */
-static volatile uint8_t bVideoON = 0;
 static volatile uint8_t bVidON = 0;
 static volatile uint8_t IsiPrevBuffIndex;
 static volatile uint8_t UsbPrevBuffIndex;
-static volatile uint32_t delay;
-static volatile uint32_t displayFrameAddr;
 
 /* Image size in preview mode */
 static uint32_t wImageWidth, wImageHeight;
@@ -292,7 +234,8 @@ void ISI_Handler(void)
 		ISI_EnableInterrupt(ISI_IER_PXFR_DONE);
 		IsiPrevBuffIndex++;
 
-		if (IsiPrevBuffIndex == ISI_MAX_PREV_BUFFER) IsiPrevBuffIndex = 0;
+		if (IsiPrevBuffIndex == ISI_MAX_PREV_BUFFER) 
+		IsiPrevBuffIndex = 0;
 	}
 }
 
@@ -366,210 +309,45 @@ static void _isiInit(void)
 							(uint32_t)ISI_BASE);
 }
 
-/*------------ USB Video Device Functions ------------*/
-/**
- * Max packet size calculation for High bandwidth transfer\n
- * - Mode 1: last packet is <epSize+1> ~ <epSize*2> bytes\n
- * - Mode 2: last packet is <epSize*2+1> ~ <epSize*3> bytes
- */
-static void VIDD_UpdateHighBWMaxPacketSize(void)
-{
-
-#if (ISO_HIGH_BW_MODE == 1 || ISO_HIGH_BW_MODE == 2)
-	uint32_t frmSiz = frmW * frmH * 2 + FRAME_PAYLOAD_HDR_SIZE;
-	uint32_t pktSiz = FRAME_PACKET_SIZE_HS * (ISO_HIGH_BW_MODE + 1);
-	uint32_t nbLast = frmSiz % pktSiz;
-
-	while (1) {
-		nbLast = frmSiz % pktSiz;
-
-		if (nbLast == 0 || nbLast > (FRAME_PACKET_SIZE_HS * ISO_HIGH_BW_MODE))
-			break;
-
-		pktSiz --;
-	}
-
-	frmMaxPktSize = pktSiz;
-#else
-	frmMaxPktSize = FRAME_PACKET_SIZE_HS; // EP size
-#endif
-}
-
-/**
- * Send USB control status.
- */
-static void VIDD_StatusStage(void)
-{
-	USBVideoProbeData *pProbe = (USBVideoProbeData *)pControlBuffer;
-	viddProbeData.bFormatIndex = pProbe->bFormatIndex;
-	viddProbeData.bFrameIndex  = pProbe->bFrameIndex;
-	viddProbeData.dwFrameInterval = pProbe->dwFrameInterval;
-
-	//viddProbeData.dwMaxVideoFrameSize = pProbe->dwMaxVideoFrameSize;
-	switch (pProbe->bFrameIndex) {
-	case 1: frmW = VIDCAMD_FW_1; frmH = VIDCAMD_FH_1; break;
-
-	case 2: frmW = VIDCAMD_FW_2; frmH = VIDCAMD_FH_2; break;
-
-	case 3: frmW = VIDCAMD_FW_3; frmH = VIDCAMD_FH_3; break;
-	}
-
-	VIDD_UpdateHighBWMaxPacketSize();
-	USBD_Write(0, 0, 0, 0, 0);
-}
-
-/**
- * Handle SetCUR request for USB Video Device.
- */
-static void VIDD_SetCUR(const USBGenericRequest *pReq)
-{
-	uint8_t bCS = USBVideoRequest_GetControlSelector(pReq);
-	uint32_t len;
-	TRACE_INFO_WP("SetCUR(%d) ", pReq->wLength);
-
-	if (pReq->wIndex == VIDCAMD_StreamInterfaceNum) {
-		TRACE_INFO_WP("VS ");
-
-		switch (bCS) {
-		case VS_PROBE_CONTROL:
-			TRACE_INFO_WP("PROBE ");
-			len = sizeof(USBVideoProbeData);
-
-			if (pReq->wLength < len) len = pReq->wLength;
-
-			USBD_Read(0, pControlBuffer, len, (TransferCallback)VIDD_StatusStage, 0);
-			break;
-
-		case VS_COMMIT_CONTROL:
-			TRACE_INFO_WP("COMMIT ");
-			len = sizeof(USBVideoProbeData);
-
-			if (pReq->wLength < len) len = pReq->wLength;
-
-			USBD_Read(0, pControlBuffer, len, (TransferCallback)VIDD_StatusStage, 0);
-
-		default: USBD_Stall(0);
-		}
-	} else if (pReq->wIndex == VIDCAMD_ControlInterfaceNum) {
-		TRACE_INFO_WP("VC ");
-	}
-	else USBD_Stall(0);
-}
-
-/**
- * Handle GetCUR request for USB Video Device.
- */
-static void VIDD_GetCUR(const USBGenericRequest *pReq)
-{
-	uint8_t bCS = USBVideoRequest_GetControlSelector(pReq);
-	uint32_t len;
-	TRACE_INFO_WP("GetCUR(%d) ", pReq->wLength);
-
-	if (pReq->wIndex == VIDCAMD_StreamInterfaceNum) {
-		TRACE_INFO_WP("VS ");
-
-		switch (bCS) {
-		case VS_PROBE_CONTROL:
-			TRACE_INFO_WP("PROBE ");
-			len = sizeof(USBVideoProbeData);
-
-			if (pReq->wLength < len) len = pReq->wLength;
-
-			USBD_Write(0, &viddProbeData, len, 0, 0);
-			break;
-
-		case VS_COMMIT_CONTROL: /* Returns current state of VS I/F */
-			TRACE_INFO_WP("COMMIT ");
-			USBD_Write(0, &bAlternateInterfaces[VIDCAMD_StreamInterfaceNum], 1, 0, 0);
-			break;
-
-		default: USBD_Stall(0);
-		}
-	} else if (pReq->wIndex == VIDCAMD_ControlInterfaceNum){
-      TRACE_INFO_WP("VC ");
-    }
-	else USBD_Stall(0);
-}
-
-/**
- * Handle GetDEF request for USB Video Device.
- */
-static void VIDD_GetDEF(const USBGenericRequest *pReq)
-{
-	printf("GetDEF(%x,%x,%d)\n\r", pReq->wIndex, pReq->wValue, pReq->wLength);
-}
-
-/**
- * Handle GetINFO request for USB Video Device.
- */
-static void VIDD_GetINFO(const USBGenericRequest *pReq)
-{
-	printf("GetINFO(%x,%x,%d)\n\r", pReq->wIndex, pReq->wValue, pReq->wLength);
-}
-
-/**
- * Handle GetMIN request for USB Video Device.
- */
-static void VIDD_GetMIN(const USBGenericRequest *pReq)
-{
-	printf("GetMin(%x,%x,%d)\n\r", pReq->wIndex, pReq->wValue, pReq->wLength);
-	VIDD_GetCUR(pReq);
-}
-
-/**
- * Handle GetMAX request for USB Video Device.
- */
-static void VIDD_GetMAX(const USBGenericRequest *pReq)
-{
-	printf("GetMax(%x,%x,%d)\n\r", pReq->wIndex, pReq->wValue, pReq->wLength);
-	VIDD_GetCUR(pReq);
-}
-
-/**
- * Handle GetRES request for USB Video Device.
- */
-static void VIDD_GetRES(const USBGenericRequest *pReq)
-{
-	printf("GetRES(%x,%x,%d) ", pReq->wIndex, pReq->wValue, pReq->wLength);
-}
-
 /**
  * Callback that invoked when USB packet is sent.
  */
 static void VIDD_PayloadSent(void *pArg, uint8_t bStat)
 {
-	uint32_t pktSize;
+	/*dummy*/
 	pArg = pArg; bStat = bStat;
+	uint32_t pktSize;
 	uint8_t *pX = pXfrBuffers[0];
-
-	uint32_t frmSize = FRAME_BUFFER_SIZEC(frmW, frmH);
-	uint8_t *pV = pVideoBufffers;
+	struct _uvc_driver *pUVC_driver = UVC_get_driver();
+	uint32_t frmSize = FRAME_BUFFER_SIZEC(pUVC_driver->frm_width, pUVC_driver->frm_height);
+	uint8_t *pV = (uint8_t*)pUVC_driver->buf;
 	USBVideoPayloadHeader *pHdr = (USBVideoPayloadHeader *)pX;
-	uint32_t maxPktSize = USBD_IsHighSpeed() ? (frmMaxPktSize)
+	uint32_t maxPktSize = USBD_IsHighSpeed() ? (UVC_get_frmMaxPktSize())
 						  : (FRAME_PACKET_SIZE_FS);
-	pktSize = frmSize - frmI;
+	pktSize = frmSize - pUVC_driver->frm_index;
 	pHdr->bHeaderLength     = FRAME_PAYLOAD_HDR_SIZE;
 	pHdr->bmHeaderInfo.B    = 0;
 
 	if (pktSize > maxPktSize - pHdr->bHeaderLength)
 		pktSize = maxPktSize - pHdr->bHeaderLength;
 
-	pV = &pV[frmI];
-	frmI += pktSize;
-	pHdr->bmHeaderInfo.bm.FID = (frmC & 1);
+	pV = &pV[pUVC_driver->frm_index];
+	pUVC_driver->frm_index += pktSize;
+	pHdr->bmHeaderInfo.bm.FID = (pUVC_driver->frm_count & 1);
 
-	if (frmI >= frmSize) {
-		frmC ++;
-		frmI = 0;
+	if (pUVC_driver->frm_index >= frmSize) {
+		pUVC_driver->frm_count ++;
+		pUVC_driver->frm_index = 0;
 		pHdr->bmHeaderInfo.bm.EoF = 1;
 
-		if (bFrameXfring)
-			bFrameXfring = 0;
+		if (pUVC_driver->is_frame_xfring) {
+			pUVC_driver->is_frame_xfring = 0;
+		}
 	} else {
 		pHdr->bmHeaderInfo.bm.EoF = 0;
 
-		if (bFrameXfring == 0) {
-			bFrameXfring = 1;
+		if (pUVC_driver->is_frame_xfring == 0) {
+			pUVC_driver->is_frame_xfring = 1;
 			pVideoBufffers = (uint8_t *)USB_BASE + UsbPrevBuffIndex *
 							 (VIDEO_WIDTH * VIDEO_HEIGHT * 2);
 			UsbPrevBuffIndex ++;
@@ -607,93 +385,6 @@ static void _ConfigureUotghs(void)
 	NVIC_EnableIRQ(USBHS_IRQn);
 }
 
-/**
- *  Invoked whenever a SETUP request is received from the host. Forwards the
- *  request to the standard handler.
- */
-void USBDCallbacks_RequestReceived(const USBGenericRequest *request)
-{
-	USBDDriver *pUsbd = USBD_GetDriver();
-
-	/* STD requests */
-	if (USBGenericRequest_GetType(request) != USBGenericRequest_CLASS) {
-		USBDDriver_RequestHandler(pUsbd, request);
-		return;
-	}
-
-	/* Video requests */
-	TRACE_INFO_WP("Vid ");
-
-	switch (USBGenericRequest_GetRequest(request)) {
-	case VIDGenericRequest_SETCUR:  VIDD_SetCUR (request);  break;
-
-	case VIDGenericRequest_GETCUR:  VIDD_GetCUR (request);  break;
-
-	case VIDGenericRequest_GETDEF:  VIDD_GetDEF (request);  break;
-
-	case VIDGenericRequest_GETINFO: VIDD_GetINFO(request);  break;
-
-	case VIDGenericRequest_GETMIN:  VIDD_GetMIN (request);  break;
-
-	case VIDGenericRequest_GETMAX:  VIDD_GetMAX (request);  break;
-
-	case VIDGenericRequest_GETRES:  VIDD_GetRES (request);  break;
-
-	default:
-		TRACE_WARNING("REQ: %x %x %x %x\n\r",
-					  USBGenericRequest_GetType(request),
-					  USBGenericRequest_GetRequest(request),
-					  USBGenericRequest_GetValue(request),
-					  USBGenericRequest_GetLength(request));
-		USBD_Stall(0);
-	}
-
-	TRACE_INFO_WP("\n\r");
-}
-
-/**
- * Invoked whenever the active setting of an interface is changed by the
- * host. Reset streaming interface.
- * \param interface Interface number.
- * \param setting Newly active setting.
- */
-void USBDDriverCallbacks_InterfaceSettingChanged(uint8_t interface,
-		uint8_t setting)
-{
-	if (interface != VIDCAMD_StreamInterfaceNum) return;
-
-	if (setting) {
-		bVideoON = 1;
-		frmC = 0;   frmI = 0;
-	} else {
-		bVideoON = 0;
-		bFrameXfring = 0;
-	}
-
-	memory_sync();
-	USBD_HAL_ResetEPs(1 << VIDCAMD_IsoInEndpointNum, USBRC_CANCELED, 1);
-}
-
-/**
- * \brief Generic ISI & OV sensor initialization
- */
-static void _PreviewMode(void)
-{
-	IsiPrevBuffIndex = 0;
-	UsbPrevBuffIndex = 0;
-	ISI_SetSensorSize(frmW / 2, frmH);
-	ISI_setPreviewSize(frmW / 2, frmH);
-	/* calculate scaler factor automatically. */
-	ISI_calcScalerFactor();
-	ISI_DisableInterrupt(0xFFFFFFFF);
-	ISI_DmaChannelDisable(ISI_DMA_CHDR_C_CH_DIS);
-	ISI_DmaChannelEnable(ISI_DMA_CHER_P_CH_EN);
-	ISI_EnableInterrupt(ISI_IER_PXFR_DONE);
-	/* Configure ISI interrupts */
-	NVIC_ClearPendingIRQ(ISI_IRQn);
-	NVIC_EnableIRQ(ISI_IRQn);
-	ISI_Enable();
-}
 
 /*----------------------------------------------------------------------------
  *        Global functions
@@ -758,9 +449,8 @@ extern int main(void)
 	/* Initialize all USB power (off) */
 	_ConfigureUotghs();
 
-	/* USB Driver Initialize */
-	USBDDriver_Initialize(pUsbd, &usbdDriverDescriptors, bAlternateInterfaces);
-	USBD_Init();
+	/* UVC Driver Initialize */
+	UVCDriver_Init(&usbdDriverDescriptors, (uint32_t *)pVideoBufffers);
 
 	/* Start USB stack to authorize VBus monitoring */
 	USBD_Connect();
@@ -769,20 +459,22 @@ extern int main(void)
 		if (USBD_GetState() < USBD_STATE_CONFIGURED)
 			continue;
 
-		if (bVidON && !bVideoON) {
+		if (bVidON && !UVC_is_video_on()) {
 			bVidON = 0;
 			ISI_Disable();
 			printf("vidE \n\r");
 		}
 
-		if (!bVidON && bVideoON) {
+		if (!bVidON && UVC_is_video_on()) {
 			bVidON = 1;
 			NVIC_ClearPendingIRQ(USBHS_IRQn);
 			NVIC_DisableIRQ(USBHS_IRQn);
-			_PreviewMode();
+			IsiPrevBuffIndex = 0;
+			UsbPrevBuffIndex = 0;
+			_PreviewMode(UVC_frm_width()/2,UVC_frm_height());
 			/* Start USB Streaming */
 			USBD_HAL_SetTransferCallback(VIDCAMD_IsoInEndpointNum,
-										 (TransferCallback)VIDD_PayloadSent, 0);
+										 (TransferCallback)VIDD_PayloadSent, NULL);
 			NVIC_EnableIRQ(USBHS_IRQn);
 			VIDD_PayloadSent(NULL, USBD_STATUS_SUCCESS);
 			printf("vidS\n\r");
