@@ -445,16 +445,19 @@ void MSDD_StateMachine(MSDDriver *pMsdDriver)
 	MSCsw           *csw = &(commandState->csw);
 	MSDTransfer     *transfer = &(commandState->transfer);
 	unsigned char   status;
-
+	Usbhs *pUdp = USBHS;
 	/* Identify current driver state */
 	switch (pMsdDriver->state) {
 	/*---------------------- */
 	case MSDD_STATE_READ_CBW:
 		/*---------------------- */
+		if(USBHS_ByteCount(pUdp, commandState->pipeOUT) == 0)
+		{
+			break;
+		}
 		/* Start the CBW read operation */
 		transfer->semaphore = 0;
 
-		USBD_HAL_WaitReadData(commandState->pipeOUT);
 		status = USBD_Read(commandState->pipeOUT,
 						   cbw,
 						   MSD_CBW_SIZE,
