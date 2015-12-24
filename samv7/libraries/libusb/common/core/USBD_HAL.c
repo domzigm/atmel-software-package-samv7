@@ -352,7 +352,7 @@ static uint8_t UDPHS_MblWriteFifo(uint8_t bEndpoint)
 	bufferEnd = UDPHS_MblUpdate(pTransfer, pBi, size, 0);
 
 	/* Write packet in the FIFO buffer */
-	pFifo = (uint8_t *)((uint32_t *)USBHS_RAM_ADDR + (EPT_VIRTUAL_SIZE *
+	pFifo = (uint8_t *)(USBHS_RAM_ADDR + (EPT_VIRTUAL_SIZE *
 						bEndpoint));
 	memory_sync();
 
@@ -399,7 +399,7 @@ static void UDPHS_WritePayload(uint8_t bEndpoint, int32_t size)
 	pTransfer->remaining -= size;
 
 	/* Write packet in the FIFO buffer */
-	pFifo = (uint8_t *)((uint32_t *)USBHS_RAM_ADDR + (EPT_VIRTUAL_SIZE *
+	pFifo = (uint8_t *)(USBHS_RAM_ADDR + (EPT_VIRTUAL_SIZE *
 						bEndpoint));
 	memory_sync();
 
@@ -432,7 +432,7 @@ static void UDPHS_ReadPayload(uint8_t bEndpoint, int32_t wPacketSize)
 	pTransfer->transferred += wPacketSize;
 
 	/* Retrieve packet */
-	pFifo = (uint8_t *)((uint32_t *)USBHS_RAM_ADDR
+	pFifo = (uint8_t *)(USBHS_RAM_ADDR
 						+ (EPT_VIRTUAL_SIZE * bEndpoint));
 
 	while (wPacketSize > 0) {
@@ -450,11 +450,8 @@ static void UDPHS_ReadRequest(USBGenericRequest *pRequest)
 {
 	uint32_t *pData = (uint32_t *)(void *)pRequest;
 	volatile uint32_t *pFifo;
-
 	pFifo = (volatile uint32_t *)USBHS_RAM_ADDR;
-	*pData++ = *pFifo;
-	memory_sync();
-	pFifo = (volatile uint32_t *)USBHS_RAM_ADDR;
+	*pData++ = *pFifo++;
 	*pData = *pFifo;
 	memory_sync();
 }
@@ -1971,7 +1968,7 @@ void USBD_HAL_Test(uint8_t bIndex)
 		USBHS_EnableEP(pUdp, 2, true);
 
 		/* Write FIFO */
-		pFifo = (uint8_t *)((uint32_t *)(USBHS_RAM_ADDR) + (EPT_VIRTUAL_SIZE * 2));
+		pFifo = (uint8_t *)((USBHS_RAM_ADDR) + (EPT_VIRTUAL_SIZE * 2));
 
 		for (i = 0; i < sizeof(test_packet_buffer); i++)
 			pFifo[i] = test_packet_buffer[i];
