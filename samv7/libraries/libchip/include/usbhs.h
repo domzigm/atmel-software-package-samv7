@@ -63,9 +63,9 @@
 #define CHIP_USB_ENDPOINTS_DMA(ep)              ((((ep)>=1)&&((ep)<=7))?true:false)
 
 /** Max size of the FMA FIFO */
-#define DMA_MAX_FIFO_SIZE     (65536/1)
+#define DMA_MAX_FIFO_SIZE     (32768)
 /** fifo space size in DW */
-#define EPT_VIRTUAL_SIZE      8192
+#define EPT_VIRTUAL_SIZE      (32768)
 
 
 //! @name USBHS Host IP properties
