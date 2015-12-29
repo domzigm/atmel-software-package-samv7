@@ -239,9 +239,10 @@ static void uhi_hid_mouse_report_reception(
 	if ((status != UHD_TRANS_NOERROR) || (nb_transfered < 4)) {
 		return; // HID mouse transfer aborted
 	}
-
+#ifdef UHD_PIPE_DMA_SUPPORTED
 	SCB_InvalidateDCache_by_Addr((uint32_t *)uhi_hid_mouse_dev.report,
 								 nb_transfered);
+#endif
 	// Decode buttons
 	state_prev = uhi_hid_mouse_dev.report_btn_prev;
 	state_new = uhi_hid_mouse_dev.report[UHI_HID_MOUSE_BTN];
