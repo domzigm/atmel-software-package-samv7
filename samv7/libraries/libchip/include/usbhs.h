@@ -1450,7 +1450,7 @@ __STATIC_INLINE uint8_t USBHS_HostGetCurrentBank(Usbhs *pUsbhs, uint8_t Pipe)
  * \brief Gets USB host interrupt status
  * \param pUsbhs  USBHS host instance
  */
-__STATIC_INLINE uint8_t USBHS_HostGetPipeByteCount(Usbhs *pUsbhs, uint8_t Pipe)
+__STATIC_INLINE uint32_t USBHS_HostGetPipeByteCount(Usbhs *pUsbhs, uint8_t Pipe)
 {
 	return ((pUsbhs->USBHS_HSTPIPISR[Pipe] & USBHS_HSTPIPISR_PBYCT_Msk) >>
 			 USBHS_HSTPIPISR_PBYCT_Pos);
