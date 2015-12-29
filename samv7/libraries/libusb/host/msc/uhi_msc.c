@@ -500,7 +500,7 @@ bool uhi_msc_scsi_test_unit_ready(uint8_t lun, uhi_msc_scsi_callback_t callback)
 
 	// Prepare specific value of CBW packet
 	uhi_msc_cbw.dCBWDataTransferLength = 0;
-	uhi_msc_cbw.bmCBWFlags = MSD_CBW_DEVICE_TO_DEVICE;
+	uhi_msc_cbw.bmCBWFlags = MSD_CBW_HOST_TO_DEVICE;
 	uhi_msc_cbw.bCBWCBLength = 6;
 	memset(uhi_msc_cbw.pCommand, 0, sizeof(uhi_msc_cbw.pCommand));
 	uhi_msc_cbw.pCommand[0] = SBC_TEST_UNIT_READY;
@@ -564,7 +564,7 @@ bool uhi_msc_scsi_write_10(uint8_t lun, uint32_t addr, const uint8_t *ram,
 	// Prepare specific value of CBW packet
 	uhi_msc_cbw.dCBWDataTransferLength =
 		(*pBlockLen) * nb_sector;
-	uhi_msc_cbw.bmCBWFlags = MSD_CBW_DEVICE_TO_DEVICE;
+	uhi_msc_cbw.bmCBWFlags = MSD_CBW_HOST_TO_DEVICE;
 	uhi_msc_cbw.bCBWCBLength = 10;
 	memset(uhi_msc_cbw.pCommand, 0, sizeof(uhi_msc_cbw.pCommand));
 

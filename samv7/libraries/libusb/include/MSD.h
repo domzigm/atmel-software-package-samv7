@@ -148,7 +148,7 @@
 
 /** CBW bmCBWFlags field */
 #define MSD_CBW_DEVICE_TO_HOST                  (1 << 7)
-#define MSD_CBW_DEVICE_TO_DEVICE                (0 << 7)
+#define MSD_CBW_HOST_TO_DEVICE                (0 << 7)
 /**      @}*/
 
 /** \addtogroup usbd_msd_csw_def MSD CSW Definitions
