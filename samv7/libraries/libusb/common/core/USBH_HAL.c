@@ -884,8 +884,10 @@ bool USBH_HAL_ConfigurePipe(uint8_t Addr, USBEndpointDescriptor *ep_desc)
 
 		USBHS_HostPipeEnable(USBHS, pipe);
 
+#ifdef UHD_PIPE_DMA_SUPPORTED
 		// Enable endpoint interrupts
 		USBHS_HostDmaIntEnable(USBHS, pipe - 1);
+#endif
 		USBHS_HostEnablePipeIntType(USBHS, pipe,
 									(USBHS_HSTPIPIER_RXSTALLDES | USBHS_HSTPIPIER_PERRES) );
 
@@ -1455,7 +1457,7 @@ static void USBH_HAL_PhaseDataIn(void)
 					  USBHS_HSTPIPISR_SHORTPACKETI) == USBHS_HSTPIPISR_SHORTPACKETI) ? true : false;
 #endif
 
-	pEpData = (uint8_t *)((uint32_t *)USBHS_RAM_ADDR
+	pEpData = (uint8_t *)(USBHS_RAM_ADDR
 						  + (EPT_VIRTUAL_SIZE * bPipe));
 uhd_ctrl_receiv_in_read_data:
 	memory_sync();
@@ -1563,7 +1565,7 @@ static void USBH_HAL_PhaseDataOut(void)
 	//uhd_configure_pipe_token(0, USBHS_HSTPIPCFG_PTOKEN_OUT);
 	//uhd_ack_out_ready(0);
 	USBHS_HostAckPipeIntType(USBHS, bPipe, USBHS_HSTPIPICR_TXOUTIC);
-	pEpData = (uint8_t *)((uint32_t *)USBHS_RAM_ADDR
+	pEpData = (uint8_t *)(USBHS_RAM_ADDR
 						  + (EPT_VIRTUAL_SIZE * bPipe));
 	memory_sync();
 
@@ -1712,7 +1714,7 @@ static void USBH_HAL_PipeInReceived(uint8_t pipe)
 	uint32_t nb_data = 0, i;
 	uint32_t nb_remain = pJob->buf_size - pJob->nb_trans;
 	uint32_t pkt_size = USBHS_HostGetSize(USBHS, pipe);
-	uint8_t *ptr_src = (uint8_t *)((uint32_t *)USBHS_RAM_ADDR
+	uint8_t *ptr_src = (uint8_t *)(USBHS_RAM_ADDR
 								   + (EPT_VIRTUAL_SIZE * pipe));
 	uint8_t *ptr_dst = &pJob->buf[pJob->nb_trans];
 	bool b_full = false, b_short = false;
@@ -1787,7 +1789,7 @@ static void USBH_HAL_PipeOutReady(uint8_t pipe)
 	// If not ZLP, fill FIFO
 	if (nb_data) {
 		// Fill FIFO
-		ptr_dst = (uint8_t *)((uint32_t *)USBHS_RAM_ADDR
+		ptr_dst = (uint8_t *)(USBHS_RAM_ADDR
 							  + (EPT_VIRTUAL_SIZE * pipe));
 		ptr_src = &pJob->buf[pJob->nb_trans];
 		// Modify job information
