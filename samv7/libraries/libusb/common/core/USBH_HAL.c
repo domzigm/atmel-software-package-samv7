@@ -413,7 +413,7 @@ void USBHS_Handler(void)
 	} else {
 		pipe_int = USBHS_GetInterruptPipeNum();
 		pipe_dma_int = USBHS_GetInterruptPipeDmaNum();
-
+//printf("pipe_int-%d,pipe_dma_int-%d\n\r",pipe_int,pipe_dma_int);
 		if (pipe_int == 0) {
 			TRACE_DEBUG("Pipe0: ");
 			// Interrupt acked by control endpoint managed
@@ -2039,7 +2039,7 @@ static void USBH_HAL_PipeInterrupt(uint8_t pipe)
 		// SHORTPACKETI: Short received
 		if (statusInt & USBHS_HSTPIPISR_SHORTPACKETI) {
 			USBHS_HostAckPipeIntType(USBHS, pipe,
-									 USBHS_HSTPIPICR_SHORTPACKETIC); //uhd_ack_short_packet(pipe);
+									 USBHS_HSTPIPICR_RXINIC|USBHS_HSTPIPICR_SHORTPACKETIC); 
 			USBH_HAL_PipeInReceived(pipe);
 			return;
 		}
