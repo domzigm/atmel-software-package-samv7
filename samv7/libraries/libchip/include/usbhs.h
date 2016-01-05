@@ -1018,7 +1018,7 @@ __STATIC_INLINE void USBHS_DisableSOF(void)
 * \brief Gets USB host interrupt status
 * \param pUsbhs  USBHS host instance
 */
-__STATIC_INLINE uint32_t USBHS_GetHostStatus(Usbhs *pUsbhs, uint8_t IntType)
+__STATIC_INLINE uint32_t USBHS_GetHostStatus(Usbhs *pUsbhs, uint32_t IntType)
 {
 	return (pUsbhs->USBHS_HSTISR & IntType);
 }
@@ -1081,7 +1081,7 @@ __STATIC_INLINE void USBHS_SetHostDmaStatus(Usbhs *pUsbhs, uint8_t PipeInt)
  * \brief Gets USB host interrupt status
  * \param pUsbhs  USBHS host instance
  */
-__STATIC_INLINE uint8_t USBHS_IsHostIntEnable(Usbhs *pUsbhs, uint8_t IntType)
+__STATIC_INLINE uint32_t USBHS_IsHostIntEnable(Usbhs *pUsbhs, uint32_t IntType)
 {
 	return (pUsbhs->USBHS_HSTIMR & IntType);
 }
@@ -1593,18 +1593,14 @@ __STATIC_INLINE void USBHS_HostClearErr(Usbhs *pUsbhs, uint8_t Pipe,
 }
 
 
-__STATIC_INLINE  uint8_t USBHS_GetInterruptPipeNum(void)
+__STATIC_INLINE  uint8_t USBHS_GetInterruptPipeNum(uint32_t Intmask)
 {
-	uint32_t status = USBHS->USBHS_HSTISR;
-	uint32_t mask = USBHS->USBHS_HSTIMR;
-	return ctz(((status & mask) >> 8) | (1 << USBHS_EPT_NUM));
+	return ctz(((Intmask) >> 8) | (1 << USBHS_EPT_NUM));
 }
 
-static inline uint8_t USBHS_GetInterruptPipeDmaNum(void)
+static inline uint8_t USBHS_GetInterruptPipeDmaNum(uint32_t Intmask)
 {
-	uint32_t status = USBHS->USBHS_HSTISR;
-	uint32_t mask = USBHS->USBHS_HSTIMR;
-	return (ctz(((status & mask) >> 25) | (1 << (USBHS_EPT_NUM - 1))) + 1);
+	return (ctz(((Intmask) >> 25) | (1 << (USBHS_EPT_NUM - 1))) + 1);
 }
 /*--------------------------------------------------------
 * =========== USB Host's pipe DMA functions =========
