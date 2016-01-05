@@ -394,8 +394,8 @@ static void USBH_HAL_PipeXfrEnd(uint8_t pipe, USBH_XfrStatus_t status);
 void USBHS_Handler(void)
 {
 	uint8_t pipe_int, pipe_dma_int;
-	uint32_t status = USBHS_GetHostStatus(USBHS, 0xFF);
-	uint32_t statusInt = ( status & USBHS_IsHostIntEnable(USBHS, 0xFF));
+	volatile uint32_t status = USBHS_GetHostStatus(USBHS, 0xFFFFFFFF);
+	volatile uint32_t statusInt =( status & USBHS_IsHostIntEnable(USBHS, 0xFFFFFFFF));
 
 	memory_sync();
 	TRACE_DEBUG("%c ", USBHS_IsUsbLowSpeed(USBHS) ? 'L' :
@@ -406,13 +406,13 @@ void USBHS_Handler(void)
 		USBHS->USBHS_HSTCTRL |= USBHS_HSTCTRL_SPDCONF_LOW_POWER;
 
 	// Manage SOF interrupt
-	if (status & USBHS_HSTISR_HSOFI) {
+	if (statusInt & USBHS_HSTISR_HSOFI) {
 		//Acknowledge SOF
 		USBHS_ClearHostStatus(USBHS, USBHS_HSTICR_HSOFIC);
 		USBH_HAL_ManageSof();
 	} else {
-		pipe_int = USBHS_GetInterruptPipeNum();
-		pipe_dma_int = USBHS_GetInterruptPipeDmaNum();
+		pipe_int = USBHS_GetInterruptPipeNum(statusInt);
+		pipe_dma_int = USBHS_GetInterruptPipeDmaNum(statusInt);
 //printf("pipe_int-%d,pipe_dma_int-%d\n\r",pipe_int,pipe_dma_int);
 		if (pipe_int == 0) {
 			TRACE_DEBUG("Pipe0: ");
@@ -433,7 +433,7 @@ void USBHS_Handler(void)
 
 #endif
 		// USB bus reset detection
-		else if (status & USBHS_HSTISR_RSTI) {
+		else if (statusInt & USBHS_HSTISR_RSTI) {
 			TRACE_INFO_WP("RST ");
 			USBHS_ClearHostStatus(USBHS, USBHS_HSTICR_RSTIC);
 
@@ -488,7 +488,7 @@ void USBHS_Handler(void)
 			USBHS_UnFreezeClock(USBHS);
 			// Here the wakeup interrupt has been used to detect connection
 			// with an asynchrone interrupt
-			USBHS_HostIntDisable(USBHS, USBHS_HSTIDR_HWUPIEC);
+			USBHS_ClearHostStatus(USBHS, USBHS_HSTIDR_HWUPIEC);
 
 			USBHS_Set(USBHS, USBHS_SR_VBUSRQ);// enable VBUS
 			uhd_sleep_mode(UHD_STATE_DISCONNECT);
@@ -496,9 +496,8 @@ void USBHS_Handler(void)
 		}
 
 
-		else if (USBHS_IsHostIntEnable(USBHS, USBHS_HSTIMR_HWUPIE)
-				 && (USBHS_GetHostStatus(USBHS,
-										 (USBHS_HSTISR_HWUPI | USBHS_HSTISR_RSMEDI | USBHS_HSTISR_RXRSMI)))) {
+		else if (USBHS_IsHostIntEnable(USBHS, USBHS_HSTIMR_HWUPIE) &&
+		(status & (USBHS_HSTISR_HWUPI | USBHS_HSTISR_RSMEDI | USBHS_HSTISR_RXRSMI))) {
 
 			TRACE_INFO_WP("\n\rWKP ");
 
@@ -527,11 +526,7 @@ void USBHS_Handler(void)
 			// Wait 50ms before restarting transfer
 			uhd_resume_start = 50;
 			uhd_sleep_mode(UHD_STATE_IDLE);
-		} else {
-			assert(false); // Interrupt event no managed
-		}
-
-		//TRACE_INFO_WP("\n\r");
+		} 
 	}
 }
 
@@ -2072,7 +2067,7 @@ static void USBH_HAL_PipeInterrupt(uint8_t pipe)
 			return;
 		}
 
-		if (status & USBHS_HSTPIPISR_RXSTALLDI) {
+		if (statusInt & USBHS_HSTPIPISR_RXSTALLDI) {
 			USBHS_HostAckPipeIntType(USBHS, pipe,
 									 USBHS_HSTPIPICR_RXSTALLDIC); //uhd_ack_stall(pipe);
 			USBHS_HostEnablePipeIntType(USBHS, pipe, USBHS_HSTPIPIER_RSTDTS);
@@ -2081,7 +2076,7 @@ static void USBH_HAL_PipeInterrupt(uint8_t pipe)
 			return;
 		}
 
-		if (status & USBHS_HSTPIPISR_PERRI) {
+		if (statusInt & USBHS_HSTPIPISR_PERRI) {
 			// Get and ack error
 			USBH_HAL_PipeAbort(pipe, USBH_HAL_GetPipeError(pipe));
 			return;
