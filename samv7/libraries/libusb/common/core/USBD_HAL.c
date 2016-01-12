@@ -540,10 +540,6 @@ static void UDPHS_EndpointHandler(uint8_t bEndpoint)
 				pEp->sendZLP = 0;
 			}
 		} else {
-			/* Clear interrupt when the state of endpoint0 is not SENDING. */
-			if (bEndpoint == 0)
-				USBHS_AckEpInterrupt(USBHS, bEndpoint, USBHS_DEVEPTICR_TXINIC);
-
 			TRACE_DEBUG("Err Wr %d\n\r", pEp->sendZLP);
 		}
 	}
@@ -576,11 +572,18 @@ static void UDPHS_EndpointHandler(uint8_t bEndpoint)
 		else {
 			TRACE_DEBUG_WP("%d ", wPktSize);
 
-			/*Acknowledge Received OUT Data Interrupt*/
+			/*Acknowledge Received OUT Data Interrupt if not control EP*/
+			if (type != USBHS_DEVEPTCFG_EPTYPE_CTRL >> USBHS_DEVEPTCFG_EPTYPE_Pos)
 			USBHS_AckEpInterrupt(pUdp, bEndpoint, USBHS_DEVEPTICR_RXOUTIC);
 
 			wPktSize = USBHS_ByteCount(pUdp, bEndpoint);
+
+			TRACE_DEBUG_WP("%d ", wPktSize);
 			UDPHS_ReadPayload(bEndpoint, wPktSize);
+
+			/*Acknowledge Received OUT Data Interrupt if it is a control EP*/
+			if (type == USBHS_DEVEPTCFG_EPTYPE_CTRL >> USBHS_DEVEPTCFG_EPTYPE_Pos)
+			USBHS_AckEpInterrupt(pUdp, bEndpoint, USBHS_DEVEPTICR_RXOUTIC);
 
 			/*Free the current bank and to switch to the next bank (If any).*/
 			if (type != USBHS_DEVEPTCFG_EPTYPE_CTRL >> USBHS_DEVEPTCFG_EPTYPE_Pos)
