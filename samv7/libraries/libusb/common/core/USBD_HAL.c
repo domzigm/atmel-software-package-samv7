@@ -492,15 +492,6 @@ static void UDPHS_EndpointHandler(uint8_t bEndpoint)
 				pXfr->buffered = 0;
 			}
 
-			/* Force ZLP transmission in total length is a
-			    multiple of endpoint size */
-			if (((pXfr->transferred % pEp->size) == 0)
-				&& (pXfr->remaining == 0)
-				&& (pXfr->transferred > 0)
-				&& (pEp->sendZLP == 0))
-				pEp->sendZLP = 1;
-
-
 			if (pXfr->buffered == 0
 				&& pXfr->transferred == 0
 				&& pXfr->remaining == 0
