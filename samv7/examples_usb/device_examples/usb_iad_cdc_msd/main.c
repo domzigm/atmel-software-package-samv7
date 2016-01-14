@@ -183,6 +183,9 @@ static uint8_t usbSerialBuffer0[DATABUFFERSIZE];
 /** Serial port opened */
 static uint8_t isSerialPortON = 0;
 
+/** Flag for cdc_read */
+static uint32_t ReadDone = 0;
+
 /*- MSD */
 /** Available media. */
 sMedia medias[MAX_LUNS];
@@ -226,6 +229,14 @@ void USBDCallbacks_RequestReceived(const USBGenericRequest *request)
 /*----------------------------------------------------------------------------
  *         Callbacks
  *----------------------------------------------------------------------------*/
+
+/**
+ * The callback function of CDCDSerial_Read.
+ */
+void _CDCDSerial_Read_Callback()
+{
+	ReadDone = 1;
+}
 
 /**
  * Invoked when the MSD finish a READ/WRITE.
@@ -402,11 +413,17 @@ int main(void)
 				printf("-I- SerialPort ON\n\r");
 				/* Start receiving data on the USART */
 				/* Start receiving data on the USB */
-				CDCDSerial_Read(usbSerialBuffer0, DATAPACKETSIZE, 0, 0);
+				ReadDone = 0;
+				CDCDSerial_Read(usbSerialBuffer0, DATAPACKETSIZE,(TransferCallback) _CDCDSerial_Read_Callback, 0);
 				serialON = 1;
 			} else if (serialON && !isSerialPortON) {
 				printf("-I- SeriaoPort OFF\n\r");
 				serialON = 0;
+			} else if (serialON && isSerialPortON && ReadDone == 1)
+			{
+				ReadDone = 0;
+				CDCDSerial_Read(usbSerialBuffer0, DATAPACKETSIZE,(TransferCallback) _CDCDSerial_Read_Callback, 0);
+
 			}
 
 			MSDFunction_StateMachine();
