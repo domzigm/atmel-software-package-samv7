@@ -280,20 +280,20 @@ extern void GMAC_TransmissionStart(Gmac *pGmac);
 extern void GMAC_TransmissionHalt(Gmac *pGmac);
 extern void GMAC_EnableRGMII(Gmac *pGmac, uint32_t duplex, uint32_t speed);
 
-void GMAC_ClearScreener1Reg (Gmac *pGmac, gmacQueList_t queueIdx);
+void GMAC_ClearScreener1Reg (Gmac *pGmac, uint8_t regIdx);
 
-void GMAC_WriteScreener1Reg(Gmac *pGmac, gmacQueList_t queueIdx,
+void GMAC_WriteScreener1Reg(Gmac *pGmac, uint8_t regIdx,
 							uint32_t regVal);
 
-void GMAC_ClearScreener2Reg (Gmac *pGmac, gmacQueList_t queueIdx);
+void GMAC_ClearScreener2Reg (Gmac *pGmac, uint8_t regIdx);
 
-void GMAC_WriteScreener2Reg (Gmac *pGmac, gmacQueList_t queueIdx,
+void GMAC_WriteScreener2Reg (Gmac *pGmac, uint8_t regIdx,
 							 uint32_t regVal);
 
-void GMAC_WriteEthTypeReg (Gmac *pGmac, gmacQueList_t queueIdx,
+void GMAC_WriteEthTypeReg (Gmac *pGmac, uint8_t regIdx,
 						   uint16_t etherType);
 
-void GMAC_WriteCompareReg(Gmac *pGmac, gmacQueList_t queueIdx, uint32_t c0Reg,
+void GMAC_WriteCompareReg(Gmac *pGmac, uint8_t regIdx, uint32_t c0Reg,
 						  uint16_t c1Reg);
 
 void GMAC_EnableCbsQueA(Gmac *pGmac);

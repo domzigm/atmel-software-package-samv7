@@ -528,39 +528,51 @@ void GMAC_TransmissionHalt(Gmac *pGmac)
 
 
 /* Screener Register configurations */
-void GMAC_ClearScreener1Reg (Gmac *pGmac, gmacQueList_t queueIdx)
+void GMAC_ClearScreener1Reg (Gmac *pGmac, uint8_t regIdx)
 {
-	pGmac->GMAC_ST1RPQ[queueIdx] = 0u;
+  /* Verify if the regIdx is less than the number of screener1 registers */
+  if(regIdx < 4u)
+	pGmac->GMAC_ST1RPQ[regIdx] = 0u;
 }
 
-void GMAC_WriteScreener1Reg(Gmac *pGmac, gmacQueList_t queueIdx,
+void GMAC_WriteScreener1Reg(Gmac *pGmac, uint8_t regIdx,
 							uint32_t regVal)
 {
-	pGmac->GMAC_ST1RPQ[queueIdx] = regVal;
+  /* Verify if the regIdx is less than the number of screener1 registers */
+  if(regIdx < 4u)
+	pGmac->GMAC_ST1RPQ[regIdx] = regVal;
 }
 
-void GMAC_ClearScreener2Reg (Gmac *pGmac, gmacQueList_t queueIdx)
+void GMAC_ClearScreener2Reg (Gmac *pGmac, uint8_t regIdx)
 {
-	pGmac->GMAC_ST2RPQ[queueIdx] = 0u;
+  /* Verify if the regIdx is less than the number of screener2 registers */
+  if(regIdx < 8u)
+	pGmac->GMAC_ST2RPQ[regIdx] = 0u;
 }
 
-void GMAC_WriteScreener2Reg (Gmac *pGmac, gmacQueList_t queueIdx,
+void GMAC_WriteScreener2Reg (Gmac *pGmac, uint8_t regIdx,
 							 uint32_t regVal)
 {
-	pGmac->GMAC_ST2RPQ[queueIdx] = regVal;
+  /* Verify if the regIdx is less than the number of screener2 registers */
+  if(regIdx < 8u)
+	pGmac->GMAC_ST2RPQ[regIdx] = regVal;
 }
 
-void GMAC_WriteEthTypeReg (Gmac *pGmac, gmacQueList_t queueIdx,
+void GMAC_WriteEthTypeReg (Gmac *pGmac, uint8_t regIdx,
 						   uint16_t etherType)
 {
-	pGmac->GMAC_ST2ER[queueIdx] = (uint32_t)etherType;
+  /* Verify if the regIdx is less than the number of EtherType registers */
+  if(regIdx < 4u)
+	pGmac->GMAC_ST2ER[regIdx] = (uint32_t)etherType;
 }
 
-void GMAC_WriteCompareReg(Gmac *pGmac, gmacQueList_t queueIdx, uint32_t c0Reg,
+void GMAC_WriteCompareReg(Gmac *pGmac, uint8_t regIdx, uint32_t c0Reg,
 						  uint16_t c1Reg)
 {
-	pGmac->GMAC_ST2COMP[queueIdx].GMAC_ST2COM0 = c0Reg;
-	pGmac->GMAC_ST2COMP[queueIdx].GMAC_ST2COM1 = (uint32_t)c1Reg;
+  /* Verify if the regIdx is less than the number of Compare registers */
+  if(regIdx < GMACST2COMPARE_NUMBER)
+	pGmac->GMAC_ST2COMP[regIdx].GMAC_ST2COM0 = c0Reg;
+	pGmac->GMAC_ST2COMP[regIdx].GMAC_ST2COM1 = (uint32_t)c1Reg;
 	memory_barrier();
 }
 
