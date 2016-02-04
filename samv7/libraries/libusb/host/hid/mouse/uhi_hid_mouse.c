@@ -95,11 +95,11 @@ static void uhi_hid_mouse_report_reception(
 	uint32_t nb_transfered);
 //@}
 
-
 /**
  * \name Functions required by UHC
  * @{
  */
+
 
 USBH_enum_status_t uhi_hid_mouse_install(USBH_device_t *dev)
 {
@@ -146,9 +146,11 @@ USBH_enum_status_t uhi_hid_mouse_install(USBH_device_t *dev)
 									   ptr_iface)->bEndpointAddress;
 			uhi_hid_mouse_dev.report_size =
 				(((USBEndpointDescriptor *)ptr_iface)->wMaxPacketSize);
-			uhi_hid_mouse_dev.report = malloc(uhi_hid_mouse_dev.report_size);
 
-			if (uhi_hid_mouse_dev.report == NULL) {
+			/* For aligned with 32*/
+			uint32_t *pDataTx=malloc((uhi_hid_mouse_dev.report_size) + DEFAULT_CACHELINE - 1);
+			uhi_hid_mouse_dev.report =(uint8_t *) MEM_ALIGN(pDataTx, DEFAULT_CACHELINE);
+			if (pDataTx == NULL || uhi_hid_mouse_dev.report == NULL) {
 				assert(false);
 				return UHC_ENUM_MEMORY_LIMIT; // Internal RAM allocation fail
 			}
@@ -239,10 +241,8 @@ static void uhi_hid_mouse_report_reception(
 	if ((status != UHD_TRANS_NOERROR) || (nb_transfered < 4)) {
 		return; // HID mouse transfer aborted
 	}
-#ifdef UHD_PIPE_DMA_SUPPORTED
 	SCB_InvalidateDCache_by_Addr((uint32_t *)uhi_hid_mouse_dev.report,
 								 nb_transfered);
-#endif
 	// Decode buttons
 	state_prev = uhi_hid_mouse_dev.report_btn_prev;
 	state_new = uhi_hid_mouse_dev.report[UHI_HID_MOUSE_BTN];
