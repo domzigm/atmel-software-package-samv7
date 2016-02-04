@@ -1940,7 +1940,6 @@ void USBD_HAL_Test(uint8_t bIndex)
 	/* force High Speed (remove suspend) */
 	pUdp->USBHS_DEVCTRL |= USBHS_DEVCTRL_SPDCONF_HIGH_SPEED;
 
-	USBHS_EnableTestMode(pUdp, USBHS_DEVCTRL_OPMODE2);
 
 	switch (bIndex) {
 	case USBFeatureRequest_TESTPACKET:
@@ -1966,11 +1965,12 @@ void USBD_HAL_Test(uint8_t bIndex)
 
 		for (i = 0; i < sizeof(test_packet_buffer); i++)
 			pFifo[i] = test_packet_buffer[i];
+		memory_sync();
 
 		/* Tst PACKET */
 		USBHS_EnableTestMode(pUdp, USBHS_DEVCTRL_TSTPCKT);
 		/* Send packet */
-		USBHS_RaiseEPInt(pUdp, 2, USBHS_DEVEPTIFR_TXINIS);
+		USBHS_DisableEPIntType(pUdp, 2, USBHS_DEVEPTIDR_FIFOCONC);
 		break;
 
 	case USBFeatureRequest_TESTJ:
@@ -1989,7 +1989,7 @@ void USBD_HAL_Test(uint8_t bIndex)
 		break;
 
 	case USBFeatureRequest_TESTSENDZLP:
-		USBHS_RaiseEPInt(pUdp, 0, USBHS_DEVEPTIFR_TXINIS);
+		USBHS_AckEpInterrupt(pUdp, 0, USBHS_DEVEPTICR_TXINIC);
 		TRACE_DEBUG_WP("SEND_ZLP ");
 		break;
 	}
