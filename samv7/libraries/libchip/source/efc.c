@@ -264,17 +264,3 @@ extern uint32_t EFC_PerformCommand(Efc *efc, uint32_t dwCommand,
 		return (dwStatus & (EEFC_FSR_FLOCKE | EEFC_FSR_FCMDE | EEFC_FSR_FLERR));
 	}
 }
-
-/**
- * \brief Set flash access mode.
- *
- * \param dwMode - 0:128-bit, (1<<24):64-bit
- */
-extern void EFC_SetFlashAccessMode(Efc *efc, uint32_t dwMode)
-{
-	uint32_t dwFmr;
-
-	dwFmr = dwMode;
-	EFC_WriteFMR(efc, dwFmr);
-}
-

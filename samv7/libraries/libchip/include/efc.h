@@ -118,8 +118,6 @@ extern uint32_t EFC_GetStatus(Efc *efc);
 
 extern uint32_t EFC_GetResult(Efc *efc);
 
-extern void EFC_SetFlashAccessMode(Efc *efc, uint32_t dwMode);
-
 #ifdef __cplusplus
 }
 #endif
