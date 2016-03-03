@@ -498,7 +498,7 @@ void MCID_Init(sMcid *pMcid,
 	HSMCI_ConfigureCompletionTO(pMci , HSMCI_CSTOR_CSTOCYC(0xFF)
 								 | HSMCI_CSTOR_CSTOMUL_1048576);
 	/* Set the Mode Register: 400KHz */
-	clkDiv = (dwMck / (MCI_INITIAL_SPEED << 1)) - 1;
+	MCI_SetSpeed(pMcid,MCI_INITIAL_SPEED,dwMck);
 	HSMCI_ConfigureMode(pMci, (clkDiv | HSMCI_MR_PWSDIV(0x7)));
 
 	HSMCI_Enable(pMci);
