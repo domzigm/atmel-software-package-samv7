@@ -167,21 +167,14 @@ extern void FLASHD_Initialize(uint32_t dwMCk, uint32_t dwUseIAP)
 /**
  * \brief Erases the entire flash.
  *
- * \param dwAddress  Flash start address.
  * \return 0 if successful; otherwise returns an error code.
  */
-extern uint32_t FLASHD_Erase(uint32_t dwAddress)
+extern uint32_t FLASHD_Erase()
 {
 	Efc *pEfc;
-	uint16_t wPage;
-	uint16_t wOffset;
 	uint32_t dwError;
 
-	assert((dwAddress >= IFLASH_ADDR)
-			|| (dwAddress <= (IFLASH_ADDR + IFLASH_SIZE)));
-
-	/* Translate write address */
-	EFC_TranslateAddress(&pEfc, dwAddress, &wPage, &wOffset);
+	EFC_TranslateAddress(&pEfc, 0, 0, 0);
 	dwError = EFC_PerformCommand(pEfc, EFC_FCMD_EA, 0, _dwUseIAP);
 
 	return dwError;

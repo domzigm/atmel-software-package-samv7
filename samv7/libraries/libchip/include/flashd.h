@@ -54,7 +54,7 @@ extern "C" {
 
 extern void FLASHD_Initialize(uint32_t dwMCk, uint32_t dwUseIAP);
 
-extern uint32_t FLASHD_Erase(uint32_t dwAddress);
+extern uint32_t FLASHD_Erase();
 
 extern uint32_t FLASHD_EraseSector(uint32_t dwAddress);
 
