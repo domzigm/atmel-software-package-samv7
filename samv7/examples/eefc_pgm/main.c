@@ -86,13 +86,18 @@
  *     -- EEFC Programming Example xxx --
  *     -- xxxxxx-xx
  *     -- Compiled: xxx xx xxxx xx:xx:xx --
+ *     -I- Checking page contents after erasing ...................
+ *     ............................................................
+ *     ..............................................
  *     -I- Unlocking last page
  *     -I- Writing last page with walking bit pattern
- *     -I- Checking page contents .................. ok
+ *     -I- Checking page contents ................................
+ *      ..........................................................
+ *      ................... OK
  *     -I- Locking last page
  *     -I- Try to program the locked page...
  *     -I- Please open Segger's JMem program
- *     -I- Read memory at address 0x0043FF00 to check contents
+ *     -I- Read memory at address 0x005ffe00 to check contents
  *     -I- Press any key to continue...
  *     -I- Good job!
  *     -I- Now set the security bit
@@ -124,6 +129,54 @@
 #include <assert.h>
 
 /*----------------------------------------------------------------------------
+ *        Local functions
+ *----------------------------------------------------------------------------*/
+
+/**
+ *  \brief Erases flash by sector
+ *  Erases flash by sector with Unlock,EraseSector and cache coherence operations.
+ *
+ * \param StartAddr  Start address for the erase operation.
+ * \param EndAddr    End address for the erase operation.
+ *
+ */
+static uint8_t FlashSectorErase(uint32_t StartAddr, uint32_t EndAddr)
+{
+	uint8_t  ucError = 0;
+	uint32_t  StartAddrTemp = StartAddr;
+	
+	/* Unlock the region */
+	ucError = FLASHD_Unlock(StartAddr, EndAddr, 0, 0);
+	if( ucError ) {
+		printf("FLASHD_Unlock fail:0x%x\r\n", ucError);
+		return ucError;
+	}
+
+	/* Erase the region by Erase Sector command */
+	for( ; StartAddrTemp < EndAddr; ) {
+		ucError = FLASHD_EraseSector(StartAddrTemp);
+		if( ucError ) {
+			printf("EraseSector@%08x fail:0x%x\r\n", StartAddrTemp, ucError);
+			return ucError;
+		}
+		StartAddrTemp += IFLASH_SECTOR_SIZE;
+	}
+
+	/* Lock the region */
+	ucError = FLASHD_Lock(StartAddr, EndAddr,
+			0, 0 );
+		if( ucError ) {
+		printf("FLASHD_lock fail:0x%x\r\n", ucError);
+		return ucError;
+	}
+
+	/*Invalidate the region as the region is cachable*/
+	SCB_InvalidateDCache_by_Addr((uint32_t*)StartAddr, EndAddr-StartAddr);
+
+	return ucError;
+}
+
+/*----------------------------------------------------------------------------
  *         Global functions
  *----------------------------------------------------------------------------*/
 
@@ -140,6 +193,8 @@ extern int main( void )
 	uint32_t adwBuffer[IFLASH_PAGE_SIZE / 4];
 	uint32_t dwLastPageAddress;
 	volatile uint32_t *pdwLastPageData;
+	uint32_t *read_address;
+	uint32_t  read_data;
 
 	/* Disable watchdog */
 	WDT_Disable(WDT);
@@ -171,8 +226,22 @@ extern int main( void )
 	dwLastPageAddress = IFLASH_ADDR + IFLASH_SIZE - IFLASH_PAGE_SIZE;
 	pdwLastPageData = (volatile uint32_t *)dwLastPageAddress;
 
+	/*Erase the last page*/
+	FlashSectorErase(dwLastPageAddress,dwLastPageAddress+IFLASH_PAGE_SIZE);
+
+	printf("-I- Checking page contents after erasing ");
+	for (dwCnt = 0; dwCnt < (IFLASH_PAGE_SIZE / 4); dwCnt++) {
+		printf(".");
+		if (pdwLastPageData[dwCnt] != 0xFFFFFFFF) {
+			printf("\n\r-F- Expected 0x%08X at address 0xFFFFFFFF, found 0x%08X\n\r",
+					(1u << (dwCnt % 32)),
+					(unsigned)(pdwLastPageData[dwCnt]));
+			while (1);
+		}
+	}
+	
 	/* Unlock page */
-	printf("-I- Unlocking last page\n\r");
+	printf("\n\r-I- Unlocking last page\n\r");
 	ucError = FLASHD_Unlock(dwLastPageAddress, dwLastPageAddress + IFLASH_PAGE_SIZE,
 			0, 0);
 	assert( !ucError );
