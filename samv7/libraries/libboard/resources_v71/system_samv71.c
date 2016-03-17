@@ -243,9 +243,6 @@ void system_init_flash(uint32_t ul_clk)
 
 /**
  * \brief Enable  USB clock.
- *
- * \param pll_id Source of the USB clock.
- * \param div Actual clock divisor. Must be superior to 0.
  */
 void sysclk_enable_usb(void)
 {
@@ -267,10 +264,6 @@ void sysclk_enable_usb(void)
 
 /**
  * \brief Disables USB clock.
- *
- *
- * \param pll_id Source of the USB clock.
- * \param div Actual clock divisor. Must be superior to 0.
  */
 void sysclk_disable_usb(void)
 {

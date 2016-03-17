@@ -1881,8 +1881,7 @@ void USBD_HAL_WaitReadData(uint8_t bEndpoint)
 }
 
 /**
- * Indicates if the device is running in high or full-speed. Always returns 0
- * since UDP does not support high-speed mode.
+ * Indicates if the device is running in high or full-speed.
  */
 uint8_t USBD_HAL_IsHighSpeed(void)
 {
@@ -1915,7 +1914,7 @@ void USBD_HAL_Activate(void)
 
 void USBD_HAL_Disable(void)
 {
-	//** Disable USB hardware
+	/* Disable USB hardware*/
 	USBHS_UsbEnable(USBHS, false);
 
 	/* Clear IRQ */
