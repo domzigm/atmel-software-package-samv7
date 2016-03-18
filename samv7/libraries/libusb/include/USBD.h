@@ -217,8 +217,6 @@ typedef void (*MblTransferCallback)(void *pArg,
 
 extern void USBD_Init(void);
 
-extern void USBD_ConfigureSpeed(uint8_t forceFS);
-
 extern void USBD_Connect(void);
 
 extern void USBD_Disconnect(void);
