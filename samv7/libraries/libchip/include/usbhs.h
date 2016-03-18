@@ -99,9 +99,8 @@ typedef enum {
 **/
 
 /**
- * \brief Freeze or unfreeze USB clock
+ * \brief Freeze the USB clock
  * \param pUsbhs   Pointer to an USBHS instance.
- * \param Enable Enable or disable
  */
 __STATIC_INLINE void USBHS_FreezeClock(Usbhs *pUsbhs)
 {
@@ -109,9 +108,8 @@ __STATIC_INLINE void USBHS_FreezeClock(Usbhs *pUsbhs)
 }
 
 /**
- * \brief Freeze or unfreeze USB clock
+ * \brief Unfreeze the USB clock
  * \param pUsbhs   Pointer to an USBHS instance.
- * \param Enable Enable or disable
  */
 __STATIC_INLINE void USBHS_UnFreezeClock(Usbhs *pUsbhs)
 {
