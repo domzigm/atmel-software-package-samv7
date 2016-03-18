@@ -217,32 +217,6 @@ void HIDDKeyboardCallbacks_LedsChanged(
 		LED_Clear(LED_NUMLOCK);
 }
 
-/*----------------------------------------------------------------------------
- *         Internal functions
- *----------------------------------------------------------------------------*/
-/**
- * Configure USB settings for USB device
- */
-static void _ConfigureUotghs(void)
-{
-
-	/* UTMI parallel mode, High/Full/Low Speed */
-	/* UUSBCK not used in this configuration (High Speed) */
-	PMC->PMC_SCDR = PMC_SCDR_USBCLK;
-	/* USB clock register: USB Clock Input is UTMI PLL */
-	PMC->PMC_USB = PMC_USB_USBS;
-	/* Enable peripheral clock for USBHS */
-	PMC_EnablePeripheral(ID_USBHS);
-	USBHS->USBHS_CTRL = USBHS_CTRL_UIMOD_DEVICE;
-	/* Enable PLL 480 MHz */
-	PMC->CKGR_UCKR = CKGR_UCKR_UPLLEN | CKGR_UCKR_UPLLCOUNT(0xF);
-
-	/* Wait that PLL is considered locked by the PMC */
-	while (!(PMC->PMC_SR & PMC_SR_LOCKU));
-
-	/* IRQ */
-	NVIC_EnableIRQ(USBHS_IRQn);
-}
 
 
 /*---------------------------------------------------------------------------
@@ -272,8 +246,6 @@ int main(void)
 	/* If they are present, configure Vbus & Wake-up pins */
 	PIO_InitializeInterrupts(0);
 
-	_ConfigureUotghs();
-
 #ifdef NO_PUSHBUTTON
 	printf("-- : DBG key 1 2 used as buttons\n\r");
 	printf("-- : 1st press to push, 2nd press to release\n\r");
@@ -291,7 +263,6 @@ int main(void)
 
 	// Start USB stack to authorize VBus monitoring
 	USBD_Connect();
-
 
 	/* Infinite loop */
 	while (1) {
