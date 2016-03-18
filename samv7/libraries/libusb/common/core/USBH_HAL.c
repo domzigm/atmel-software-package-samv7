@@ -341,7 +341,7 @@ static uint8_t uhd_resume_start;
 static uint16_t uhd_pipes_unfreeze;
 
 //@}
-static const Pin USB_HOST[] = {PINS_VBUS_EN};
+static const Pin USB_HOST[] = {PINS_VBUS_HOST_EN};
 
 static void USBH_HAL_ManageSof(void);
 static void USBH_HAL_ControlInterrupt(void);

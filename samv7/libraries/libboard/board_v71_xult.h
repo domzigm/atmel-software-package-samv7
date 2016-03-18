@@ -531,15 +531,17 @@
  */
 #define BOARD_USB_BMATTRIBUTES USBConfigurationDescriptor_SELFPOWERED_NORWAKEUP
 
-/** USB VBus monitoring pin definition. */
-#define PIN_USB_VBUS {PIO_PC16, PIOC, ID_PIOC, PIO_INPUT, PIO_DEFAULT}
+/** USB VBus monitoring pin definition.
+ *  VBUS detection dose not exist by default for the SAMV71 Xplained Ultra board
+ */
+#ifdef VBUS_DETECTION
+#define PIN_USB_VBUS {PIO_PA6, PIOA, ID_PIOA, PIO_INPUT, PIO_DEFAULT}
+#endif
 
 
 /*----------------------------------------------------------------------------*/
 /**
  * \page samv7_Xplained_ultra_extcomp "SAM V71 Xplained Ultra - External components"
- * This page lists the definitions related to external on-board components
- * located in the board.h file for the SAM V71 Xplained Ultra board.
  *
  * LCD
  */
@@ -767,6 +769,6 @@
 /*
 * USB pins
 */
-#define PINS_VBUS_EN   {PIO_PC16, PIOC, ID_PIOC, PIO_OUTPUT_1, PIO_DEFAULT}
+#define PINS_VBUS_HOST_EN   {PIO_PC16, PIOC, ID_PIOC, PIO_OUTPUT_1, PIO_DEFAULT}
 #endif /* #ifndef _BOARD_V71_XULT_H_ */
 

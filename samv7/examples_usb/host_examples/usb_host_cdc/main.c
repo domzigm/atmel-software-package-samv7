@@ -87,7 +87,7 @@
 #include "conf_usb_host.h"
 #include "ui.h"
 
-const Pin USB_HOST[] = {PINS_VBUS_EN};
+const Pin USB_HOST[] = {PINS_VBUS_HOST_EN};
 /**  Pins to configure for the application.*/
 const Pin UsartPins[] = {PINS_USART};
 /*! \brief Main function. Execution starts here.
