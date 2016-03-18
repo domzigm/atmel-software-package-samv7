@@ -57,13 +57,13 @@
 
 #define DMA
 
-
 /** Bits that should be shifted to access interrupt bits. */
 #define SHIFT_INTERUPT   12
 
+/** Divider for USB Clock */
+#define USBCLK_DIV          10
+
 /**
- * \section endpoint_states_sec "UDP Endpoint states"
- *
  *  This page lists the endpoint states.
  *
  *  \subsection States
@@ -223,6 +223,47 @@ COMPILER_ALIGNED(16) static UdphsDmaDescriptor *pDmaLL;
  *      Internal Functions
  *---------------------------------------------------------------------------*/
 
+/**
+ * Enables the clock of the USBHS peripheral.
+ * \return 1 if peripheral status changed.
+ */
+static uint8_t USBHS_EnablePeripheralClock(void)
+{
+	if (!PMC_IsPeriphEnabled(ID_USBHS)) {
+		PMC_EnablePeripheral(ID_USBHS);
+		return 1;
+	}
+	return 0;
+}
+
+/**
+ * Disables the USBHS peripheral clock.
+ */
+static inline void USBHS_DisablePeripheralClock(void)
+{
+	PMC_DisablePeripheral(ID_USBHS);
+}
+
+/**
+ * Enable the 480MHz USB clock.
+ */
+static inline void USBHS_EnableUsbClock(void)
+{
+	/* Enable PLL 480 MHz */
+	PMC->CKGR_UCKR = CKGR_UCKR_UPLLEN | CKGR_UCKR_UPLLCOUNT(0xF);
+
+	/* Wait that PLL is considered locked by the PMC */
+	while (!(PMC->PMC_SR & PMC_SR_LOCKU));
+}
+
+/**
+ *  Disables the 480MHz USB clock.
+ */
+static inline void USBHS_DisableUsbClock(void)
+{
+	Pmc *pPmc = PMC;
+	pPmc->CKGR_UCKR &= ~(uint32_t)CKGR_UCKR_UPLLEN;
+}
 /**
  * Handles a completed transfer on the given endpoint, invoking the
  * configured callback if any.
@@ -561,8 +602,6 @@ static void UDPHS_EndpointHandler(uint8_t bEndpoint)
 		}
 		/* In read state */
 		else {
-			TRACE_DEBUG_WP("%d ", wPktSize);
-
 			/*Acknowledge Received OUT Data Interrupt if not control EP*/
 			if (type != USBHS_DEVEPTCFG_EPTYPE_CTRL >> USBHS_DEVEPTCFG_EPTYPE_Pos)
 			USBHS_AckEpInterrupt(pUdp, bEndpoint, USBHS_DEVEPTICR_RXOUTIC);
@@ -1416,8 +1455,8 @@ uint8_t USBD_HAL_SetupMblTransfer(uint8_t bEndpoint,
  *         otherwise, the corresponding error status code.
  */
 uint8_t USBD_HAL_Write(uint8_t bEndpoint,
-					   const void *pData,
-					   uint32_t dLength)
+				const void *pData,
+				uint32_t dLength)
 {
 	if (endpoints[bEndpoint].transfer.transHdr.transType)
 		return UDPHS_AddWr(bEndpoint, pData, dLength);
@@ -1445,8 +1484,8 @@ uint8_t USBD_HAL_Write(uint8_t bEndpoint,
  *         otherwise, the corresponding error status code.
  */
 uint8_t USBD_HAL_WrWithHdr(uint8_t bEndpoint,
-						   const void *pHdr, uint8_t bHdrLen,
-						   const void *pData, uint32_t dLength)
+				const void *pHdr, uint8_t bHdrLen,
+				const void *pData, uint32_t dLength)
 {
 	Usbhs *pUdp = USBHS;
 
@@ -1605,8 +1644,8 @@ uint8_t USBD_HAL_WrWithHdr(uint8_t bEndpoint,
  *         otherwise, the corresponding error code.
  */
 uint8_t USBD_HAL_Read(uint8_t bEndpoint,
-					  void *pData,
-					  uint32_t dLength)
+				void *pData,
+				uint32_t dLength)
 {
 	if (endpoints[bEndpoint].transfer.transHdr.transType)
 		return USBD_STATUS_SW_NOT_SUPPORTED;
@@ -1724,33 +1763,50 @@ void USBD_HAL_Init(void)
 {
 
 #ifdef DMA
-
 	/* DMA Link list should be 16-bytes aligned */
 	if ((uint32_t)dmaLL & 0xFFFFFFF0)
 		pDmaLL = (UdphsDmaDescriptor *)((uint32_t)&dmaLL[1] & 0xFFFFFFF0);
 	else
 		pDmaLL = (UdphsDmaDescriptor *)((uint32_t)&dmaLL[0]);
-
 #endif
-	/** Disable USB hardware */
-	USBHS_UsbEnable(USBHS, false);
 
-	USBHS_UsbMode(USBHS, DEVICE_MODE);
+	if (ForceFS){
+		/* USB clock register: USB Clock Input is UTMI PLL */
+		PMC->PMC_USB = (PMC_USB_USBS | PMC_USB_USBDIV(USBCLK_DIV - 1));
+	}
+	else{
+		/* USBCLK not used in this configuration (High Speed) */
+		PMC->PMC_SCDR = PMC_SCDR_USBCLK;
+	}
 
-	/** Enable USB hardware*/
-	USBHS_UsbEnable(USBHS, true);
+	/* Enable the USBHS peripheral clock.*/
+	USBHS_EnablePeripheralClock();
 
-	USBHS_UnFreezeClock(USBHS);
+	/* Enable the 480MHz USB clock */
+	USBHS_EnableUsbClock();
 
 	if (ForceFS)
 		USBHS_EnableHighSpeed(USBHS, false);
 	else
 		USBHS_EnableHighSpeed(USBHS, true);
 
-	/*  Check USB clock */
-	while (!USBHS_ISUsableClock(USBHS));
+	/* Device mode is selected */
+	USBHS_UsbMode(USBHS, DEVICE_MODE);
+	USBHS_UsbModeEnable(USBHS);
 
-	USBHS_FreezeClock(USBHS);
+	/* Enable USB hardware*/
+	USBHS_UsbEnable(USBHS, true);
+
+	/* Unfreeze the USB clock */
+	USBHS_UnFreezeClock(USBHS);
+
+	if (ForceFS){
+	/* Enable the USBCLK bit */
+	PMC->PMC_SCER = PMC_SCER_USBCLK;
+	}
+
+	/* Check USB clock */
+	while (!USBHS_ISUsableClock(USBHS));
 
 	/* Clear IRQ */
 	NVIC_ClearPendingIRQ(USBHS_IRQn);
@@ -1831,7 +1887,6 @@ uint8_t USBD_HAL_Halt(uint8_t bEndpoint, uint8_t ctl)
 			} else {
 				USBHS_EnableEPIntType(pUdp, bEndpoint, USBHS_DEVEPTIER_NBUSYBKES);
 #ifdef DMA
-
 				if (CHIP_USB_ENDPOINTS_DMA(bDmaEndpoint)) {
 					/* Enable the endpoint DMA interrupt */
 					USBHS_EnableDMAIntEP(pUdp, bDmaEndpoint);
@@ -1839,7 +1894,6 @@ uint8_t USBD_HAL_Halt(uint8_t bEndpoint, uint8_t ctl)
 					/* Enable the endpoint interrupt */
 					USBHS_EnableIntEP(pUdp, bEndpoint);
 				}
-
 #else
 				/* Enable the endpoint interrupt */
 				USBHS_EnableIntEP(pUdp, bEndpoint);
