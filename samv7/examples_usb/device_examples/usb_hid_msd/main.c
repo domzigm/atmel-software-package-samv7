@@ -278,32 +278,67 @@ static void MSDCallbacks_Data(uint8_t flowDirection,
 /*---------------------------------------------------------------------------
  *         Internal functions
  *---------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------
+ *         VBus monitoring (optional)
+ *---------------------------------------------------------------------------*/
+#ifdef VBUS_DETECTION
+
+/** VBus pin instance. */
+static const Pin pinVbus = PIN_USB_VBUS;
 /**
- * Configure USB settings for USB device
+ * Handles interrupts coming from PIO controllers.
  */
-static void _ConfigureUotghs(void)
+static void ISR_Vbus(const Pin *pPin)
 {
-	/* UTMI parallel mode, High/Full/Low Speed */
-	/* UUSBCK not used in this configuration (High Speed) */
-	PMC->PMC_SCDR = PMC_SCDR_USBCLK;
-	/* USB clock register: USB Clock Input is UTMI PLL */
-	PMC->PMC_USB = PMC_USB_USBS;
-	/* Enable peripheral clock for USBHS */
-	PMC_EnablePeripheral(ID_USBHS);
-	USBHS->USBHS_CTRL = USBHS_CTRL_UIMOD_DEVICE;
-	/* Enable PLL 480 MHz */
-	PMC->CKGR_UCKR = CKGR_UCKR_UPLLEN | CKGR_UCKR_UPLLCOUNT(0xF);
+	/* Check current level on VBus */
+	if (PIO_Get(&pinVbus)) {
 
-	/* Wait that PLL is considered locked by the PMC */
-	while (!(PMC->PMC_SR & PMC_SR_LOCKU));
+		TRACE_INFO("VBUS conn\n\r");
+		USBD_Connect();
+	}
+	else {
 
-	/* IRQ */
-	NVIC_EnableIRQ(USBHS_IRQn);
+		TRACE_INFO("VBUS discon\n\r");
+		USBD_Disconnect();
+	}
 }
+#endif
+
+
 /**
- * Invoked when the status of the keyboard LEDs changes. Turns the num. lock
- * LED on or off.
- * \param numLockStatus Indicates the current status of the num. lock key.
+ * Configures the VBus pin to trigger an interrupt when the level on that pin
+ * changes if it exists.
+ */
+static void VBus_Configure( void )
+{
+	TRACE_INFO("VBus configuration\n\r");
+
+#ifdef VBUS_DETECTION
+	/* Configure PIO */
+	PIO_Configure(&pinVbus, PIO_LISTSIZE(pinVbus));
+	PIO_ConfigureIt(&pinVbus, ISR_Vbus);
+	PIO_EnableIt(&pinVbus);
+
+	/* Check current level on VBus */
+	if (PIO_Get(&pinVbus)) {
+
+		/* if VBUS present, force the connect */
+		TRACE_INFO("conn\n\r");
+		USBD_Connect();
+	}
+	else {
+		USBD_Disconnect();
+	}
+#else
+	printf("No VBus Monitor\n\r");
+	USBD_Connect();
+
+#endif
+
+}
+
+/**
  * \param capsLockStatus Indicates the current status of the caps lock key.
  * \param scrollLockStatus Indicates the current status of the scroll lock key
  */
@@ -474,9 +509,6 @@ int main(void)
 	/* If they are present, configure Vbus & Wake-up pins */
 	PIO_InitializeInterrupts(0);
 
-	/* Initialize all USB power (off) */
-	_ConfigureUotghs();
-
 	/* ----- HID Function Initialize */
 #ifdef NO_PUSHBUTTON
 	printf("-- : DBG key 1 2 used as buttons\n\r");
@@ -495,8 +527,8 @@ int main(void)
 	/* USB COMPOSITE driver initialization */
 	HIDMSDDriver_Initialize(&hidmsddDriverDescriptors, luns, MAX_LUNS);
 
-	/* connect if needed */
-	USBD_Connect();
+	/* Start USB stack to authorize VBus monitoring */
+	VBus_Configure();
 
 	/* Driver loop */
 	while (1) {

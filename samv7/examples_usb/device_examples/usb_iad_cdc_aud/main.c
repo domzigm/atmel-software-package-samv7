@@ -591,34 +591,68 @@ void AUDDFunction_StreamSettingChanged(uint8_t mic,
 	} else LED_Clear(LED_YELLOW0);
 }
 
+/*---------------------------------------------------------------------------
+ *         VBus monitoring (optional)
+ *---------------------------------------------------------------------------*/
+#ifdef VBUS_DETECTION
+
+/** VBus pin instance. */
+static const Pin pinVbus = PIN_USB_VBUS;
 /**
- * Configure USB settings for USB device
+ * Handles interrupts coming from PIO controllers.
  */
-static void _ConfigureUsbhs(void)
+static void ISR_Vbus(const Pin *pPin)
 {
-	/* UTMI parallel mode, High/Full/Low Speed */
-	/* UUSBCK not used in this configuration (High Speed) */
-	PMC->PMC_SCDR = PMC_SCDR_USBCLK;
-	/* USB clock register: USB Clock Input is UTMI PLL */
-	PMC->PMC_USB = PMC_USB_USBS;
-	/* Enable peripheral clock for USBHS */
-	PMC_EnablePeripheral(ID_USBHS);
-	USBHS->USBHS_CTRL = USBHS_CTRL_UIMOD_DEVICE;
-	/* Enable PLL 480 MHz */
-	PMC->CKGR_UCKR = CKGR_UCKR_UPLLEN | CKGR_UCKR_UPLLCOUNT(0xF);
+	/* Check current level on VBus */
+	if (PIO_Get(&pinVbus)) {
 
-	/* Wait that PLL is considered locked by the PMC */
-	while (!(PMC->PMC_SR & PMC_SR_LOCKU));
+		TRACE_INFO("VBUS conn\n\r");
+		USBD_Connect();
+	}
+	else {
 
-	/* IRQ */
-	NVIC_EnableIRQ(USBHS_IRQn);
+		TRACE_INFO("VBUS discon\n\r");
+		USBD_Disconnect();
+	}
 }
+#endif
+
+
+/**
+ * Configures the VBus pin to trigger an interrupt when the level on that pin
+ * changes if it exists.
+ */
+static void VBus_Configure( void )
+{
+	TRACE_INFO("VBus configuration\n\r");
+
+#ifdef VBUS_DETECTION
+	/* Configure PIO */
+	PIO_Configure(&pinVbus, PIO_LISTSIZE(pinVbus));
+	PIO_ConfigureIt(&pinVbus, ISR_Vbus);
+	PIO_EnableIt(&pinVbus);
+
+	/* Check current level on VBus */
+	if (PIO_Get(&pinVbus)) {
+
+		/* if VBUS present, force the connect */
+		TRACE_INFO("conn\n\r");
+		USBD_Connect();
+	}
+	else {
+		USBD_Disconnect();
+	}
+#else
+	printf("No VBus Monitor\n\r");
+	USBD_Connect();
+
+#endif
+
+}
+
 /*----------------------------------------------------------------------------
  *         Exported functions
  *----------------------------------------------------------------------------*/
-
-/**
- *  \brief usb_iad_cdc_aud Application entry point.
  *
  *  Starts the driver and
  *  - waits for an audio input stream to forward to the DAC.
@@ -650,9 +684,6 @@ int main(void)
 	/* If they are present, configure Vbus & Wake-up pins */
 	PIO_InitializeInterrupts(0);
 
-	/* Initialize all USB power (off) */
-	_ConfigureUsbhs();
-
 	/* Audio STREAM LED */
 	LED_Configure(LED_YELLOW0);
 
@@ -662,8 +693,8 @@ int main(void)
 
 	/* USB audio driver initialization */
 	CDCAUDDDriver_Initialize(&cdcauddDriverDescriptors);
-	/* connect if needed */
-	USBD_Connect();
+	/* Start USB stack to authorize VBus monitoring */
+	VBus_Configure();
 
 	/* Infinite loop */
 	while (1) {
