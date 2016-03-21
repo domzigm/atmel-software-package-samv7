@@ -413,7 +413,7 @@ typedef struct {
 #define AFEC_CDR_DATA_Msk (0xfffu << AFEC_CDR_DATA_Pos) /**< \brief (AFEC_CDR) Converted Data */
 /* -------- AFEC_COCR : (AFEC Offset: 0x6C) AFEC Channel Offset Compensation Register -------- */
 #define AFEC_COCR_AOFF_Pos 0
-#define AFEC_COCR_AOFF_Msk (0xfffu << AFEC_COCR_AOFF_Pos) /**< \brief (AFEC_COCR) Analog Offset */
+#define AFEC_COCR_AOFF_Msk (0x3ffu << AFEC_COCR_AOFF_Pos) /**< \brief (AFEC_COCR) Analog Offset */
 #define AFEC_COCR_AOFF(value) ((AFEC_COCR_AOFF_Msk & ((value) << AFEC_COCR_AOFF_Pos)))
 /* -------- AFEC_TEMPMR : (AFEC Offset: 0x70) AFEC Temperature Sensor Mode Register -------- */
 #define AFEC_TEMPMR_RTCT (0x1u << 0) /**< \brief (AFEC_TEMPMR) Temperature Sensor RTC Trigger mode */

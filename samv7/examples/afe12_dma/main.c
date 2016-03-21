@@ -147,7 +147,7 @@ static void _afe_Callback(int dummy, void* pArg)
 	printf("\n\rCH  AFE   Voltage(mV) \n\r");
 	for (i = 0; i < SAMPLES; i++) {
 		ch = (afeBuffer[i] & AFEC_LCDR_CHNB_Msk) >> AFEC_LCDR_CHNB_Pos;
-		voltage = ((afeBuffer[i] & 0xFFFF ) - 0x800) * 1650 / 2047;
+		voltage = ((afeBuffer[i] & 0xFFFF ) - 0x200) * 1650 / 2047;
 		printf("%02u  %04x  %04u\n\r" ,(unsigned int)ch,
 			(unsigned int)(afeBuffer[i] & 0xFFFF) ,(unsigned int)voltage);
 	}
@@ -201,7 +201,7 @@ static void _afe_initialization(void) {
 			| AFEC_EMR_RES_NO_AVERAGE
 			| AFEC_EMR_TAG
 			| AFEC_EMR_STM);
-	AFEC_SetAnalogOffset(AFEC0, TEST_CHANNEL, 0x800);
+	AFEC_SetAnalogOffset(AFEC0, TEST_CHANNEL, 0x200);
 	AFEC_SetAnalogControl(AFEC0, AFEC_ACR_IBCTL(1) | AFEC_ACR_PGA0_ON |
 			AFEC_ACR_PGA1_ON);
 	AFEC_EnableChannel(AFEC0, TEST_CHANNEL);
