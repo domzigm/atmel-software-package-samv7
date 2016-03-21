@@ -205,9 +205,9 @@ void HIDDKeyboardCallbacks_LedsChanged(
 	uint8_t scrollLockStatus)
 {
 	printf("%c %c %c\n\r",
-		   numLockStatus ? 'N' : '_',
-		   capsLockStatus ? 'C' : '_',
-		   scrollLockStatus ? 'S' : '_'
+			numLockStatus ? 'N' : '_',
+			capsLockStatus ? 'C' : '_',
+			scrollLockStatus ? 'S' : '_'
 		);
 
 	/* Num. lock */
@@ -217,6 +217,64 @@ void HIDDKeyboardCallbacks_LedsChanged(
 		LED_Clear(LED_NUMLOCK);
 }
 
+/*---------------------------------------------------------------------------
+ *         VBus monitoring (optional)
+ *---------------------------------------------------------------------------*/
+#ifdef VBUS_DETECTION
+
+/** VBus pin instance. */
+static const Pin pinVbus = PIN_USB_VBUS;
+/**
+ * Handles interrupts coming from PIO controllers.
+ */
+static void ISR_Vbus(const Pin *pPin)
+{
+	/* Check current level on VBus */
+	if (PIO_Get(&pinVbus)) {
+
+		TRACE_INFO("VBUS conn\n\r");
+		USBD_Connect();
+	}
+	else {
+
+		TRACE_INFO("VBUS discon\n\r");
+		USBD_Disconnect();
+	}
+}
+#endif
+
+
+/**
+ * Configures the VBus pin to trigger an interrupt when the level on that pin
+ * changes if it exists.
+ */
+static void VBus_Configure( void )
+{
+	TRACE_INFO("VBus configuration\n\r");
+
+#ifdef VBUS_DETECTION
+	/* Configure PIO */
+	PIO_Configure(&pinVbus, PIO_LISTSIZE(pinVbus));
+	PIO_ConfigureIt(&pinVbus, ISR_Vbus);
+	PIO_EnableIt(&pinVbus);
+
+	/* Check current level on VBus */
+	if (PIO_Get(&pinVbus)) {
+
+		/* if VBUS present, force the connect */
+		TRACE_INFO("conn\n\r");
+		USBD_Connect();
+	}
+	else {
+		USBD_Disconnect();
+	}
+#else
+	printf("No VBus Monitor\n\r");
+	USBD_Connect();
+
+#endif
+
+}
 
 
 /*---------------------------------------------------------------------------
@@ -261,8 +319,8 @@ int main(void)
 	/* HID driver initialization */
 	HIDDKeyboardDriver_Initialize(&hiddKeyboardDriverDescriptors);
 
-	// Start USB stack to authorize VBus monitoring
-	USBD_Connect();
+	/* Start USB stack to authorize VBus monitoring */
+	VBus_Configure();
 
 	/* Infinite loop */
 	while (1) {
