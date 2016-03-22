@@ -193,8 +193,6 @@ extern int main( void )
 	uint32_t adwBuffer[IFLASH_PAGE_SIZE / 4];
 	uint32_t dwLastPageAddress;
 	volatile uint32_t *pdwLastPageData;
-	uint32_t *read_address;
-	uint32_t  read_data;
 
 	/* Disable watchdog */
 	WDT_Disable(WDT);
