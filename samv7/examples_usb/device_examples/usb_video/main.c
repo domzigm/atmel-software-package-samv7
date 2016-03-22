@@ -467,7 +467,6 @@ void VIDD_PayloadSent(void *pArg, uint8_t bStat)
 extern int main(void)
 {
 	uint8_t i = 0;
-	USBDDriver *pUsbd = USBD_GetDriver();
 
 	/* Enable I and D cache */
 	SCB_EnableICache();

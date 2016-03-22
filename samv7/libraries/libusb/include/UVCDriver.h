@@ -99,6 +99,8 @@ extern void _PreviewMode(uint32_t,uint32_t);
 extern uint8_t UVC_is_video_on(void);
 extern uint32_t UVC_frm_width(void);
 extern uint32_t UVC_frm_height(void);
+extern uint32_t UVC_get_frm_index(void);
+extern void UVC_set_frm_index(uint32_t);
 
 /**@}*/
 #endif //#ifndef UVCDRIVER_H
