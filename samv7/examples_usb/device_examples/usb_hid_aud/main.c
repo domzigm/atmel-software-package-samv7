@@ -763,9 +763,6 @@ int main(void)
 	/* If they are present, configure Vbus & Wake-up pins */
 	PIO_InitializeInterrupts(0);
 
-	/* Initialize all USB power (off) */
-	_ConfigureUsbhs();
-
 	/* ----- HID Function Initialize */
 #ifdef NO_PUSHBUTTON
 	printf("-- : DBG key 1 2 used as buttons\n\r");

@@ -481,6 +481,8 @@ static void VBus_Configure( void )
 #endif
 
 }
+
+/**
  * \brief compress image in buffer to jpeg file
  * \param pImageSrc     pointer to image buffer to compressed
  * \param pImageDst     pointer to buffer to store the jpeg

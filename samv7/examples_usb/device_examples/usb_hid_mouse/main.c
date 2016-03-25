@@ -298,7 +298,9 @@ static void VBus_Configure( void )
 /*----------------------------------------------------------------------------
  *         Exported function
  *----------------------------------------------------------------------------*/
- *
+
+/**
+ * usb_hid_mouse application entry.
  * Initializes the system and then monitors buttons, sending the
  * corresponding character when one is pressed.
  */

@@ -653,6 +653,8 @@ static void VBus_Configure( void )
 /*----------------------------------------------------------------------------
  *         Exported functions
  *----------------------------------------------------------------------------*/
+/**
+ *  \brief usb_iad_cdc_aud Application entry point.
  *
  *  Starts the driver and
  *  - waits for an audio input stream to forward to the DAC.

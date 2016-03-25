@@ -386,7 +386,9 @@ static void VBus_Configure( void )
 #else
 	printf("No VBus Monitor\n\r");
 	USBD_Connect();
-
+	
+#endif
+}
 /*---------------------------------------------------------------------------
  *         Exported function
  *---------------------------------------------------------------------------*/
