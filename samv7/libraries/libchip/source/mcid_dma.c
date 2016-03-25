@@ -469,8 +469,6 @@ void MCID_Init(sMcid *pMcid,
 			   sXdmad *pXdmad,
 			   uint8_t bPolling)
 {
-	uint16_t clkDiv;
-
 	assert(pMcid);
 	assert(pMci);
 
@@ -499,7 +497,6 @@ void MCID_Init(sMcid *pMcid,
 								 | HSMCI_CSTOR_CSTOMUL_1048576);
 	/* Set the Mode Register: 400KHz */
 	MCI_SetSpeed(pMcid,MCI_INITIAL_SPEED,dwMck);
-	HSMCI_ConfigureMode(pMci, (clkDiv | HSMCI_MR_PWSDIV(0x7)));
 
 	HSMCI_Enable(pMci);
 	HSMCI_Configure(pMci, HSMCI_CFG_FIFOMODE | HSMCI_CFG_FERRCTRL);
