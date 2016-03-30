@@ -175,30 +175,32 @@ int main(void)
 				memset(&aligned_fs.fs, 0, sizeof(FATFS));
 				res = f_mount(&aligned_fs.fs, (TCHAR const *)&lun, 1);
 
-				if (FR_INVALID_DRIVE == res) {
+				if(FR_OK == res)
+					printf("Mount ok\n\r");
+				else if (FR_INVALID_DRIVE == res){
 					// LUN is not present
 					lun_states[lun] = TEST_NO_PRESENT;
 					printf("did not mount ok\n\r");
 					continue;
-				} else
-					printf("Mount ok\n\r");
+				}
+				else
+					printf("Mount error-%d\n\r",res);
 
 				// Create a test file on the disk
 				test_file_name[0] = lun + '0';
 				res = f_open(&aligned_file_object.file_object,
 							 (TCHAR const *)test_file_name,
 							 FA_CREATE_ALWAYS | FA_WRITE);
-
-				if (res == FR_NOT_READY) {
+				if (res == FR_OK)
+					printf("File create ok\n\r");
+				else if (res == FR_NOT_READY) {
 					// LUN not ready
 					lun_states[lun] = TEST_NO_PRESENT;
 					f_close(&aligned_file_object.file_object);
 					printf("File create error\n\r");
 					continue;
-				} else
-					printf("File create ok\n\r");
+				} else {
 
-				if (res != FR_OK) {
 					// LUN test error
 					lun_states[lun] = TEST_ERROR;
 					f_close(&aligned_file_object.file_object);
