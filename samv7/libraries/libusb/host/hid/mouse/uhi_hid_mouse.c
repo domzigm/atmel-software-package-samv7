@@ -80,7 +80,8 @@ static uhi_hid_mouse_dev_t uhi_hid_mouse_dev = {
 	.report = NULL,
 };
 
-//@}
+/* Address pointers as the return of malloc for alignment */
+static uint32_t *pDataTx;
 
 
 /**
@@ -148,7 +149,7 @@ USBH_enum_status_t uhi_hid_mouse_install(USBH_device_t *dev)
 				(((USBEndpointDescriptor *)ptr_iface)->wMaxPacketSize);
 
 			/* For aligned with 32*/
-			uint32_t *pDataTx=malloc((uhi_hid_mouse_dev.report_size) + DEFAULT_CACHELINE - 1);
+			pDataTx=malloc((uhi_hid_mouse_dev.report_size) + DEFAULT_CACHELINE - 1);
 			uhi_hid_mouse_dev.report =(uint8_t *) MEM_ALIGN(pDataTx, DEFAULT_CACHELINE);
 			if (pDataTx == NULL || uhi_hid_mouse_dev.report == NULL) {
 				assert(false);
@@ -192,8 +193,8 @@ void uhi_hid_mouse_uninstall(USBH_device_t *dev)
 	}
 
 	uhi_hid_mouse_dev.dev = NULL;
-	assert(uhi_hid_mouse_dev.report != NULL);
-	free(uhi_hid_mouse_dev.report);
+	assert(pDataTx);
+	free(pDataTx);
 	UHI_HID_MOUSE_CHANGE(dev, false);
 }
 //@}
