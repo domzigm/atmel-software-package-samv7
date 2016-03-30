@@ -130,13 +130,14 @@ static uhi_cdc_dev_t uhi_cdc_dev = {
 	.dev = NULL,
 	.nb_port = 0,
 };
+
+//! Address pointers as the return of malloc for alignment
+static uint32_t *pDataTemp[12][2];
 //@}
 
 /**
  * \name Internal routines
  */
-//@{
-
 /**
  * \brief Free all CDC device structures
  */
@@ -378,7 +379,9 @@ USBH_enum_status_t uhi_cdc_install(USBH_device_t *dev)
 				ptr_line->buffer_size = buf_size;
 				ptr_line->buffer[0].pos = 0;
 				ptr_line->buffer[0].nb = 0;
-				ptr_line->buffer[0].ptr = malloc(buf_size);
+				/* For aligned with 32*/
+				pDataTemp[port_num][0] = malloc(buf_size + DEFAULT_CACHELINE - 1);
+				ptr_line->buffer[0].ptr =(uint8_t *) MEM_ALIGN(pDataTemp[port_num][0], DEFAULT_CACHELINE);
 
 				if (ptr_line->buffer[0].ptr == NULL) {
 					assert(false);
@@ -388,7 +391,9 @@ USBH_enum_status_t uhi_cdc_install(USBH_device_t *dev)
 
 				ptr_line->buffer[1].pos = 0;
 				ptr_line->buffer[1].nb = 0;
-				ptr_line->buffer[1].ptr = malloc(buf_size);
+				/* For aligned with 32*/
+				pDataTemp[port_num][1] = malloc(buf_size + DEFAULT_CACHELINE - 1);
+				ptr_line->buffer[1].ptr =(uint8_t *) MEM_ALIGN(pDataTemp[port_num][1], DEFAULT_CACHELINE);
 
 				if (ptr_line->buffer[1].ptr == NULL) {
 					assert(false);
@@ -490,16 +495,16 @@ static void uhi_cdc_free_device(void)
 
 	for (i = 0; i < uhi_cdc_dev.nb_port; i++) {
 		if (uhi_cdc_dev.port[i].line_rx.buffer[0].ptr)
-			free(uhi_cdc_dev.port[i].line_rx.buffer[0].ptr);
+			free(pDataTemp[i][0]);
 
 		if (uhi_cdc_dev.port[i].line_rx.buffer[1].ptr)
-			free(uhi_cdc_dev.port[i].line_rx.buffer[1].ptr);
+			free(pDataTemp[i][1]);
 
 		if (uhi_cdc_dev.port[i].line_tx.buffer[0].ptr)
-			free(uhi_cdc_dev.port[i].line_tx.buffer[0].ptr);
+			free(pDataTemp[i][0]);
 
 		if (uhi_cdc_dev.port[i].line_tx.buffer[1].ptr)
-			free(uhi_cdc_dev.port[i].line_tx.buffer[1].ptr);
+			free(pDataTemp[i][1]);
 	}
 
 	free(uhi_cdc_dev.port);
@@ -735,6 +740,8 @@ static bool uhi_cdc_tx_update(uhi_cdc_line_t *line)
 	// Start transfer
 	line->b_trans_ongoing = true;
 	cpu_irq_restore(flags);
+
+	USBHS_SCB_CleanDCache_by_Addr((uint32_t*)buf->ptr,buf->nb);
 
 	return USBH_HAL_RunEndpoint(
 			uhi_cdc_dev.dev->address,
