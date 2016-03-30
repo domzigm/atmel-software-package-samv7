@@ -104,9 +104,17 @@ static uhi_msc_lun_t *uhi_msc_lun_sel;
 
 //! Temporary structures used to read LUN information via a SCSI command
 //@{
-static SBCReadCapacity10Data uhi_msc_capacity;
+
+COMPILER_ALIGNED(32)
+static struct {
+	SBCReadCapacity10Data uhi_msc_capacity;
+	uint8_t test[24];  /* Dummy for alignement*/
+}capacity_fill;
+COMPILER_ALIGNED(32)
 static SBCInquiryData uhi_msc_inquiry;
+COMPILER_ALIGNED(32)
 static SBCRequestSenseData uhi_msc_sense;
+COMPILER_ALIGNED(32)
 static struct {
 	SBCModeParameterHeader6 header;
 	SBCInformationalExceptionsControl sense_data;
@@ -121,18 +129,20 @@ typedef void (*uhi_msc_scsi_sense_callback_t) (void);
 static uhi_msc_scsi_callback_t uhi_msc_scsi_sub_callback;
 static uhi_msc_scsi_callback_t uhi_msc_scsi_callback;
 static uhi_msc_scsi_sense_callback_t uhi_msc_scsi_sense_callback;
+
 //@}
 //@}
 
 /**
  * \name Variables to manage SCSI requests
  */
-//@{
 //! Structure to send a CBW packet
+COMPILER_ALIGNED(32)
 static MSCbw uhi_msc_cbw =
 {.dCBWSignature = MSD_CBW_SIGNATURE };
 
 //! Structure to receive a CSW packet
+COMPILER_ALIGNED(32)
 static MSCsw uhi_msc_csw;
 
 //! Structure to sent or received DATA packet
@@ -639,6 +649,8 @@ static void uhi_msc_scsi_inquiry(uhi_msc_scsi_callback_t callback)
  */
 static void uhi_msc_scsi_inquiry_done(bool b_cbw_succes)
 {
+	SCB_InvalidateDCache_by_Addr((uint32_t*)(&uhi_msc_inquiry),sizeof(uhi_msc_inquiry));
+
 	if ((!b_cbw_succes) || uhi_msc_csw.dCSWDataResidue) {
 		uhi_msc_scsi_callback(false);
 		return;
@@ -729,7 +741,7 @@ static void uhi_msc_scsi_read_capacity(uhi_msc_scsi_callback_t callback)
 	uhi_msc_cbw.bCBWCBLength = 10;
 	memset(uhi_msc_cbw.pCommand, 0, sizeof(uhi_msc_cbw.pCommand));
 	uhi_msc_cbw.pCommand[0] = SBC_READ_CAPACITY_10;
-	uhi_msc_scsi(uhi_msc_scsi_read_capacity_done, (uint8_t *)&uhi_msc_capacity);
+	uhi_msc_scsi(uhi_msc_scsi_read_capacity_done, (uint8_t *)&(capacity_fill.uhi_msc_capacity));
 }
 
 /**
@@ -744,6 +756,9 @@ static void uhi_msc_scsi_read_capacity_done(bool b_cbw_succes)
 	pBlockLen = (uint32_t *)&uhi_msc_lun_sel->capacity.pLogicalBlockLength[0];
 	pBlockAddr = (uint32_t *)&uhi_msc_lun_sel->capacity.pLogicalBlockAddress[0];
 
+	SCB_InvalidateDCache_by_Addr((uint32_t*)(&capacity_fill.uhi_msc_capacity),
+					sizeof(capacity_fill.uhi_msc_capacity));
+
 	if ((!b_cbw_succes) || (uhi_msc_csw.bCSWStatus != MSD_CSW_COMMAND_PASSED)
 		|| uhi_msc_csw.dCSWDataResidue) {
 		// Read capacity has failed
@@ -756,9 +771,9 @@ static void uhi_msc_scsi_read_capacity_done(bool b_cbw_succes)
 
 	// Format capacity data
 	*pBlockLen = be32_to_cpu(*((uint32_t *)
-								&uhi_msc_capacity.pLogicalBlockLength[0]));
+								&capacity_fill.uhi_msc_capacity.pLogicalBlockLength[0]));
 	*pBlockAddr = be32_to_cpu(*((uint32_t *)
-								 &uhi_msc_capacity.pLogicalBlockAddress[0]));
+								 &capacity_fill.uhi_msc_capacity.pLogicalBlockAddress[0]));
 
 	// Now, read flag write protection
 	uhi_msc_scsi_mode_sense6(uhi_msc_scsi_callback);
@@ -810,6 +825,7 @@ static void uhi_msc_scsi_mode_sense6_done(bool b_cbw_succes)
 		uhi_msc_scsi_callback(true);
 		return;
 	}
+	SCB_InvalidateDCache_by_Addr((uint32_t *)&uhi_msc_sense6, sizeof(uhi_msc_sense6));
 
 	// Decode field
 	uhi_msc_lun_sel->b_write_protected =
@@ -885,6 +901,7 @@ static void uhi_msc_scsi_request_sense_done(bool b_cbw_succes)
 		uhi_msc_scsi_callback(false);
 		return;
 	}
+	SCB_InvalidateDCache_by_Addr((uint32_t *)&uhi_msc_sense, sizeof(uhi_msc_sense));
 
 	// Request sense successful
 	uhi_msc_scsi_sense_callback();
@@ -920,6 +937,7 @@ static void uhi_msc_scsi(uhi_msc_scsi_callback_t callback, uint8_t *payload)
 	// CBWCB4 - LSB(Allocation Length)
 	// CBWCW5 - Control = 0
 
+	SCB_CleanDCache_by_Addr((uint32_t *)(&uhi_msc_cbw),sizeof(uhi_msc_cbw));
 	// Start transfer of CBW packet on bulk endpoint OUT
 	uhi_msc_transfer(uhi_msc_dev_sel->ep_out, (uint8_t *) &uhi_msc_cbw,
 					 sizeof(uhi_msc_cbw), uhi_msc_cbw_sent);
@@ -943,7 +961,7 @@ static void uhi_msc_cbw_sent(
 	UNUSED(add);
 	UNUSED(ep);
 	UNUSED(nb_transfered);
-
+//	printf("Cbw ");
 	// Checks the result of CBW transfer
 	if (status != UHD_TRANS_NOERROR) {
 		if (status == UHD_TRANS_STALL) {
@@ -971,7 +989,11 @@ static void uhi_msc_cbw_sent(
 	if (uhi_msc_cbw.bmCBWFlags & MSD_CBW_DEVICE_TO_HOST)
 		endp = uhi_msc_dev_sel->ep_in;
 	else
+		{
 		endp = uhi_msc_dev_sel->ep_out;
+		SCB_CleanDCache_by_Addr((uint32_t *)uhi_msc_data,uhi_msc_cbw.dCBWDataTransferLength);
+
+		}
 
 	uhi_msc_transfer(endp, uhi_msc_data, uhi_msc_cbw.dCBWDataTransferLength,
 					 uhi_msc_data_transfered);
@@ -1012,6 +1034,10 @@ static void uhi_msc_data_transfered(
 	}
 
 	// DATA phase complete
+	if (uhi_msc_cbw.bmCBWFlags & MSD_CBW_DEVICE_TO_HOST)
+		{
+		SCB_InvalidateDCache_by_Addr((uint32_t *)uhi_msc_data,uhi_msc_cbw.dCBWDataTransferLength);
+		}
 
 	// Start CSW phase
 	uhi_msc_csw_wait();
@@ -1054,6 +1080,7 @@ static void uhi_msc_csw_received(
 		uhi_msc_scsi_sub_callback(false);
 		return;
 	}
+	SCB_InvalidateDCache_by_Addr((uint32_t *)&uhi_msc_csw, sizeof(uhi_msc_csw));
 
 	if ((nb_transfered != sizeof(uhi_msc_csw))
 		|| (uhi_msc_csw.dCSWTag != uhi_msc_cbw.dCBWTag)
