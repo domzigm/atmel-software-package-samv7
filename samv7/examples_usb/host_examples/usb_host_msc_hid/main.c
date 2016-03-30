@@ -104,8 +104,20 @@ static volatile uint16_t main_usb_sof_counter = 0;
 
 static test_state_t lun_states[MAX_DRIVE];
 
-static FATFS fs; // Re-use fs for LUNs to reduce memory footprint
-static FIL file_object;
+/* Add ALIGN_FATFS and ALIGN_FIL to ensure the buffer is 32 bytes aligned */
+typedef struct _ALIGN_FATFS {
+	uint8_t padding[16];
+	FATFS fs;
+} ALIGN_FATFS;
+typedef struct _ALIGN_FIL {
+	uint8_t padding[28];
+	FIL file_object;
+} ALIGN_FIL;
+
+COMPILER_ALIGNED(32)
+static ALIGN_FATFS aligned_fs;
+COMPILER_ALIGNED(32)
+static ALIGN_FIL aligned_file_object;
 
 static char test_file_name[] = {
 	TEST_FILE_NAME
@@ -160,8 +172,8 @@ int main(void)
 					printf("LUN ok\n\r");
 
 				// Mount drive
-				memset(&fs, 0, sizeof(FATFS));
-				res = f_mount(&fs, (TCHAR const *)&lun, 1);
+				memset(&aligned_fs.fs, 0, sizeof(FATFS));
+				res = f_mount(&aligned_fs.fs, (TCHAR const *)&lun, 1);
 
 				if (FR_INVALID_DRIVE == res) {
 					// LUN is not present
@@ -173,14 +185,14 @@ int main(void)
 
 				// Create a test file on the disk
 				test_file_name[0] = lun + '0';
-				res = f_open(&file_object,
+				res = f_open(&aligned_file_object.file_object,
 							 (TCHAR const *)test_file_name,
 							 FA_CREATE_ALWAYS | FA_WRITE);
 
 				if (res == FR_NOT_READY) {
 					// LUN not ready
 					lun_states[lun] = TEST_NO_PRESENT;
-					f_close(&file_object);
+					f_close(&aligned_file_object.file_object);
 					printf("File create error\n\r");
 					continue;
 				} else
@@ -189,17 +201,17 @@ int main(void)
 				if (res != FR_OK) {
 					// LUN test error
 					lun_states[lun] = TEST_ERROR;
-					f_close(&file_object);
+					f_close(&aligned_file_object.file_object);
 					printf("File system error\n\r");
 					continue;
 				}
 
 				// Write to test file
-				f_puts((const TCHAR *)MSG_TEST, &file_object);
+				f_puts((const TCHAR *)MSG_TEST, &aligned_file_object.file_object);
 				printf("File Writing\n\r");
 				// LUN test OK
 				lun_states[lun] = TEST_OK;
-				f_close(&file_object);
+				f_close(&aligned_file_object.file_object);
 				printf("File close\n\r");
 			}
 
