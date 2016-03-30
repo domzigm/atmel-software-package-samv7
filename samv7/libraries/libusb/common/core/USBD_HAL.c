@@ -1574,9 +1574,9 @@ uint8_t USBD_HAL_WrWithHdr(uint8_t bEndpoint,
 				pktLen = pEp->size;
 
 				if (pktLen >= dLength) { /* It's the last */
-					pDmaLL[1].pNxtDesc = (void *) NULL;
-					pDmaLL[1].pAddr = (void *)&pU8[ndxData];
-					pDmaLL[1].dwCtrl = USBHS_DEVDMACONTROL_CHANN_ENB
+					pDmaLL[2].pNxtDesc = (void *) NULL;
+					pDmaLL[2].pAddr = (void *)&pU8[ndxData];
+					pDmaLL[2].dwCtrl = USBHS_DEVDMACONTROL_CHANN_ENB
 									   | USBHS_DEVDMACONTROL_BUFF_LENGTH(dLength)
 									   | USBHS_DEVDMACONTROL_END_B_EN
 									   | USBHS_DEVDMACONTROL_END_BUFFIT;
