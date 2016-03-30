@@ -1912,7 +1912,6 @@ static void USBH_HAL_PipeXfrCmplt(uint8_t pipe)
 				}
 			}
 
-			SCB_CleanInvalidateDCache();
 			USBHS_HostConfigureDma(pUsbDma, uhd_dma_ctrl);
 			pJob->nb_trans += next_trans;
 			cpu_irq_restore(flags);
@@ -1959,8 +1958,6 @@ static void USBH_HAL_PipeDmaInterrupt(uint8_t pipe)
 	Usbhs  *pUdp = USBHS;
 	UsbhsHstdma *pUsbDma = &pUdp->USBHS_HSTDMA[pipe - 1];
 
-	SCB_CleanInvalidateDCache();
-
 	if (USBHS_GetHostPipeDmaStatus(pUsbDma) & USBHS_HSTDMASTATUS_CHANN_ENB) {
 		return; // Ignore EOT_STA interrupt
 	}
@@ -1969,11 +1966,10 @@ static void USBH_HAL_PipeDmaInterrupt(uint8_t pipe)
 	nb_remaining = ( (USBHS_GetHostPipeDmaStatus(pUsbDma) &
 					  USBHS_HSTDMASTATUS_BUFF_COUNT_Msk) >> USBHS_HSTDMASTATUS_BUFF_COUNT_Pos);
 	memory_sync();
+	// Get job corresponding at endpoint
+	pJob = &uhd_pipe_job[pipe - 1];
 
 	if (nb_remaining) {
-		// Get job corresponding at endpoint
-		pJob = &uhd_pipe_job[pipe - 1];
-
 		// Transfer no complete (short packet or ZLP) then:
 		// Update number of transfered data
 		pJob->nb_trans -= nb_remaining;
@@ -1996,7 +1992,7 @@ static void USBH_HAL_PipeDmaInterrupt(uint8_t pipe)
 			// - incomplete transfer when the request number INRQ is not complete.
 			// - low USB speed and with a high CPU frequency,
 			// a ACK from host can be always running on USB line.
-
+		//	printf("IN-%d ",nb_remaining);
 			if (nb_remaining) {
 				// Freeze pipe in case of incomplete transfer
 				USBHS_HostEnablePipeIntType(USBHS, pipe, USBHS_HSTPIPIER_PFREEZES);
@@ -2110,7 +2106,7 @@ static void USBH_HAL_PipeInterrupt(uint8_t pipe)
 		//uhd_disable_out_ready_interrupt(pipe);
 		// One bank is free then send a ZLP
 		USBHS_HostAckPipeIntType(USBHS, pipe,
-								 USBHS_HSTPIPICR_TXOUTIC); //uhd_ack_out_ready(pipe);
+								 USBHS_HSTPIPICR_TXOUTIC);
 		USBHS_HostDisablePipeIntType(USBHS, pipe,
 									 (USBHS_HSTPIPIDR_FIFOCONC | USBHS_HSTPIPIDR_PFREEZEC));
 		//USBHS_HostDisablePipeIntType(USBHS, pipe, );
