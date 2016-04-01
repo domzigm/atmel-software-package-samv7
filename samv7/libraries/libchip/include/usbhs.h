@@ -124,9 +124,9 @@ __STATIC_INLINE void USBHS_VBusHWC(Usbhs *pUsbhs, uint8_t Enable)
 {
 
 	if (!Enable)
-		pUsbhs->USBHS_CTRL |= (1 << 8);
+		pUsbhs->USBHS_CTRL |= USBHS_CTRL_VBUSHWC;
 	else
-		pUsbhs->USBHS_CTRL &= ~((uint32_t)(1 << 8));
+		pUsbhs->USBHS_CTRL &= ~((uint32_t)USBHS_CTRL_VBUSHWC);
 }
 
 /**
