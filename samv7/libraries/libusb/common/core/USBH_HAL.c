@@ -538,9 +538,7 @@ void USBH_HAL_EnableUsbHost(void)
 	// To avoid USB interrupt before end of initialization
 	flags = cpu_irq_save();
 
-	//USB_Initialized = true;
-
-	//* Enable USB hardware clock
+	/* Enable USB hardware clock */
 	sysclk_enable_usb();
 	PMC_EnablePeripheral(ID_USBHS);
 
@@ -555,7 +553,9 @@ void USBH_HAL_EnableUsbHost(void)
 
 	PIO_Set(USB_HOST);// Power off USB devices
 
+	/* Host mode is selected */
 	USBHS_UsbMode(USBHS, HOST_MODE);
+	USBHS_UsbModeEnable(USBHS);
 
 	USBHS_UsbEnable(USBHS, true);
 
