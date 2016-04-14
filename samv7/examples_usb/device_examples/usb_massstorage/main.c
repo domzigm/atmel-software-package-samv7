@@ -512,6 +512,9 @@ int main(void)
 	/* Initialize PIO pins */
 	_ConfigurePIOs();
 
+	/* Initialize drivers */
+	_ConfigureDrivers();
+
 	_MemoriesInitialize(pSd);
 
 	/* BOT driver initialization */
