@@ -520,7 +520,7 @@
 #define BOARD_USB_BMATTRIBUTES USBConfigurationDescriptor_SELFPOWERED_NORWAKEUP
 
 /** USB VBus monitoring pin definition.
- *  VBUS detection dose not exist by default for the SAMV71 Xplained Ultra board
+ *  VBUS detection dose not exist by default for the SAME70 Xplained Ultra board
  */
 #ifdef VBUS_DETECTION
 #define PIN_USB_VBUS {PIO_PA6, PIOA, ID_PIOA, PIO_INPUT, PIO_DEFAULT}
