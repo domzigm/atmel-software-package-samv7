@@ -1914,6 +1914,13 @@ uint8_t USBD_HAL_Halt(uint8_t bEndpoint, uint8_t ctl)
 			USBHS_DisableEPIntType(pUdp, bEndpoint, USBHS_DEVEPTIDR_STALLRQC);
 			USBHS_AutoSwitchBankEnable(pUdp, bEndpoint, true);
 		}
+		else
+		{
+			/* Reinitialize the data toggle to DATA0 regardless of whether 
+			the endponit has the Halt feature.*/
+			/*Clear data toggle sequence*/
+			USBHS_EnableEPIntType(pUdp, bEndpoint, USBHS_DEVEPTIER_RSTDTS);
+		}
 	}
 
 	/* Return Halt status */
