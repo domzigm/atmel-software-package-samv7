@@ -105,22 +105,26 @@ static uhi_msc_lun_t *uhi_msc_lun_sel;
 //! Temporary structures used to read LUN information via a SCSI command
 //@{
 
-COMPILER_ALIGNED(32)
-static struct {
+typedef struct {
 	SBCReadCapacity10Data uhi_msc_capacity;
-	uint8_t test[24];  /* Dummy for alignement*/
-}capacity_fill;
+	uint8_t dummy[24];  /* Dummy for alignement*/
+}Capacity_Aligned;
+COMPILER_ALIGNED(32)
+static Capacity_Aligned capacity_fill;
+
 COMPILER_ALIGNED(32)
 static SBCInquiryData uhi_msc_inquiry;
 COMPILER_ALIGNED(32)
 static SBCRequestSenseData uhi_msc_sense;
-COMPILER_ALIGNED(32)
-static struct {
+
+typedef struct {
 	SBCModeParameterHeader6 header;
 	SBCInformationalExceptionsControl sense_data;
-} uhi_msc_sense6;
+	uint8_t dummy[16];  /* Dummy for alignement*/
+} MSC_Sense6;
+COMPILER_ALIGNED(32)
+static MSC_Sense6 uhi_msc_sense6;
 //@}
-
 //! Callback type used by SCSI sense command
 typedef void (*uhi_msc_scsi_sense_callback_t) (void);
 
@@ -142,8 +146,12 @@ static MSCbw uhi_msc_cbw =
 {.dCBWSignature = MSD_CBW_SIGNATURE };
 
 //! Structure to receive a CSW packet
+typedef struct {
+	MSCsw uhi_msc_csw;
+	uint8_t dummy[19];  /* Dummy for alignement*/
+}CSW_Aligned;
 COMPILER_ALIGNED(32)
-static MSCsw uhi_msc_csw;
+static CSW_Aligned csw_fill;
 
 //! Structure to sent or received DATA packet
 static uint8_t *uhi_msc_data;
@@ -651,7 +659,7 @@ static void uhi_msc_scsi_inquiry_done(bool b_cbw_succes)
 {
 	SCB_InvalidateDCache_by_Addr((uint32_t*)(&uhi_msc_inquiry),sizeof(uhi_msc_inquiry));
 
-	if ((!b_cbw_succes) || uhi_msc_csw.dCSWDataResidue) {
+	if ((!b_cbw_succes) || csw_fill.uhi_msc_csw.dCSWDataResidue) {
 		uhi_msc_scsi_callback(false);
 		return;
 	}
@@ -675,7 +683,7 @@ static void uhi_msc_scsi_test_unit_ready_done(bool b_cbw_succes)
 	}
 
 	// Test unit ready successful
-	if (uhi_msc_csw.bCSWStatus != MSD_CSW_COMMAND_PASSED) {
+	if (csw_fill.uhi_msc_csw.bCSWStatus != MSD_CSW_COMMAND_PASSED) {
 		uhi_msc_lun_sel->status = LUN_FAIL; // By default
 		// LUN is not ready
 		// Read a sense code
@@ -759,8 +767,8 @@ static void uhi_msc_scsi_read_capacity_done(bool b_cbw_succes)
 	SCB_InvalidateDCache_by_Addr((uint32_t*)(&capacity_fill.uhi_msc_capacity),
 					sizeof(capacity_fill.uhi_msc_capacity));
 
-	if ((!b_cbw_succes) || (uhi_msc_csw.bCSWStatus != MSD_CSW_COMMAND_PASSED)
-		|| uhi_msc_csw.dCSWDataResidue) {
+	if ((!b_cbw_succes) || (csw_fill.uhi_msc_csw.bCSWStatus != MSD_CSW_COMMAND_PASSED)
+		|| csw_fill.uhi_msc_csw.dCSWDataResidue) {
 		// Read capacity has failed
 		uhi_msc_lun_sel->status = LUN_FAIL;
 
@@ -817,8 +825,8 @@ static void uhi_msc_scsi_mode_sense6(uhi_msc_scsi_callback_t callback)
  */
 static void uhi_msc_scsi_mode_sense6_done(bool b_cbw_succes)
 {
-	if ((!b_cbw_succes) || (uhi_msc_csw.bCSWStatus != MSD_CSW_COMMAND_PASSED)
-		|| (uhi_msc_csw.dCSWDataResidue < 4)) {
+	if ((!b_cbw_succes) || (csw_fill.uhi_msc_csw.bCSWStatus != MSD_CSW_COMMAND_PASSED)
+		|| (csw_fill.uhi_msc_csw.dCSWDataResidue < 4)) {
 		// Sense6 command is not supported,
 		// The device must be not write protected.
 		uhi_msc_lun_sel->b_write_protected = false;
@@ -840,8 +848,8 @@ static void uhi_msc_scsi_mode_sense6_done(bool b_cbw_succes)
  */
 static void uhi_msc_scsi_read_10_done(bool b_cbw_succes)
 {
-	if ((!b_cbw_succes) || (uhi_msc_csw.bCSWStatus != MSD_CSW_COMMAND_PASSED)
-		|| uhi_msc_csw.dCSWDataResidue) {
+	if ((!b_cbw_succes) || (csw_fill.uhi_msc_csw.bCSWStatus != MSD_CSW_COMMAND_PASSED)
+		|| csw_fill.uhi_msc_csw.dCSWDataResidue) {
 		// Read10 has failed
 		uhi_msc_lun_sel->status = LUN_FAIL;
 		uhi_msc_scsi_callback(false);
@@ -858,8 +866,8 @@ static void uhi_msc_scsi_read_10_done(bool b_cbw_succes)
  */
 static void uhi_msc_scsi_write_10_done(bool b_cbw_succes)
 {
-	if ((!b_cbw_succes) || (uhi_msc_csw.bCSWStatus != MSD_CSW_COMMAND_PASSED)
-		|| uhi_msc_csw.dCSWDataResidue) {
+	if ((!b_cbw_succes) || (csw_fill.uhi_msc_csw.bCSWStatus != MSD_CSW_COMMAND_PASSED)
+		|| csw_fill.uhi_msc_csw.dCSWDataResidue) {
 		// Write10 has failed
 		uhi_msc_lun_sel->status = LUN_FAIL;
 		uhi_msc_scsi_callback(false);
@@ -897,7 +905,7 @@ static void uhi_msc_scsi_request_sense(uhi_msc_scsi_sense_callback_t callback)
  */
 static void uhi_msc_scsi_request_sense_done(bool b_cbw_succes)
 {
-	if ((!b_cbw_succes) || uhi_msc_csw.dCSWDataResidue) {
+	if ((!b_cbw_succes) || csw_fill.uhi_msc_csw.dCSWDataResidue) {
 		uhi_msc_scsi_callback(false);
 		return;
 	}
@@ -1050,8 +1058,8 @@ static void uhi_msc_data_transfered(
 static void uhi_msc_csw_wait(void)
 {
 	// Start transfer of CSW packet on bulk endpoint IN
-	uhi_msc_transfer(uhi_msc_dev_sel->ep_in, (uint8_t *) & uhi_msc_csw,
-					 sizeof(uhi_msc_csw), uhi_msc_csw_received);
+	uhi_msc_transfer(uhi_msc_dev_sel->ep_in, (uint8_t *) & csw_fill.uhi_msc_csw,
+					 sizeof(csw_fill.uhi_msc_csw), uhi_msc_csw_received);
 }
 
 /**
@@ -1080,18 +1088,18 @@ static void uhi_msc_csw_received(
 		uhi_msc_scsi_sub_callback(false);
 		return;
 	}
-	SCB_InvalidateDCache_by_Addr((uint32_t *)&uhi_msc_csw, sizeof(uhi_msc_csw));
+	SCB_InvalidateDCache_by_Addr((uint32_t *)&csw_fill.uhi_msc_csw, sizeof(csw_fill.uhi_msc_csw));
 
-	if ((nb_transfered != sizeof(uhi_msc_csw))
-		|| (uhi_msc_csw.dCSWTag != uhi_msc_cbw.dCBWTag)
-		|| (uhi_msc_csw.dCSWSignature != MSD_CSW_SIGNATURE)) {
+	if ((nb_transfered != sizeof(csw_fill.uhi_msc_csw))
+		|| (csw_fill.uhi_msc_csw.dCSWTag != uhi_msc_cbw.dCBWTag)
+		|| (csw_fill.uhi_msc_csw.dCSWSignature != MSD_CSW_SIGNATURE)) {
 		// Error in CSW fields
 		uhi_msc_scsi_sub_callback(false);
 		return;
 	}
 
 	// CSW is success
-	uhi_msc_csw.dCSWDataResidue = uhi_msc_csw.dCSWDataResidue;
+	csw_fill.uhi_msc_csw.dCSWDataResidue = csw_fill.uhi_msc_csw.dCSWDataResidue;
 	uhi_msc_scsi_sub_callback(true);
 }
 
