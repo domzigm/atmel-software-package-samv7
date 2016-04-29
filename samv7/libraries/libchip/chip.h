@@ -63,7 +63,8 @@
 	#define SCB_VTOR_TBLBASE_Msk               (1UL << SCB_VTOR_TBLBASE_Pos)                  /*!< SCB VTOR: TBLBASE Mask */
 #endif
 
-
+/* In Cortex-M7 size of cache line is fixed to 8 words (32 bytes) */
+#define DEFAULT_CACHELINE 32
 /*
  * Peripherals
  */
