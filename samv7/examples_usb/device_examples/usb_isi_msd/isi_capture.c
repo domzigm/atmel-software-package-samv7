@@ -64,13 +64,15 @@ extern const sensorProfile_t ov2643Profile;
 extern const sensorProfile_t ov5640Profile;
 extern const sensorProfile_t ov7740Profile;
 extern const sensorProfile_t ov9740Profile;
+extern const sensorProfile_t ov7670Profile;
 
 /** Supported sensor profiles */
-static const sensorProfile_t *sensorsProfile[5] = {&ov2640Profile,
+static const sensorProfile_t *sensorsProfile[6] = {&ov2640Profile,
 												   &ov2643Profile,
 												   &ov5640Profile,
 												   &ov7740Profile,
-												   &ov9740Profile
+												   &ov9740Profile,
+												   &ov7670Profile
 												  };
 
 /** Buffer for ISI capture */

@@ -179,13 +179,15 @@ extern const sensorProfile_t ov2643Profile;
 extern const sensorProfile_t ov5640Profile;
 extern const sensorProfile_t ov7740Profile;
 extern const sensorProfile_t ov9740Profile;
+extern const sensorProfile_t ov7670Profile;
+
 
 static const sensorProfile_t *sensorProfiles[] = {
-	&ov2643Profile, &ov5640Profile, &ov7740Profile, &ov9740Profile
+	&ov2643Profile, &ov5640Profile, &ov7740Profile, &ov9740Profile,&ov7670Profile
 };
 
 static const char sensorName[][8] = {
-	"OV2643", "OV5640", "OV7740", "OV9740"
+	"OV2643", "OV5640", "OV7740", "OV9740","OV7670"
 };
 
 /** Video buffers */

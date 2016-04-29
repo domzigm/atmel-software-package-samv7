@@ -151,13 +151,16 @@ extern const sensorProfile_t ov2643Profile;
 extern const sensorProfile_t ov5640Profile;
 extern const sensorProfile_t ov7740Profile;
 extern const sensorProfile_t ov9740Profile;
+extern const sensorProfile_t ov7670Profile;
+
 
 /** Supported sensor profiles */
-static const sensorProfile_t *sensorsProfile[5] = {&ov2640Profile,
+static const sensorProfile_t *sensorsProfile[6] = {&ov2640Profile,
                                                   &ov2643Profile,
                                                   &ov5640Profile,
                                                   &ov7740Profile,
-                                                  &ov9740Profile
+                                                  &ov9740Profile,
+												  &ov7670Profile
 };
 
 /*----------------------------------------------------------------------------
@@ -377,9 +380,11 @@ extern int main( void )
 	printf("- '2' omnivision 5640 \n\r");
 	printf("- '3' omnivision 7740 \n\r");
 	printf("- '4' omnivision 9740 \n\r");
+	printf("- '5' omnivision 7670 \n\r");
+
 	for(;;) {
 		key = DBG_GetChar();
-		if ((key >= '0') && (key <='5')) {
+		if ((key >= '0') && (key <='6')) {
 			if (sensor_setup(&twid, sensorsProfile[key- '0'], VGA) != SENSOR_OK) {
 				printf("-E- Sensor setup failed.");
 				while (1);
