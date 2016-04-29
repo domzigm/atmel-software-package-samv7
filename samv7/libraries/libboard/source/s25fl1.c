@@ -226,8 +226,8 @@ static uint8_t S25FL1D_MemoryAccess(uint8_t Instr, uint32_t Addr,
 #endif
 	} else {
 		/* For aligned with 32*/
-		uint32_t *pDataTx = malloc((size + 4) + 32);
-		qspiDma.Qspid.qspiBuffer.pDataTx = Memory_Align(pDataTx, 32);
+		uint32_t *pDataTx = malloc((size + 4) + 2*(DEFAULT_CACHELINE) - 1);
+		qspiDma.Qspid.qspiBuffer.pDataTx = Memory_Align(pDataTx, DEFAULT_CACHELINE);
 
 		if ((((int)qspiDma.Qspid.qspiBuffer.pDataTx) % 32) != 0)
 			printf("pDataTx is not aligned with 32 - 0x%x \n\r",

@@ -149,7 +149,7 @@ USBH_enum_status_t uhi_hid_mouse_install(USBH_device_t *dev)
 				(((USBEndpointDescriptor *)ptr_iface)->wMaxPacketSize);
 
 			/* For aligned with 32*/
-			pDataTx=malloc((uhi_hid_mouse_dev.report_size) + DEFAULT_CACHELINE - 1);
+			pDataTx=malloc((uhi_hid_mouse_dev.report_size) + 2*(DEFAULT_CACHELINE) - 1);
 			uhi_hid_mouse_dev.report =(uint8_t *) MEM_ALIGN(pDataTx, DEFAULT_CACHELINE);
 			if (pDataTx == NULL || uhi_hid_mouse_dev.report == NULL) {
 				assert(false);

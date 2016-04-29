@@ -380,7 +380,7 @@ USBH_enum_status_t uhi_cdc_install(USBH_device_t *dev)
 				ptr_line->buffer[0].pos = 0;
 				ptr_line->buffer[0].nb = 0;
 				/* For aligned with 32*/
-				pDataTemp[port_num][0] = malloc(buf_size + DEFAULT_CACHELINE - 1);
+				pDataTemp[port_num][0] = malloc(buf_size + 2* (DEFAULT_CACHELINE) - 1);
 				ptr_line->buffer[0].ptr =(uint8_t *) MEM_ALIGN(pDataTemp[port_num][0], DEFAULT_CACHELINE);
 
 				if (pDataTemp[port_num][0] == NULL || ptr_line->buffer[0].ptr == NULL) {
@@ -392,7 +392,7 @@ USBH_enum_status_t uhi_cdc_install(USBH_device_t *dev)
 				ptr_line->buffer[1].pos = 0;
 				ptr_line->buffer[1].nb = 0;
 				/* For aligned with 32*/
-				pDataTemp[port_num][1] = malloc(buf_size + DEFAULT_CACHELINE - 1);
+				pDataTemp[port_num][1] = malloc(buf_size + 2*(DEFAULT_CACHELINE) - 1);
 				ptr_line->buffer[1].ptr =(uint8_t *) MEM_ALIGN(pDataTemp[port_num][1], DEFAULT_CACHELINE);
 
 				if (pDataTemp[port_num][1] == NULL || ptr_line->buffer[1].ptr == NULL) {
