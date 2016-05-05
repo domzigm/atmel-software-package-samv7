@@ -183,8 +183,7 @@ static uint8_t usbSerialBuffer0[DATABUFFERSIZE];
 /** Serial port opened */
 static uint8_t isSerialPortON = 0;
 
-/** Flag for cdc_read */
-static uint32_t ReadDone = 0;
+
 
 /*- MSD */
 /** Available media. */
@@ -232,10 +231,14 @@ void USBDCallbacks_RequestReceived(const USBGenericRequest *request)
 
 /**
  * The callback function of CDCDSerial_Read.
+ * Call CDCDSerial_Read here to keep the device in receive state and this is 
+ * essential for Linux host.
  */
-void _CDCDSerial_Read_Callback()
+static void _CDCDSerial_Read_Callback( void)
 {
-	ReadDone = 1;
+
+	CDCDSerial_Read(usbSerialBuffer0, DATAPACKETSIZE,(TransferCallback) _CDCDSerial_Read_Callback, 0);
+
 }
 
 /**
@@ -284,10 +287,10 @@ uint8_t CDCDSerial_LineCodingIsToChange(CDCLineCoding *pLineCoding)
 /*---------------------------------------------------------------------------
  *         Internal functions
  *---------------------------------------------------------------------------*/
+/**
+ * Configure USBHS settings for USB device
+ */
 
-/*---------------------------------------------------------------------------
- *         VBus monitoring (optional)
- *---------------------------------------------------------------------------*/
 #ifdef VBUS_DETECTION
 
 /** VBus pin instance. */
@@ -447,17 +450,18 @@ int main(void)
 				printf("-I- SerialPort ON\n\r");
 				/* Start receiving data on the USART */
 				/* Start receiving data on the USB */
-				ReadDone = 0;
 				CDCDSerial_Read(usbSerialBuffer0, DATAPACKETSIZE,(TransferCallback) _CDCDSerial_Read_Callback, 0);
 				serialON = 1;
-			} else if (serialON && !isSerialPortON) {
+			}else if(serialON && !isSerialPortON){
+				memory_sync();
+				/* Remove the data in the banks when the port has been closed on the host */
+				while (!USBHS_IsBankFree(USBHS, CDCD_Descriptors_DATAIN0)) {
+					USBHS_KillBank(USBHS, CDCD_Descriptors_DATAIN0);
+					while (USBHS_IsBankKilled(USBHS, CDCD_Descriptors_DATAIN0));
+				}
+
 				printf("-I- SeriaoPort OFF\n\r");
 				serialON = 0;
-			} else if (serialON && isSerialPortON && ReadDone == 1)
-			{
-				ReadDone = 0;
-				CDCDSerial_Read(usbSerialBuffer0, DATAPACKETSIZE,(TransferCallback) _CDCDSerial_Read_Callback, 0);
-
 			}
 
 			MSDFunction_StateMachine();
