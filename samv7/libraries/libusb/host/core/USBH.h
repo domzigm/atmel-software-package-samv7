@@ -124,15 +124,6 @@ extern "C" {
 #endif
 
 /**
- * Define the macro to ensure the address (StartAddr)is aligned
- * with a special value (AlignNum).
- */
-#define MEM_ALIGN(StartAddr, AlignNum) \
-	((uint32_t *)(((uint32_t)(StartAddr) + (AlignNum) -1) & (~((AlignNum) - 1))))
-
-
-
-/**
  * \brief Structure to store device information
  */
 typedef struct {

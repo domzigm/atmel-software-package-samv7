@@ -268,11 +268,19 @@
  */
 #define UNUSED(v)          (void)(v)
 
-/**
- * \weakgroup interrupt_group
+/*! \brief Round up to integer which can be aligned with value of m.
  *
- * @{
+ * \param x Input value.
+ * \param m Aligned value.
  */
+#define ROUND_UP_MULT(x,m) (((x) + ((m)-1)) & ~((m)-1))
+
+/**
+ * Define the macro to ensure the address (StartAddr)is aligned
+ * with a special value (AlignNum).
+ */
+#define MEM_ALIGN(StartAddr, AlignNum) \
+	((uint32_t *)(((uint32_t)(StartAddr) + (AlignNum) -1) & (~((AlignNum) - 1))))
 
 /**
  * \name Interrupt Service Routine definition
