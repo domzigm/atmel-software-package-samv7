@@ -862,11 +862,24 @@ static inline uint8_t UDPHS_Write(uint8_t bEndpoint,
 		return USBD_STATUS_SUCCESS;
 	}
 
-	/* Wait for the bank to be free in order to transfer data without DMA correctly
-	 * when the last is done with DMA */
+	/* Wait for the bank to be free before disabling the automatic bank switch in order
+     * to transfer data in FOFO mode correctly when the last is done with DMA.
+	 * Add the timeout machine to avoid stucking here.
+	 */
 	if (bEndpoint)
-		while (USBHS_IsBankFree(pUdp, bEndpoint) == false);
-
+		{
+		uint32_t TimeOut = 0;
+		while ((USBHS_IsBankFree(pUdp, bEndpoint) == false) && TimeOut++ < 0xFFFFFF );
+		if(TimeOut >= 0xFFFFFF)
+		{
+			while (!USBHS_IsBankFree(USBHS, bEndpoint)) {
+				USBHS_KillBank(USBHS, bEndpoint);
+				while (USBHS_IsBankKilled(USBHS, bEndpoint));
+			}
+			UDPHS_EndOfTransfer(bEndpoint, USBD_STATUS_CANCELED);
+			return USBD_STATUS_CANCELED;
+		}
+	}
 #endif
 	/* Disable automatic bank switch*/
 	USBHS_AutoSwitchBankEnable(pUdp, bEndpoint, false);
