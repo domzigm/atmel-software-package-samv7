@@ -123,13 +123,13 @@ INCLUDES += -I../../
 
 CFLAGS += -Wall -Wchar-subscripts -Wcomment -Wformat=2 -Wimplicit-int
 CFLAGS += -Werror-implicit-function-declaration -Wmain -Wparentheses
-CFLAGS += -Wsequence-point -Wreturn-type -Wswitch -Wtrigraphs 
+CFLAGS += -Wsequence-point -Wreturn-type -Wswitch -Wtrigraphs
 CFLAGS += -Wuninitialized -Wunknown-pragmas -Wfloat-equal
 CFLAGS += -Wshadow -Wpointer-arith -Wbad-function-cast -Wwrite-strings
 CFLAGS += -Waggregate-return -Wstrict-prototypes
 CFLAGS += -Wmissing-prototypes -Wmissing-declarations
 CFLAGS += -Wformat -Wmissing-format-attribute -Wno-deprecated-declarations
-CFLAGS += -Wredundant-decls -Wnested-externs -Winline -Wlong-long
+CFLAGS += -Wredundant-decls -Wnested-externs -Wlong-long
 CFLAGS += -Wunreachable-code
 
 # To reduce application size use only integer printf function.
@@ -138,7 +138,7 @@ CFLAGS += -Dprintf=iprintf
 CFLAGS += -march=armv7-m -mtune=cortex-m7 -mthumb -ffunction-sections
 CFLAGS += -g $(OPTIMIZATION) $(INCLUDES) -DBOARD_SAMV71_XULT -D__$(CHIP)__ -DTRACE_LEVEL=$(TRACE_LEVEL) -DSD_SINGLE_LINE_MODE
 ASFLAGS = -march=armv7-m -mtune=cortex-m7  -mthumb -Wall -g $(OPTIMIZATION) $(INCLUDES) -D__$(CHIP)__ -D__ASSEMBLY__
-LDFLAGS= -march=armv7-m -mtune=cortex-m7 -mthumb  -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry=entry -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align
+LDFLAGS= -march=armv7-m -mtune=cortex-m7 -mthumb  -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry=Reset_Handler -Wl,--unresolved-symbols=report-all -Wl,--warn-common
 LD_OPTIONAL= -L./ -Wl,--print-gc-sections -Wl,--stats
 
 #-------------------------------------------------------------------------------
@@ -190,6 +190,7 @@ C_OBJECTS += ov2643_config.o
 C_OBJECTS += ov5640_config.o
 C_OBJECTS += ov7740_config.o
 C_OBJECTS += ov9740_config.o
+C_OBJECTS += ov7670_config.o
 C_OBJECTS += bmp.o
 C_OBJECTS += isi.o
 C_OBJECTS += uart_dma.o

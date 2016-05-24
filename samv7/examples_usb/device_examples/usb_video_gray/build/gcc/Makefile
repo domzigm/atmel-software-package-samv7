@@ -112,7 +112,7 @@ CFLAGS += -Wshadow -Wpointer-arith -Wbad-function-cast -Wwrite-strings
 CFLAGS += -Waggregate-return -Wstrict-prototypes
 CFLAGS += -Wmissing-prototypes -Wmissing-declarations
 CFLAGS += -Wformat -Wmissing-format-attribute -Wno-deprecated-declarations
-CFLAGS += -Wredundant-decls -Wnested-externs -Winline -Wlong-long
+CFLAGS += -Wredundant-decls -Wnested-externs -Wlong-long
 CFLAGS += -Wunreachable-code
 
 # To reduce application size use only integer printf function.
@@ -121,7 +121,7 @@ CFLAGS += -Dprintf=iprintf
 CFLAGS += -march=armv7-m -mtune=cortex-m7 -mthumb -ffunction-sections
 CFLAGS += -g $(OPTIMIZATION) $(INCLUDES) -DBOARD_SAMV71_XULT -D__$(CHIP)__ -DTRACE_LEVEL=$(TRACE_LEVEL) -DMCK_123MHZ
 ASFLAGS = -march=armv7-m -mtune=cortex-m7  -mthumb -Wall -g $(OPTIMIZATION) $(INCLUDES) -D__$(CHIP)__ -D__ASSEMBLY__
-LDFLAGS= -march=armv7-m -mtune=cortex-m7 -mthumb  -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry=Reset_Handler -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align
+LDFLAGS= -march=armv7-m -mtune=cortex-m7 -mthumb  -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry=Reset_Handler -Wl,--unresolved-symbols=report-all -Wl,--warn-common
 LD_OPTIONAL= -L$(BOARD_LIB)/resources_v71/gcc -Wl,--print-gc-sections -Wl,--stats
 
 #-------------------------------------------------------------------------------
@@ -135,6 +135,7 @@ VPATH += $(CHIP_LIB)/source
 VPATH += $(BOARD_LIB)/source
 VPATH += $(USB_LIB)/common/core
 VPATH += $(USB_LIB)/device/core
+VPATH += $(USB_LIB)/device/uvc
 VPATH += $(BOARD_LIB)/resources_v71
 VPATH += $(BOARD_LIB)/resources_v71/gcc
 
@@ -176,6 +177,8 @@ C_OBJECTS += USBD.o
 C_OBJECTS += USBDCallbacks.o
 C_OBJECTS += USBDDriver.o
 C_OBJECTS += USBDDriverCallbacks.o
+C_OBJECTS += UVCDriver.o
+C_OBJECTS += UVCFunction.o
 
 C_OBJECTS += main.o
 C_OBJECTS += USBDDriverDescriptors.o
