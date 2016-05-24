@@ -52,7 +52,7 @@ void UVCDriver_Init(const USBDDriverDescriptors *descriptors, uint32_t *buff_add
 	/*Initial UVC driver instance */
 	uvc_driver.frm_index = 0;
 	uvc_driver.is_frame_xfring = 0;
-	uvc_driver.frm_index = 0;
+	uvc_driver.frm_count = 0;
 	uvc_driver.buf = buff_addr;
 	uvc_driver.frm_width = VIDEO_WIDTH;
 	uvc_driver.frm_height = VIDEO_HEIGHT;
