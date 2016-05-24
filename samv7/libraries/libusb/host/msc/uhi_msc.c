@@ -99,7 +99,7 @@ static uhi_msc_dev_t uhi_msc_dev = {
 //! Current LUN selected in USB MSC device by the UHI MSC
 //@{
 static uhi_msc_lun_t *uhi_msc_lun_sel;
-#define uhi_msc_lun_num_sel cbw_fill.uhi_msc_cbw.bCBWLUN
+#define uhi_msc_lun_num_sel uhi_msc_cbw.bCBWLUN
 //@}
 
 //! Temporary structures used to read LUN information via a SCSI command
@@ -146,12 +146,9 @@ static uhi_msc_scsi_sense_callback_t uhi_msc_scsi_sense_callback;
  * \name Variables to manage SCSI requests
  */
 //! Structure to send a CBW packet
-typedef struct {
-	MSCbw uhi_msc_cbw;
-	uint8_t dummy[DEFAULT_CACHELINE-31];  /* Dummy for alignement*/
-}CBW_Aligned;
 COMPILER_ALIGNED(DEFAULT_CACHELINE)
-static CBW_Aligned cbw_fill ={.uhi_msc_cbw.dCBWSignature = MSD_CBW_SIGNATURE };
+static MSCbw uhi_msc_cbw =
+{.dCBWSignature = MSD_CBW_SIGNATURE };
 
 //! Structure to receive a CSW packet
 typedef struct {
@@ -525,11 +522,11 @@ bool uhi_msc_scsi_test_unit_ready(uint8_t lun, uhi_msc_scsi_callback_t callback)
 	uhi_msc_scsi_callback = callback;
 
 	// Prepare specific value of CBW packet
-	cbw_fill.uhi_msc_cbw.dCBWDataTransferLength = 0;
-	cbw_fill.uhi_msc_cbw.bmCBWFlags = MSD_CBW_HOST_TO_DEVICE;
-	cbw_fill.uhi_msc_cbw.bCBWCBLength = 6;
-	memset(cbw_fill.uhi_msc_cbw.pCommand, 0, sizeof(cbw_fill.uhi_msc_cbw.pCommand));
-	cbw_fill.uhi_msc_cbw.pCommand[0] = SBC_TEST_UNIT_READY;
+	uhi_msc_cbw.dCBWDataTransferLength = 0;
+	uhi_msc_cbw.bmCBWFlags = MSD_CBW_HOST_TO_DEVICE;
+	uhi_msc_cbw.bCBWCBLength = 6;
+	memset(uhi_msc_cbw.pCommand, 0, sizeof(uhi_msc_cbw.pCommand));
+	uhi_msc_cbw.pCommand[0] = SBC_TEST_UNIT_READY;
 
 	uhi_msc_scsi(uhi_msc_scsi_test_unit_ready_done, NULL);
 	return true;
@@ -548,27 +545,27 @@ bool uhi_msc_scsi_read_10(uint8_t lun, uint32_t addr, uint8_t *ram,
 	uhi_msc_scsi_callback = callback;
 
 	// Prepare specific value of CBW packet
-	cbw_fill.uhi_msc_cbw.dCBWDataTransferLength =
+	uhi_msc_cbw.dCBWDataTransferLength =
 		(*pBlockLen) * nb_sector;
-	cbw_fill.uhi_msc_cbw.bmCBWFlags = MSD_CBW_DEVICE_TO_HOST;
-	cbw_fill.uhi_msc_cbw.bCBWCBLength = 10;
-	memset(cbw_fill.uhi_msc_cbw.pCommand, 0, sizeof(cbw_fill.uhi_msc_cbw.pCommand));
+	uhi_msc_cbw.bmCBWFlags = MSD_CBW_DEVICE_TO_HOST;
+	uhi_msc_cbw.bCBWCBLength = 10;
+	memset(uhi_msc_cbw.pCommand, 0, sizeof(uhi_msc_cbw.pCommand));
 
 	/**pCommand++ = SBC_WRITE10;
 	memcpy(pCommand, &addr, sizeof(addr));*/
 	// CBWCB0 - Operation Code
-	cbw_fill.uhi_msc_cbw.pCommand[0] = SBC_READ_10;
+	uhi_msc_cbw.pCommand[0] = SBC_READ_10;
 
 	// CBWCB1 - RDPROTECT, DPO, FUA, Obsolete (0x00) (done by previous memset())
 
 	addrTmp = CPU_TO_BE32(addr);
 	// CBWCB2 to 5 - Logical Block Address (BE16)
-	memcpy(&cbw_fill.uhi_msc_cbw.pCommand[2], &addrTmp, sizeof(addr));
+	memcpy(&uhi_msc_cbw.pCommand[2], &addrTmp, sizeof(addr));
 
 	// CBWCW6 - Reserved (0x00) (done by previous memset())
 	// CBWCW7 to 8 - Transfer Length
-	// cbw_fill.uhi_msc_cbw.pCommand[7] = 0x00; // MSB (done by previous memset())
-	cbw_fill.uhi_msc_cbw.pCommand[8] = nb_sector; // LSB
+	// uhi_msc_cbw.pCommand[7] = 0x00; // MSB (done by previous memset())
+	uhi_msc_cbw.pCommand[8] = nb_sector; // LSB
 
 	// CBWCW9 - Control (0x00) (done by previous memset())
 	uhi_msc_scsi(uhi_msc_scsi_read_10_done, ram);
@@ -588,26 +585,26 @@ bool uhi_msc_scsi_write_10(uint8_t lun, uint32_t addr, const uint8_t *ram,
 	uhi_msc_scsi_callback = callback;
 
 	// Prepare specific value of CBW packet
-	cbw_fill.uhi_msc_cbw.dCBWDataTransferLength =
+	uhi_msc_cbw.dCBWDataTransferLength =
 		(*pBlockLen) * nb_sector;
-	cbw_fill.uhi_msc_cbw.bmCBWFlags = MSD_CBW_HOST_TO_DEVICE;
-	cbw_fill.uhi_msc_cbw.bCBWCBLength = 10;
-	memset(cbw_fill.uhi_msc_cbw.pCommand, 0, sizeof(cbw_fill.uhi_msc_cbw.pCommand));
+	uhi_msc_cbw.bmCBWFlags = MSD_CBW_HOST_TO_DEVICE;
+	uhi_msc_cbw.bCBWCBLength = 10;
+	memset(uhi_msc_cbw.pCommand, 0, sizeof(uhi_msc_cbw.pCommand));
 
 	// CBWCB0 - Operation Code
-	cbw_fill.uhi_msc_cbw.pCommand[0] = SBC_WRITE_10;
+	uhi_msc_cbw.pCommand[0] = SBC_WRITE_10;
 
 	addrTmp = CPU_TO_BE32(addr);
 	// CBWCB1 - RDPROTECT, DPO, FUA, Obsolete (0x00) (done by previous memset())
 
 	// CBWCB2 to 5 - Logical Block Address (BE16)
-	memcpy(&cbw_fill.uhi_msc_cbw.pCommand[2], &addrTmp, sizeof(addr));
+	memcpy(&uhi_msc_cbw.pCommand[2], &addrTmp, sizeof(addr));
 
 	// CBWCW6 - Reserved (0x00) (done by previous memset())
 
 	// CBWCW7 to 8 - Transfer Length
-	// cbw_fill.uhi_msc_cbw.pCommand[7] = 0x00; // MSB (done by previous memset())
-	cbw_fill.uhi_msc_cbw.pCommand[8] = nb_sector; // LSB
+	// uhi_msc_cbw.pCommand[7] = 0x00; // MSB (done by previous memset())
+	uhi_msc_cbw.pCommand[8] = nb_sector; // LSB
 
 	// CBWCW9 - Control (0x00) (done by previous memset())
 	uhi_msc_scsi(uhi_msc_scsi_write_10_done, (uint8_t *) ram);
@@ -649,12 +646,12 @@ static void uhi_msc_scsi_inquiry(uhi_msc_scsi_callback_t callback)
 	uhi_msc_scsi_callback = callback;
 
 	// Prepare specific value of CBW packet
-	cbw_fill.uhi_msc_cbw.dCBWDataTransferLength = sizeof(SBCInquiryData);
-	cbw_fill.uhi_msc_cbw.bmCBWFlags = MSD_CBW_DEVICE_TO_HOST;
-	cbw_fill.uhi_msc_cbw.bCBWCBLength = 6;
-	memset(cbw_fill.uhi_msc_cbw.pCommand, 0, sizeof(cbw_fill.uhi_msc_cbw.pCommand));
-	cbw_fill.uhi_msc_cbw.pCommand[0] = SBC_INQUIRY;
-	cbw_fill.uhi_msc_cbw.pCommand[4] = sizeof(SBCInquiryData);
+	uhi_msc_cbw.dCBWDataTransferLength = sizeof(SBCInquiryData);
+	uhi_msc_cbw.bmCBWFlags = MSD_CBW_DEVICE_TO_HOST;
+	uhi_msc_cbw.bCBWCBLength = 6;
+	memset(uhi_msc_cbw.pCommand, 0, sizeof(uhi_msc_cbw.pCommand));
+	uhi_msc_cbw.pCommand[0] = SBC_INQUIRY;
+	uhi_msc_cbw.pCommand[4] = sizeof(SBCInquiryData);
 	uhi_msc_scsi(uhi_msc_scsi_inquiry_done, (uint8_t *) & uhi_msc_inquiry);
 }
 
@@ -752,11 +749,11 @@ static void uhi_msc_scsi_read_capacity(uhi_msc_scsi_callback_t callback)
 	uhi_msc_scsi_callback = callback;
 
 	// Prepare specific value of CBW packet
-	cbw_fill.uhi_msc_cbw.dCBWDataTransferLength = sizeof(SBCReadCapacity10Data);
-	cbw_fill.uhi_msc_cbw.bmCBWFlags = MSD_CBW_DEVICE_TO_HOST;
-	cbw_fill.uhi_msc_cbw.bCBWCBLength = 10;
-	memset(cbw_fill.uhi_msc_cbw.pCommand, 0, sizeof(cbw_fill.uhi_msc_cbw.pCommand));
-	cbw_fill.uhi_msc_cbw.pCommand[0] = SBC_READ_CAPACITY_10;
+	uhi_msc_cbw.dCBWDataTransferLength = sizeof(SBCReadCapacity10Data);
+	uhi_msc_cbw.bmCBWFlags = MSD_CBW_DEVICE_TO_HOST;
+	uhi_msc_cbw.bCBWCBLength = 10;
+	memset(uhi_msc_cbw.pCommand, 0, sizeof(uhi_msc_cbw.pCommand));
+	uhi_msc_cbw.pCommand[0] = SBC_READ_CAPACITY_10;
 	uhi_msc_scsi(uhi_msc_scsi_read_capacity_done, (uint8_t *)&(capacity_fill.uhi_msc_capacity));
 }
 
@@ -815,13 +812,13 @@ static void uhi_msc_scsi_mode_sense6(uhi_msc_scsi_callback_t callback)
 	uhi_msc_scsi_callback = callback;
 
 	// Prepare specific value of CBW packet
-	cbw_fill.uhi_msc_cbw.dCBWDataTransferLength = sizeof(uhi_msc_sense6);
-	cbw_fill.uhi_msc_cbw.bmCBWFlags = MSD_CBW_DEVICE_TO_HOST;
-	cbw_fill.uhi_msc_cbw.bCBWCBLength = 6;
-	memset(cbw_fill.uhi_msc_cbw.pCommand, 0, sizeof(cbw_fill.uhi_msc_cbw.pCommand));
-	cbw_fill.uhi_msc_cbw.pCommand[0] = SBC_MODE_SENSE_6;
-	cbw_fill.uhi_msc_cbw.pCommand[2] = SBC_PAGE_INFORMATIONAL_EXCEPTIONS_CONTROL;
-	cbw_fill.uhi_msc_cbw.pCommand[4] = sizeof(uhi_msc_sense6);
+	uhi_msc_cbw.dCBWDataTransferLength = sizeof(uhi_msc_sense6);
+	uhi_msc_cbw.bmCBWFlags = MSD_CBW_DEVICE_TO_HOST;
+	uhi_msc_cbw.bCBWCBLength = 6;
+	memset(uhi_msc_cbw.pCommand, 0, sizeof(uhi_msc_cbw.pCommand));
+	uhi_msc_cbw.pCommand[0] = SBC_MODE_SENSE_6;
+	uhi_msc_cbw.pCommand[2] = SBC_PAGE_INFORMATIONAL_EXCEPTIONS_CONTROL;
+	uhi_msc_cbw.pCommand[4] = sizeof(uhi_msc_sense6);
 	uhi_msc_scsi(uhi_msc_scsi_mode_sense6_done,
 				 (uint8_t *) & uhi_msc_sense6);
 }
@@ -896,12 +893,12 @@ static void uhi_msc_scsi_request_sense(uhi_msc_scsi_sense_callback_t callback)
 	uhi_msc_scsi_sense_callback = callback;
 
 	// Prepare specific value of CBW packet
-	cbw_fill.uhi_msc_cbw.dCBWDataTransferLength = sizeof(SBCRequestSenseData);
-	cbw_fill.uhi_msc_cbw.bmCBWFlags = MSD_CBW_DEVICE_TO_HOST;
-	cbw_fill.uhi_msc_cbw.bCBWCBLength = 6;
-	memset(cbw_fill.uhi_msc_cbw.pCommand, 0, sizeof(cbw_fill.uhi_msc_cbw.pCommand));
-	cbw_fill.uhi_msc_cbw.pCommand[0] = SBC_REQUEST_SENSE;
-	cbw_fill.uhi_msc_cbw.pCommand[4] = sizeof(SBCRequestSenseData);
+	uhi_msc_cbw.dCBWDataTransferLength = sizeof(SBCRequestSenseData);
+	uhi_msc_cbw.bmCBWFlags = MSD_CBW_DEVICE_TO_HOST;
+	uhi_msc_cbw.bCBWCBLength = 6;
+	memset(uhi_msc_cbw.pCommand, 0, sizeof(uhi_msc_cbw.pCommand));
+	uhi_msc_cbw.pCommand[0] = SBC_REQUEST_SENSE;
+	uhi_msc_cbw.pCommand[4] = sizeof(SBCRequestSenseData);
 
 	uhi_msc_scsi(uhi_msc_scsi_request_sense_done, (uint8_t *)&sense_fill.uhi_msc_sense);
 }
@@ -943,9 +940,9 @@ static void uhi_msc_scsi(uhi_msc_scsi_callback_t callback, uint8_t *payload)
 	uhi_msc_data = payload;
 
 	// Prepare CBW
-	cbw_fill.uhi_msc_cbw.dCBWTag++;
-	cbw_fill.uhi_msc_cbw.dCBWDataTransferLength =
-		(cbw_fill.uhi_msc_cbw.dCBWDataTransferLength);
+	uhi_msc_cbw.dCBWTag++;
+	uhi_msc_cbw.dCBWDataTransferLength =
+		(uhi_msc_cbw.dCBWDataTransferLength);
 	// CBWCB0 - Operation Code
 	// CBWCB1 - Obsolete, EVPD = 0
 	// CBWCB2 - Page Code = 0
@@ -953,11 +950,11 @@ static void uhi_msc_scsi(uhi_msc_scsi_callback_t callback, uint8_t *payload)
 	// CBWCB4 - LSB(Allocation Length)
 	// CBWCW5 - Control = 0
 
-	SCB_CleanDCache_by_Addr((uint32_t *)(&cbw_fill.uhi_msc_cbw),sizeof(cbw_fill.uhi_msc_cbw));
+	SCB_CleanDCache_by_Addr((uint32_t *)(&uhi_msc_cbw),sizeof(uhi_msc_cbw));
 
 	// Start transfer of CBW packet on bulk endpoint OUT
-	uhi_msc_transfer(uhi_msc_dev_sel->ep_out, (uint8_t *) &cbw_fill.uhi_msc_cbw,
-					 sizeof(cbw_fill.uhi_msc_cbw), uhi_msc_cbw_sent);
+	uhi_msc_transfer(uhi_msc_dev_sel->ep_out, (uint8_t *) &uhi_msc_cbw,
+					 sizeof(uhi_msc_cbw), uhi_msc_cbw_sent);
 }
 
 /**
@@ -991,28 +988,28 @@ static void uhi_msc_cbw_sent(
 		return;
 	}
 
-	assert(nb_transfered == sizeof(cbw_fill.uhi_msc_cbw));
-	cbw_fill.uhi_msc_cbw.dCBWDataTransferLength =
-		(cbw_fill.uhi_msc_cbw.dCBWDataTransferLength);
+	assert(nb_transfered == sizeof(uhi_msc_cbw));
+	uhi_msc_cbw.dCBWDataTransferLength =
+		(uhi_msc_cbw.dCBWDataTransferLength);
 	// Here CBW is success
 
-	if (!cbw_fill.uhi_msc_cbw.dCBWDataTransferLength) {
+	if (!uhi_msc_cbw.dCBWDataTransferLength) {
 		// Start CSW phase
 		uhi_msc_csw_wait();
 		return;
 	}
 
 	// Start DATA phase
-	if (cbw_fill.uhi_msc_cbw.bmCBWFlags & MSD_CBW_DEVICE_TO_HOST)
+	if (uhi_msc_cbw.bmCBWFlags & MSD_CBW_DEVICE_TO_HOST)
 		endp = uhi_msc_dev_sel->ep_in;
 	else
 		{
 		endp = uhi_msc_dev_sel->ep_out;
-		SCB_CleanDCache_by_Addr((uint32_t *)uhi_msc_data,cbw_fill.uhi_msc_cbw.dCBWDataTransferLength);
+		SCB_CleanDCache_by_Addr((uint32_t *)uhi_msc_data,uhi_msc_cbw.dCBWDataTransferLength);
 
 		}
 
-	uhi_msc_transfer(endp, uhi_msc_data, cbw_fill.uhi_msc_cbw.dCBWDataTransferLength,
+	uhi_msc_transfer(endp, uhi_msc_data, uhi_msc_cbw.dCBWDataTransferLength,
 					 uhi_msc_data_transfered);
 }
 
@@ -1037,7 +1034,7 @@ static void uhi_msc_data_transfered(
 
 	if (status != UHD_TRANS_NOERROR) {
 		if (status == UHD_TRANS_STALL) {
-			if (cbw_fill.uhi_msc_cbw.bmCBWFlags & MSD_CBW_DEVICE_TO_HOST)
+			if (uhi_msc_cbw.bmCBWFlags & MSD_CBW_DEVICE_TO_HOST)
 				endp = uhi_msc_dev_sel->ep_in;
 			else
 				endp = uhi_msc_dev_sel->ep_out;
@@ -1051,9 +1048,9 @@ static void uhi_msc_data_transfered(
 	}
 
 	// DATA phase complete
-	if (cbw_fill.uhi_msc_cbw.bmCBWFlags & MSD_CBW_DEVICE_TO_HOST)
+	if (uhi_msc_cbw.bmCBWFlags & MSD_CBW_DEVICE_TO_HOST)
 		{
-		SCB_InvalidateDCache_by_Addr((uint32_t *)uhi_msc_data,cbw_fill.uhi_msc_cbw.dCBWDataTransferLength);
+		SCB_InvalidateDCache_by_Addr((uint32_t *)uhi_msc_data,uhi_msc_cbw.dCBWDataTransferLength);
 		}
 
 	// Start CSW phase
@@ -1100,7 +1097,7 @@ static void uhi_msc_csw_received(
 	SCB_InvalidateDCache_by_Addr((uint32_t *)&csw_fill.uhi_msc_csw, sizeof(csw_fill.uhi_msc_csw));
 
 	if ((nb_transfered != sizeof(csw_fill.uhi_msc_csw))
-		|| (csw_fill.uhi_msc_csw.dCSWTag != cbw_fill.uhi_msc_cbw.dCBWTag)
+		|| (csw_fill.uhi_msc_csw.dCSWTag != uhi_msc_cbw.dCBWTag)
 		|| (csw_fill.uhi_msc_csw.dCSWSignature != MSD_CSW_SIGNATURE)) {
 		// Error in CSW fields
 		uhi_msc_scsi_sub_callback(false);
