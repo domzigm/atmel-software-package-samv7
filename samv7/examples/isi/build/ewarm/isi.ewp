@@ -1954,6 +1954,9 @@
         <name>$PROJ_DIR$\..\..\..\..\libraries\libboard\source\ov9740_config.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\..\..\libraries\libboard\source\ov7670_config.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\..\libraries\libboard\source\lcd_draw.c</name>
       </file>
       <file>

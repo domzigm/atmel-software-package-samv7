@@ -178,6 +178,10 @@
      <SubType>compile</SubType>
      <Link>libraries\libboard\source\ov9740_config.c</Link>
     </Compile>
+<Compile Include="..\..\..\..\..\libraries\libboard\source\ov7670_config.c">
+     <SubType>compile</SubType>
+     <Link>libraries\libboard\source\ov7670_config.c</Link>
+    </Compile>
     <Compile Include="..\..\..\..\..\libraries\libchip\chip.h">
       <SubType>compile</SubType>
       <Link>libraries\libchip\chip.h</Link>
@@ -286,6 +290,14 @@
   <Compile Include="..\..\..\..\..\libraries\libusb\device\core\USBDDriverCallbacks.c">
        <SubType>compile</SubType>
        <Link>libraries\libusb\device\core\USBDDriverCallbacks.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\..\libraries\libusb\device\uvc\UVCDriver.c">
+       <SubType>compile</SubType>
+       <Link>libraries\libusb\device\uvc\UVCDriver.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\..\libraries\libusb\device\uvc\UVCFunction.c">
+       <SubType>compile</SubType>
+       <Link>libraries\libusb\device\uvc\UVCFunction.c</Link>
       </Compile>
   </ItemGroup>
   <ItemGroup>

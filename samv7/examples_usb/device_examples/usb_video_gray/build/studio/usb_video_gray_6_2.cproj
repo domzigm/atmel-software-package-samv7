@@ -271,6 +271,14 @@
        <SubType>compile</SubType>
        <Link>libraries\libusb\device\core\USBDDriverCallbacks.c</Link>
       </Compile>
+  <Compile Include="..\..\..\..\..\libraries\libusb\device\uvc\UVCDriver.c">
+       <SubType>compile</SubType>
+       <Link>libraries\libusb\device\uvc\UVCDriver.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\..\libraries\libusb\device\uvc\UVCFunction.c">
+       <SubType>compile</SubType>
+       <Link>libraries\libusb\device\uvc\UVCFunction.c</Link>
+      </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Device_Startup\" />

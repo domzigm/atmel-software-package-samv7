@@ -2047,6 +2047,12 @@
         <file>
           <name>$PROJ_DIR$\..\..\..\..\..\libraries\libusb\device\core\USBDDriverCallbacks.c</name>
         </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\libraries\libusb\device\uvc\UVCDriver.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\libraries\libusb\device\uvc\UVCFunction.c</name>
+        </file>
     </group>
   </group>
   <group>

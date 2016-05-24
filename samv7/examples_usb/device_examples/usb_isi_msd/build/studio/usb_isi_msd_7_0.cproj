@@ -186,6 +186,10 @@
      <SubType>compile</SubType>
      <Link>libraries\libboard\source\ov9740_config.c</Link>
     </Compile>
+<Compile Include="..\..\..\..\..\libraries\libboard\source\ov7670_config.c">
+     <SubType>compile</SubType>
+     <Link>libraries\libboard\source\ov7670_config.c</Link>
+    </Compile>
 <Compile Include="..\..\..\..\..\libraries\libboard\source\bmp.c">
      <SubType>compile</SubType>
      <Link>libraries\libboard\source\bmp.c</Link>

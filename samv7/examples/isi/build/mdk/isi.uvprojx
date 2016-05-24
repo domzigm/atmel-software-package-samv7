@@ -398,7 +398,7 @@
             <ScatterFile>..\..\..\..\libraries\libboard\resources_v71\mdk\sram.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc></Misc>
+            <Misc>--diag_suppress=L6314</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -592,6 +592,11 @@
               <FileName>ov9740_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\libraries\libboard\source\ov9740_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>ov7670_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\libraries\libboard\source\ov7670_config.c</FilePath>
             </File>
             <File>
               <FileName>lcd_draw.c</FileName>
@@ -1029,7 +1034,7 @@
             <ScatterFile>..\..\..\..\libraries\libboard\resources_v71\mdk\flash.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc></Misc>
+            <Misc>--diag_suppress=L6314</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -1223,6 +1228,11 @@
               <FileName>ov9740_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\libraries\libboard\source\ov9740_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>ov7670_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\libraries\libboard\source\ov7670_config.c</FilePath>
             </File>
             <File>
               <FileName>lcd_draw.c</FileName>

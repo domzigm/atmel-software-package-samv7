@@ -2920,6 +2920,9 @@
         <name>$PROJ_DIR$\..\..\..\..\..\libraries\libboard\source\ov9740_config.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\libraries\libboard\source\ov7670_config.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\..\..\libraries\libboard\board.h</name>
       </file>
       <file>
@@ -3020,6 +3023,12 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\..\..\libraries\libusb\device\core\USBDDriverCallbacks.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\libraries\libusb\device\uvc\UVCDriver.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\libraries\libusb\device\uvc\UVCFunction.c</name>
         </file>
     </group>
   </group>

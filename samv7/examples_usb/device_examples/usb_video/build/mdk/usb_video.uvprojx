@@ -398,7 +398,7 @@
             <ScatterFile>.\sram.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc></Misc>
+            <Misc>--diag_suppress=L6314</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -583,6 +583,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\libraries\libboard\source\ov9740_config.c</FilePath>
             </File>
+            <File>
+              <FileName>ov7670_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\libraries\libboard\source\ov7670_config.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -622,6 +627,16 @@
                 <FileName>USBDDriverCallbacks.c</FileName>
                 <FileType>1</FileType>
                 <FilePath>..\..\..\..\..\libraries\libusb\device\core\USBDDriverCallbacks.c</FilePath>
+              </File>
+              <File>
+                <FileName>UVCDriver.c</FileName>
+                <FileType>1</FileType>
+                <FilePath>..\..\..\..\..\libraries\libusb\device\uvc\UVCDriver.c</FilePath>
+              </File>
+              <File>
+                <FileName>UVCFunction.c</FileName>
+                <FileType>1</FileType>
+                <FilePath>..\..\..\..\..\libraries\libusb\device\uvc\UVCFunction.c</FilePath>
               </File>
 
           </Files>
@@ -1020,7 +1035,7 @@
             <ScatterFile>.\flash.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc></Misc>
+            <Misc>--diag_suppress=L6314</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -1205,6 +1220,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\libraries\libboard\source\ov9740_config.c</FilePath>
             </File>
+            <File>
+              <FileName>ov7670_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\libraries\libboard\source\ov7670_config.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1244,6 +1264,16 @@
                 <FileName>USBDDriverCallbacks.c</FileName>
                 <FileType>1</FileType>
                 <FilePath>..\..\..\..\..\libraries\libusb\device\core\USBDDriverCallbacks.c</FilePath>
+              </File>
+              <File>
+                <FileName>UVCDriver.c</FileName>
+                <FileType>1</FileType>
+                <FilePath>..\..\..\..\..\libraries\libusb\device\uvc\UVCDriver.c</FilePath>
+              </File>
+              <File>
+                <FileName>UVCFunction.c</FileName>
+                <FileType>1</FileType>
+                <FilePath>..\..\..\..\..\libraries\libusb\device\uvc\UVCFunction.c</FilePath>
               </File>
 
           </Files>
@@ -1642,7 +1672,7 @@
             <ScatterFile>.\app.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc></Misc>
+            <Misc>--diag_suppress=L6314</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -1827,6 +1857,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\libraries\libboard\source\ov9740_config.c</FilePath>
             </File>
+            <File>
+              <FileName>ov7670_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\libraries\libboard\source\ov7670_config.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1866,6 +1901,16 @@
                 <FileName>USBDDriverCallbacks.c</FileName>
                 <FileType>1</FileType>
                 <FilePath>..\..\..\..\..\libraries\libusb\device\core\USBDDriverCallbacks.c</FilePath>
+              </File>
+              <File>
+                <FileName>UVCDriver.c</FileName>
+                <FileType>1</FileType>
+                <FilePath>..\..\..\..\..\libraries\libusb\device\uvc\UVCDriver.c</FilePath>
+              </File>
+              <File>
+                <FileName>UVCFunction.c</FileName>
+                <FileType>1</FileType>
+                <FilePath>..\..\..\..\..\libraries\libusb\device\uvc\UVCFunction.c</FilePath>
               </File>
 
           </Files>
