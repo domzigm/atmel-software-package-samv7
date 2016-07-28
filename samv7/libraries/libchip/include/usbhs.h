@@ -251,7 +251,7 @@ __STATIC_INLINE bool USBHS_IsUsbLowSpeed(Usbhs *pUsbhs)
 
 __STATIC_INLINE void USBHS_Ack(Usbhs *pUsbhs, uint32_t AckType)
 {
-	pUsbhs->USBHS_SCR |= AckType;
+	pUsbhs->USBHS_SCR = AckType;
 }
 
 /********************* USBHS_SFR  *****************/
@@ -264,7 +264,7 @@ __STATIC_INLINE void USBHS_Ack(Usbhs *pUsbhs, uint32_t AckType)
 
 __STATIC_INLINE void USBHS_Set(Usbhs *pUsbhs, uint32_t SetStatus)
 {
-	pUsbhs->USBHS_SFR |= SetStatus;
+	pUsbhs->USBHS_SFR = SetStatus;
 }
 
 
@@ -427,7 +427,7 @@ __STATIC_INLINE uint32_t USBHS_ReadDmaIntStatus(Usbhs *pUsbhs, uint8_t DmaNum)
 
 __STATIC_INLINE void USBHS_AckInt(Usbhs *pUsbhs, uint32_t IntType)
 {
-	pUsbhs->USBHS_DEVICR |=  IntType;
+	pUsbhs->USBHS_DEVICR = IntType;
 }
 
 /**
@@ -439,7 +439,7 @@ __STATIC_INLINE void USBHS_AckInt(Usbhs *pUsbhs, uint32_t IntType)
 
 __STATIC_INLINE void USBHS_RaiseInt(Usbhs *pUsbhs, uint32_t IntType)
 {
-	pUsbhs->USBHS_DEVIFR |=  IntType;
+	pUsbhs->USBHS_DEVIFR = IntType;
 }
 
 /**
@@ -450,7 +450,7 @@ __STATIC_INLINE void USBHS_RaiseInt(Usbhs *pUsbhs, uint32_t IntType)
 __STATIC_INLINE void USBHS_RaiseDmaInt(Usbhs *pUsbhs, uint8_t Dma)
 {
 	assert(Dma < USBHSDEVDMA_NUMBER);
-	pUsbhs->USBHS_DEVIFR |=  (USBHS_DEVIFR_DMA_1 << Dma);
+	pUsbhs->USBHS_DEVIFR = (USBHS_DEVIFR_DMA_1 << Dma);
 }
 
 /**
@@ -496,7 +496,7 @@ __STATIC_INLINE uint32_t USBHS_IsDmaIntEnable(Usbhs *pUsbhs, uint8_t DmaNum)
  */
 __STATIC_INLINE void USBHS_EnableInt(Usbhs *pUsbhs, uint32_t IntType)
 {
-	pUsbhs->USBHS_DEVIER |=  IntType;
+	pUsbhs->USBHS_DEVIER  =  IntType;
 }
 
 /**
@@ -506,7 +506,7 @@ __STATIC_INLINE void USBHS_EnableInt(Usbhs *pUsbhs, uint32_t IntType)
  */
 __STATIC_INLINE void USBHS_EnableIntEP(Usbhs *pUsbhs, uint8_t EpNum)
 {
-	pUsbhs->USBHS_DEVIER |=  (USBHS_DEVIER_PEP_0 << EpNum);
+	pUsbhs->USBHS_DEVIER  =  (USBHS_DEVIER_PEP_0 << EpNum);
 }
 
 /**
@@ -518,7 +518,7 @@ __STATIC_INLINE void USBHS_EnableIntEP(Usbhs *pUsbhs, uint8_t EpNum)
 __STATIC_INLINE void USBHS_EnableDMAIntEP(Usbhs *pUsbhs, uint32_t DmaEp)
 {
 	assert(DmaEp < USBHSDEVDMA_NUMBER);
-	pUsbhs->USBHS_DEVIER |=  (USBHS_DEVIER_DMA_1 << DmaEp);
+	pUsbhs->USBHS_DEVIER  =  (USBHS_DEVIER_DMA_1 << DmaEp);
 }
 
 /**
@@ -529,7 +529,7 @@ __STATIC_INLINE void USBHS_EnableDMAIntEP(Usbhs *pUsbhs, uint32_t DmaEp)
 
 __STATIC_INLINE void USBHS_DisableInt(Usbhs *pUsbhs, uint32_t IntType)
 {
-	pUsbhs->USBHS_DEVIDR |=  IntType;
+	pUsbhs->USBHS_DEVIDR  =  IntType;
 }
 
 /**
@@ -540,7 +540,7 @@ __STATIC_INLINE void USBHS_DisableInt(Usbhs *pUsbhs, uint32_t IntType)
 
 __STATIC_INLINE void USBHS_DisableIntEP(Usbhs *pUsbhs, uint8_t Ep)
 {
-	pUsbhs->USBHS_DEVIDR |=  (USBHS_DEVIDR_PEP_0 << Ep);
+	pUsbhs->USBHS_DEVIDR  =  (USBHS_DEVIDR_PEP_0 << Ep);
 }
 
 /**
@@ -551,7 +551,7 @@ __STATIC_INLINE void USBHS_DisableIntEP(Usbhs *pUsbhs, uint8_t Ep)
 __STATIC_INLINE void USBHS_DisableDMAIntEP(Usbhs *pUsbhs, uint8_t DmaEp)
 {
 	assert(DmaEp < USBHSDEVDMA_NUMBER);
-	pUsbhs->USBHS_DEVIDR |=  (USBHS_DEVIDR_DMA_1 << DmaEp);
+	pUsbhs->USBHS_DEVIDR  =  (USBHS_DEVIDR_DMA_1 << DmaEp);
 }
 
 
@@ -734,7 +734,7 @@ __STATIC_INLINE uint32_t USBHS_IsEpIntEnable(Usbhs *pUsbhs, uint8_t Ep,
 __STATIC_INLINE void USBHS_EnableEPIntType(Usbhs *pUsbhs, uint8_t Ep,
 		uint32_t EpInt)
 {
-	pUsbhs->USBHS_DEVEPTIER[Ep] |=  EpInt;
+	pUsbhs->USBHS_DEVEPTIER[Ep]  =  EpInt;
 }
 
 /**
@@ -758,7 +758,7 @@ __STATIC_INLINE void USBHS_KillBank(Usbhs *pUsbhs, uint8_t Ep)
 __STATIC_INLINE void USBHS_DisableEPIntType(Usbhs *pUsbhs, uint8_t Ep,
 		uint32_t EpInt)
 {
-	pUsbhs->USBHS_DEVEPTIDR[Ep] |=  EpInt;
+	pUsbhs->USBHS_DEVEPTIDR[Ep]  =  EpInt;
 }
 
 /**
@@ -767,7 +767,7 @@ __STATIC_INLINE void USBHS_DisableEPIntType(Usbhs *pUsbhs, uint8_t Ep,
 __STATIC_INLINE void USBHS_AckEpInterrupt(Usbhs *pUsbhs, uint8_t Ep,
 		uint32_t EpInt)
 {
-	pUsbhs->USBHS_DEVEPTICR[Ep] |=  EpInt;
+	pUsbhs->USBHS_DEVEPTICR[Ep]  =  EpInt;
 }
 
 /**
@@ -775,7 +775,7 @@ __STATIC_INLINE void USBHS_AckEpInterrupt(Usbhs *pUsbhs, uint8_t Ep,
  */
 __STATIC_INLINE void USBHS_RaiseEPInt(Usbhs *pUsbhs, uint8_t Ep, uint32_t EpInt)
 {
-	pUsbhs->USBHS_DEVEPTIFR[Ep] |=  EpInt;
+	pUsbhs->USBHS_DEVEPTIFR[Ep]  =  EpInt;
 }
 
 /**
@@ -1176,7 +1176,7 @@ __STATIC_INLINE void USBHS_HostPipeIntEnable(Usbhs *pUsbhs, uint8_t PipeInt)
 __STATIC_INLINE void USBHS_HostDmaIntEnable(Usbhs *pUsbhs, uint8_t PipeInt)
 {
 	assert(PipeInt < CHIP_USB_DMA_NUMPIPE);
-	pUsbhs->USBHS_HSTIER |= (USBHS_HSTIER_DMA_1 << PipeInt);
+	pUsbhs->USBHS_HSTIER  = (USBHS_HSTIER_DMA_1 << PipeInt);
 }
 
 /**

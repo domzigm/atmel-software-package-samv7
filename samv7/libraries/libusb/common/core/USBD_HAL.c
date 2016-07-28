@@ -1169,7 +1169,7 @@ void USBD_HAL_ResetEPs(uint32_t bmEPs, uint8_t bStatus, uint8_t bKeepCfg)
 	for (ep = 0, epBit = 1; ep < CHIP_USB_NUMENDPOINTS; ep ++) {
 		if (tmp & epBit) {
 			/* Disable ISR */
-			pUdp->USBHS_DEVIDR |= (epBit << SHIFT_INTERUPT);
+			pUdp->USBHS_DEVIDR = (epBit << SHIFT_INTERUPT);
 			/* Reset transfer information */
 			pEndpoint = &(endpoints[ep]);
 			/* Reset endpoint state */
@@ -1212,7 +1212,7 @@ void USBD_HAL_CancelIo(uint32_t bmEPs)
 	for (ep = 0, epBit = 1; ep < CHIP_USB_NUMENDPOINTS; ep ++) {
 		if (tmp & epBit) {
 			/* Disable ISR */
-			pUdp->USBHS_DEVIDR |= (epBit << SHIFT_INTERUPT);
+			pUdp->USBHS_DEVIDR = (epBit << SHIFT_INTERUPT);
 			/* Terminate transfer on this EP */
 			UDPHS_EndOfTransfer(ep, USBD_STATUS_CANCELED);
 		}
