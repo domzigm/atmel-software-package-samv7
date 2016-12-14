@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\internalFlashLoader.ewp</path>
+  </project>
+  <batchBuild>
+    <batchDefinition>
+      <name>all</name>
+      <member>
+        <project>internalFlashLoader</project>
+        <configuration>same70j19</configuration>
+      </member>
+      <member>
+        <project>internalFlashLoader</project>
+        <configuration>same70j20</configuration>
+      </member>
+      <member>
+        <project>internalFlashLoader</project>
+        <configuration>same70j21</configuration>
+      </member>
+      <member>
+        <project>internalFlashLoader</project>
+        <configuration>same70n19</configuration>
+      </member>
+      <member>
+        <project>internalFlashLoader</project>
+        <configuration>same70n20</configuration>
+      </member>
+      <member>
+        <project>internalFlashLoader</project>
+        <configuration>same70n21</configuration>
+      </member>
+      <member>
+        <project>internalFlashLoader</project>
+        <configuration>same70q19</configuration>
+      </member>
+      <member>
+        <project>internalFlashLoader</project>
+        <configuration>same70q20</configuration>
+      </member>
+      <member>
+        <project>internalFlashLoader</project>
+        <configuration>same70q21</configuration>
+      </member>
+    </batchDefinition>
+  </batchBuild>
+</workspace>
+
+

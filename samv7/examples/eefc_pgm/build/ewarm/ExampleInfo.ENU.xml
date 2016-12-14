@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>eefc_pgm</iar_name>               <!--App-->
+  <iar_description> This basic example shows how to use the Enhance Embedded Flash (EEFC) peripheral available on the newest Atmel samv7 Microcontrollers. It details steps required to program the internal flash, and manage secure and lock bits. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

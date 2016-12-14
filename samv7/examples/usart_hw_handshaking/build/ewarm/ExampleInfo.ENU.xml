@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>usart_hw_handshaking</iar_name>               <!--App-->
+  <iar_description>  This example demonstrates the hardware handshaking mode (i.e. RTS/CTS) provided by the USART peripherals on SAMV7/E7 microcontrollers. The practical use of hardware handshaking is that it allows to stop transfer on the USART without losing any data in the process. This is very useful for applications that need to program slow memories for example. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

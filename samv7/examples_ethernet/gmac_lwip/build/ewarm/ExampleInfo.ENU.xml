@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>gmac_lwip</iar_name>               <!--App-->
+  <iar_description>  This project implements webserver example by using lwIP stack, It enables the device to act as a web server, sending a very short page when accessed through a browser. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

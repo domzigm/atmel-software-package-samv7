@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>sdram</iar_name>               <!--App-->
+  <iar_description>  The SDRAM example will help new users get familiar with Atmel's SAMV7/E7 family of micro-controllers. This basic application shows Shows how to initialize and perform read and write a SDRAM memory. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

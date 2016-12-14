@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\isi_gray_bmp.ewp</path>
+  </project>
+  <batchBuild>
+    <batchDefinition>
+      <name>flash</name>
+      <member>
+        <project>isi_gray_bmp</project>
+        <configuration>flash</configuration>
+      </member>
+    </batchDefinition>
+    <batchDefinition>
+      <name>sram</name>
+      <member>
+        <project>isi_gray_bmp</project>
+        <configuration>sram</configuration>
+      </member>
+    </batchDefinition>
+    <batchDefinition>
+      <name>all</name>
+      <member>
+        <project>isi_gray_bmp</project>
+        <configuration>sram</configuration>
+      </member>
+      <member>
+        <project>isi_gray_bmp</project>
+        <configuration>flash</configuration>
+      </member>
+    </batchDefinition>
+  </batchBuild>
+</workspace>
+
+

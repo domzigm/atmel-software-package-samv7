@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>gmac</iar_name>               <!--App-->
+  <iar_description>  This example uses the Gigabit Ethernet MAC (GMAC) and the on-board Ethernet transceiver available on Atmel evaluation kits. It enables the device to respond to a ping command sent by a host computer. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

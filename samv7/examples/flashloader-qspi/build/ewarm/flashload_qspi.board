@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<flash_board>
+  <pass>
+    <loader>$TOOLKIT_DIR$\config\flashloader\Atmel\samv71q21\samv71q21-flash.flash</loader>
+    <range>CODE 0x400000 0x5fffff</range>
+    <rel_offset>0x0</rel_offset>
+    <args>--flash
+--boot
+</args>
+  </pass>
+  <pass>
+    <loader>$TOOLKIT_DIR$\config\flashloader\Atmel\samv71q21\samv71q21-qspiflash.flash</loader>
+    <range>CODE 0x80000000 0x80200000</range>
+    <args>--qspiflash</args>
+  </pass>
+</flash_board>
+
+

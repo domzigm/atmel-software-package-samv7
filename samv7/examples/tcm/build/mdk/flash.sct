@@ -1,0 +1,103 @@
+; * ----------------------------------------------------------------------------
+; *         ATMEL Microcontroller Software Support
+; * ----------------------------------------------------------------------------
+; * Copyright (c) 2009, Atmel Corporation
+; *
+; * All rights reserved.
+; *
+; * Redistribution and use in source and binary forms, with or without
+; * modification, are permitted provided that the following conditions are met:
+; *
+; * - Redistributions of source code must retain the above copyright notice,
+; * this list of conditions and the disclaimer below.
+; *
+; * Atmel's name may not be used to endorse or promote products derived from
+; * this software without specific prior written permission.
+; *
+; * DISCLAIMER: THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR
+; * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+; * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+; * DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR ANY DIRECT, INDIRECT,
+; * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+; * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+; * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+; * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+; * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+; * ----------------------------------------------------------------------------
+
+; *------------------------------------------------------------------------------
+; *      Linker scatter for running in internal FLASH on the SAMV71
+; *----------------------------------------------------------------------------*/
+
+; /* vector is put at very begin adress of FLASH, the preserved size is 0x100 */
+
+#define BASE_ADDRESS_ITCM  0x00000000
+#define BASE_ADDRESS_FLASH 0x00400000
+#define BASE_ADDRESS_DTCM  0X20000000
+#define BASE_ADDRESS_SRAM  0x20400000
+
+#define MEM_SIZE_ITCM      (32 * 1024)
+#define MEM_SIZE_DTCM      (32 * 1024)
+#define MEM_SIZE_FLASH     (2 * 1024 * 1024)
+#define MEM_SIZE_SRAM      (320 * 1024)
+
+#define SIZE_STACK_HEAP    (0x1000)
+#define BASE_ADDRESS_STACK (BASE_ADDRESS_SRAM + MEM_SIZE_SRAM - MEM_SIZE_ITCM)
+#define BASE_ADDRESS_HEAP  (BASE_ADDRESS_STACK - SIZE_STACK_HEAP)
+
+
+;LR_IROM1 BASE_ADDRESS_FLASH (MEM_SIZE_FLASH - MEM_SIZE_ITCM)  ; load region size_region
+LR_IROM1 0x00400000 ((2 * 1024 * 1024) - (32 * 1024))  ; load region size_region
+{
+    Vector_region 0x00400000 +0; load address = execution address;
+    {
+        startup_sam.o (vectors, +First)
+    }
+
+    ROM +0
+    {
+        .ANY (+RO)
+    }
+
+    RW_IRAM1 0x20400000 0x00040000 ; RW data
+    {
+        .ANY (+RW +ZI)
+    }
+
+    DTCM 0x20000000  (16 * 1024)
+    {
+        .ANY (.data_TCM)
+    }
+    DTCM_STACK (0x20000000 + (16 * 1024) + (8 * 1024))	EMPTY -(8 * 1024)
+    {
+    }
+
+;    RW_IRAM_NON_CACHEABLE 0x20440000 0x0001E000 ; RW data
+;    {
+;        .ANY (.region_dma_nocache)
+;    }
+
+    ; Configure Stack and Heap
+;    ARM_LIB_HEAP BASE_ADDRESS_HEAP EMPTY SIZE_STACK_HEAP
+    ARM_LIB_HEAP (0x20400000 + (320 * 1024) - (32 * 1024) - 0x2000) EMPTY 0x1000
+    {
+    }
+
+;    ARM_LIB_STACK BASE_ADDRESS_STACK EMPTY -SIZE_STACK_HEAP
+    ARM_LIB_STACK (0x20400000 + (320 * 1024) - (32 * 1024)) EMPTY -0x1000
+    {
+    }   
+}
+
+
+;LOAD_2_ITCM (BASE_ADDRESS_FLASH + MEM_SIZE_FLASH - MEM_SIZE_ITCM)
+LOAD_2_ITCM (0x00400000 + (2 * 1024 * 1024) - (32 * 1024))
+{
+;    EXEC_ITCM BASE_ADDRESS_ITCM MEM_SIZE_ITCM
+    EXEC_ITCM 0  (32 * 1024)
+    {
+        .ANY (.code_TCM)
+    }
+}
+

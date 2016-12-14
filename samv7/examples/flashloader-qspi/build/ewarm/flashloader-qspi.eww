@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\flashloader-qspi.ewp</path>
+  </project>
+  <batchBuild>
+    <batchDefinition>
+      <name>flash</name>
+      <member>
+        <project>flashloader-qspi</project>
+        <configuration>flash</configuration>
+      </member>
+    </batchDefinition>
+    <batchDefinition>
+      <name>sram</name>
+      <member>
+        <project>flashloader-qspi</project>
+        <configuration>sram</configuration>
+      </member>
+    </batchDefinition>
+    <batchDefinition>
+      <name>all</name>
+      <member>
+        <project>flashloader-qspi</project>
+        <configuration>sram</configuration>
+      </member>
+      <member>
+        <project>flashloader-qspi</project>
+        <configuration>flash</configuration>
+      </member>
+    </batchDefinition>
+  </batchBuild>
+</workspace>
+
+

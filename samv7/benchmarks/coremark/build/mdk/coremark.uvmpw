@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<ProjectWorkspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project_mpw.xsd">
+
+  <SchemaVersion>1.0</SchemaVersion>
+
+  <Header>### uVision Project, (C) Keil Software</Header>
+
+  <WorkspaceName>coremark</WorkspaceName>
+
+  <project>
+    <PathAndName>..\..\..\..\libraries\libchip_sam9xx5\build\mdk\libchip_sam9g25.uvproj</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>..\..\..\..\libraries\libboard_sam9xx5-ek\build\mdk\libboard_sam9g25-ek.uvproj</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>.\coremark.uvproj</PathAndName>
+    <NodeIsActive>1</NodeIsActive>
+    <NodeIsExpanded>1</NodeIsExpanded>
+  </project>
+
+</ProjectWorkspace>

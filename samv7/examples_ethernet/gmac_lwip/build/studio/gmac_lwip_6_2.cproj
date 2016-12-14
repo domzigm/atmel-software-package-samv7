@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>6.2</ProjectVersion>
+    <ToolchainName>com.Atmel.ARMGCC.C</ToolchainName>
+    <ProjectGuid>{c9e51a8c-f289-47ea-9002-c417c1eec9da}</ProjectGuid>
+    <avrdevice>ATSAMV71Q21</avrdevice>
+    <avrdeviceseries>none</avrdeviceseries>
+    <OutputType>Executable</OutputType>
+    <Language>C</Language>
+    <OutputFileName>$(MSBuildProjectName)</OutputFileName>
+    <OutputFileExtension>.elf</OutputFileExtension>
+    <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
+    <AssemblyName>gmac_lwip</AssemblyName>
+    <Name>gmac_lwip</Name>
+    <RootNamespace>gmac_lwip</RootNamespace>
+    <ToolchainFlavour>Native</ToolchainFlavour>
+    <KeepTimersRunning>true</KeepTimersRunning>
+    <OverrideVtor>false</OverrideVtor>
+    <CacheFlash>true</CacheFlash>
+    <ProgFlashFromRam>true</ProgFlashFromRam>
+    <RamSnippetAddress>0x20000000</RamSnippetAddress>
+    <UncachedRange />
+    <preserveEEPROM>true</preserveEEPROM>
+    <OverrideVtorValue>exception_table</OverrideVtorValue>
+    <BootSegment>2</BootSegment>
+    <eraseonlaunchrule>1</eraseonlaunchrule>
+    <AsfFrameworkConfig>
+      <framework-data xmlns="">
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.21.0" />
+        </dependencies>
+      </framework-data>
+    </AsfFrameworkConfig>
+    <avrtool>com.atmel.avrdbg.tool.samice</avrtool>
+    <avrtoolinterface>SWD</avrtoolinterface>
+    <com_atmel_avrdbg_tool_edbg>
+      <ToolOptions>
+        <InterfaceProperties>
+          <SwdClock>2000000</SwdClock>
+        </InterfaceProperties>
+        <InterfaceName>SWD</InterfaceName>
+      </ToolOptions>
+      <ToolType>com.atmel.avrdbg.tool.edbg</ToolType>
+      <ToolNumber>ATML2407060200000059</ToolNumber>
+      <ToolName>EDBG</ToolName>
+    </com_atmel_avrdbg_tool_edbg>
+    <com_atmel_avrdbg_tool_samice>
+      <ToolOptions>
+        <InterfaceProperties>
+          <SwdClock>2000000</SwdClock>
+        </InterfaceProperties>
+        <InterfaceName>SWD</InterfaceName>
+      </ToolOptions>
+      <ToolType>com.atmel.avrdbg.tool.samice</ToolType>
+      <ToolNumber>28010796</ToolNumber>
+      <ToolName>SAM-ICE</ToolName>
+    </com_atmel_avrdbg_tool_samice>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'flash' ">
+    <ToolchainSettings>
+      <ArmGcc>
+  <armgcc.common.outputfiles.hex>True</armgcc.common.outputfiles.hex>
+  <armgcc.common.outputfiles.lss>True</armgcc.common.outputfiles.lss>
+  <armgcc.common.outputfiles.eep>True</armgcc.common.outputfiles.eep>
+  <armgcc.common.outputfiles.bin>True</armgcc.common.outputfiles.bin>
+  <armgcc.common.outputfiles.srec>True</armgcc.common.outputfiles.srec>
+  <armgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</armgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <armgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>BOARD_SAMV71_XULT</Value>
+      <Value>__SAMV71Q21__</Value>
+      <Value>flash</Value>
+      <Value>MPU_HAS_NOCACHE_REGION</Value>
+      <Value>TRACE_LEVEL=4</Value>
+    </ListValues>
+  </armgcc.compiler.symbols.DefSymbols>
+  <armgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>../../../../../libraries/libboard</Value>
+      <Value>../../../../../libraries/libboard/include</Value>
+      <Value>../../../../../libraries/libchip</Value>
+      <Value>../../../../../libraries/libchip/include</Value>
+      <Value>../../../../../libraries/libchip/include/samv71</Value>
+      <Value>../../../../../libraries/libchip/include/cmsis/CMSIS/Include</Value>
+      <Value>../../../</Value>
+      <Value>../../../../../libraries/liblwip/source/lwip_1.3.2/src/include</Value>
+      <Value>../../../../../libraries/liblwip/source/lwip_1.3.2/src/include/lwip</Value>
+      <Value>../../../../../libraries/liblwip/source/lwip_1.3.2/src/include/ipv4</Value>
+      <Value>../../../../../libraries/liblwip/source/lwip_1.3.2/src/include/netif</Value>
+      <Value>../../../../../libraries/liblwip/source/samv7-specific</Value>
+      <Value>../../../../../libraries/liblwip</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel\Device\ATMEL\samv71\include</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel\CMSIS\Include</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel\Device\ATMEL</Value>
+    </ListValues>
+  </armgcc.compiler.directories.IncludePaths>
+  <armgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>True</armgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>
+  <armgcc.compiler.optimization.DebugLevel>Maximum (-g3)</armgcc.compiler.optimization.DebugLevel>
+  <armgcc.compiler.warnings.AllWarnings>True</armgcc.compiler.warnings.AllWarnings>
+  <armgcc.linker.libraries.LibrarySearchPaths>
+    <ListValues>
+      <Value>../../../../../libraries/libboard/resources_v71/nocache_region/gcc</Value>
+    </ListValues>
+  </armgcc.linker.libraries.LibrarySearchPaths>
+  <armgcc.linker.optimization.GarbageCollectUnusedSections>True</armgcc.linker.optimization.GarbageCollectUnusedSections>
+  <armgcc.linker.memorysettings.ExternalRAM />
+  <armgcc.linker.miscellaneous.LinkerFlags>-Tsamv71q21_flash.ld</armgcc.linker.miscellaneous.LinkerFlags>
+  <armgcc.assembler.debugging.DebugLevel>Default (-g)</armgcc.assembler.debugging.DebugLevel>
+  <armgcc.preprocessingassembler.general.IncludePaths>
+    <ListValues>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel\Device\ATMEL\samv71\include</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel\CMSIS\Include</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel\Device\ATMEL</Value>
+    </ListValues>
+  </armgcc.preprocessingassembler.general.IncludePaths>
+  <armgcc.preprocessingassembler.debugging.DebugLevel>Default (-Wa,-g)</armgcc.preprocessingassembler.debugging.DebugLevel>
+</ArmGcc>
+    </ToolchainSettings>
+    <UsesExternalMakeFile>False</UsesExternalMakeFile>
+    <BuildTarget>all</BuildTarget>
+    <CleanTarget>clean</CleanTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\libraries\libboard\board.h">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\board.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\source\board_lowlevel.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\source\board_lowlevel.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\source\board_memories.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\source\board_memories.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\source\dbg_console.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\source\dbg_console.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\source\led.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\source\led.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\source\syscalls.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\source\syscalls.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\source\trace.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\source\trace.c</Link>
+    </Compile>
+<Compile Include="..\..\..\..\libraries\libboard\source\gmacb_phy.c">
+     <SubType>compile</SubType>
+     <Link>libraries\libboard\source\gmacb_phy.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\chip.h">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\chip.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\compiler.h">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\compiler.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\exceptions.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\exceptions.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\mpu.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\mpu.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\pio.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\pio.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\pio_it.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\pio_it.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\pmc.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\pmc.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\supc.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\supc.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\tc.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\tc.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\timetick.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\timetick.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\uart.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\uart.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\wdt.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\wdt.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\xdmac.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\xdmac.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\xdmad.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\xdmad.c</Link>
+    </Compile>
+<Compile Include="..\..\..\..\libraries\libchip\source\gmac.c">
+     <SubType>compile</SubType>
+     <Link>libraries\libchip\source\gmac.c</Link>
+    </Compile>
+<Compile Include="..\..\..\..\libraries\libchip\source\gmacd.c">
+     <SubType>compile</SubType>
+     <Link>libraries\libchip\source\gmacd.c</Link>
+    </Compile>
+<Compile Include="..\..\..\..\libraries\libchip\source\twi.c">
+     <SubType>compile</SubType>
+     <Link>libraries\libchip\source\twi.c</Link>
+    </Compile>
+<Compile Include="..\..\..\..\libraries\libchip\source\twid.c">
+     <SubType>compile</SubType>
+     <Link>libraries\libchip\source\twid.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\xdma_hardware_interface.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\xdma_hardware_interface.c</Link>
+    </Compile>
+    <Compile Include="..\..\main.c">
+      <SubType>compile</SubType>
+      <Link>main.c</Link>
+    </Compile>
+    
+<Compile Include="..\..\httpd.c">
+     <SubType>compile</SubType>
+     <Link>httpd.c</Link>
+    </Compile>
+<Compile Include="..\..\httpd.h">
+     <SubType>compile</SubType>
+     <Link>httpd.h</Link>
+    </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\api\api_lib.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\api\api_lib.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\api\api_msg.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\api\api_msg.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\api\err.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\api\err.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\api\netbuf.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\api\netbuf.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\api\netdb.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\api\netdb.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\api\netifapi.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\api\netifapi.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\api\sockets.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\api\sockets.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\api\tcpip.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\api\tcpip.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\autoip.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\autoip.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\icmp.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\icmp.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\igmp.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\igmp.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\inet.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\inet.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\inet_chksum.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\inet_chksum.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\ip.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\ip.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\ip_addr.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\ip_addr.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\ip_frag.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\ipv4\ip_frag.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\snmp\asn1_dec.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\snmp\asn1_dec.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\snmp\asn1_enc.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\snmp\asn1_enc.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\snmp\mib2.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\snmp\mib2.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\snmp\mib_structs.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\snmp\mib_structs.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\snmp\msg_in.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\snmp\msg_in.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\snmp\msg_out.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\snmp\msg_out.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\dhcp.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\dhcp.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\dns.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\dns.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\init.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\init.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\mem.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\mem.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\memp.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\memp.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\netif.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\netif.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\pbuf.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\pbuf.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\raw.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\raw.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\stats.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\stats.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\sys.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\sys.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\tcp.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\tcp.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\tcp_in.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\tcp_in.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\tcp_out.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\tcp_out.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\core\udp.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\core\udp.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\netif\etharp.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\netif\etharp.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\netif\ethernetif.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\netif\ethernetif.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\netif\loopif.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\netif\loopif.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\lwip_1.3.2\src\netif\slipif.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\lwip_1.3.2\src\netif\slipif.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\samv7-specific\gmacif.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\samv7-specific\gmacif.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\source\samv7-specific\arch\sys_arch.c">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\source\samv7-specific\arch\sys_arch.c</Link>
+      </Compile>
+  <Compile Include="..\..\..\..\libraries\liblwip\liblwip.h">
+       <SubType>compile</SubType>
+       <Link>libraries\liblwip\liblwip.h</Link>
+      </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Device_Startup\" />
+    <Folder Include="libraries\libboard\source" />
+    <Folder Include="libraries\libchip\source" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\libraries\libboard\resources_v71\gcc\startup_samv71.c">
+      <SubType>compile</SubType>
+      <Link>Device_Startup\startup_samv71.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\resources_v71\system_samv71.c">
+      <SubType>compile</SubType>
+      <Link>Device_Startup\system_samv71.c</Link>
+    </Compile>
+    <None Include="..\..\..\..\libraries\libboard\resources_v71\gcc\samv71q21_flash.ld">
+      <SubType>compile</SubType>
+      <Link>Device_Startup\samv71q21_flash.ld</Link>
+    </None>
+    <None Include="..\..\..\..\libraries\libboard\resources_v71\gcc\samv71q21_sram.ld">
+      <SubType>compile</SubType>
+      <Link>Device_Startup\samv71q21_sram.ld</Link>
+    </None>
+    <None Include="..\..\..\..\libraries\libboard\resources_v71\gcc\samv71_flash.ld">
+      <SubType>compile</SubType>
+      <Link>Device_Startup\samv71_flash.ld</Link>
+    </None>
+    <None Include="..\..\..\..\libraries\libboard\resources_v71\gcc\samv71_sram.ld">
+      <SubType>compile</SubType>
+      <Link>Device_Startup\samv71_sram.ld</Link>
+    </None>
+  </ItemGroup>
+  <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
+</Project>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>low_power</iar_name>               <!--App-->
+  <iar_description> This example allows to measure the consumption of the core in different modes (sleep mode, wait mode, backup mode). </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

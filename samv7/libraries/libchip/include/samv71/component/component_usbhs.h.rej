@@ -1,0 +1,10 @@
+--- samv7/libraries/libchip/include/samv71/component/component_usbhs.h
++++ samv7/libraries/libchip/include/samv71/component/component_usbhs.h
+@@ -889,6 +889,7 @@ typedef struct {
+ #define USBHS_CTRL_VBUSHWC (0x1u << 8) /**< \brief (USBHS_CTRL) VBUS Hardware Control */
+ #define USBHS_CTRL_FRZCLK (0x1u << 14) /**< \brief (USBHS_CTRL) Freeze USB Clock */
+ #define USBHS_CTRL_USBE (0x1u << 15) /**< \brief (USBHS_CTRL) USBHS Enable */
++#define USBHS_CTRL_UIDE (0x1u << 24) /**< \brief (USBHS_CTRL) USBHS Mode Enable (Clear to enable) */
+ #define USBHS_CTRL_UIMOD (0x1u << 25) /**< \brief (USBHS_CTRL) USBHS Mode */
+ #define   USBHS_CTRL_UIMOD_HOST (0x0u << 25) /**< \brief (USBHS_CTRL) The module is in USB Host mode. */
+ #define   USBHS_CTRL_UIMOD_DEVICE (0x1u << 25) /**< \brief (USBHS_CTRL) The module is in USB Device mode. */

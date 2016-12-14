@@ -1,0 +1,131 @@
+/* ---------------------------------------------------------------------------- */
+/*                  Atmel Microcontroller Software Support                      */
+/*                       SAM Software Package License                           */
+/* ---------------------------------------------------------------------------- */
+/* Copyright (c) 2015, Atmel Corporation                                        */
+/*                                                                              */
+/* All rights reserved.                                                         */
+/*                                                                              */
+/* Redistribution and use in source and binary forms, with or without           */
+/* modification, are permitted provided that the following condition is met:    */
+/*                                                                              */
+/* - Redistributions of source code must retain the above copyright notice,     */
+/* this list of conditions and the disclaimer below.                            */
+/*                                                                              */
+/* Atmel's name may not be used to endorse or promote products derived from     */
+/* this software without specific prior written permission.                     */
+/*                                                                              */
+/* DISCLAIMER:  THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR   */
+/* IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE   */
+/* DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR ANY DIRECT, INDIRECT,      */
+/* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT */
+/* LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,  */
+/* OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF    */
+/* LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING         */
+/* NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, */
+/* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                           */
+/* ---------------------------------------------------------------------------- */
+
+/**
+ *  \page libchip_page Chip Library
+ *
+ *  \section Purpose
+ * 
+ *  This directory provides a library of highly re-usable code to access
+ *  peripheral controllers with microcontrollers.
+ *
+ *  \section Contents
+ *  - \ref acc_module "ACC": the Analog Comparator Controller.
+ *  - \ref aes_module "AES": the Advanced Encryption Standard module.
+ *  - \ref AFEC_module "AFEC": the Analog Front-End Controller.
+ *  - \ref afe_dma_module "AFEC DMA": the Analog Front-End Controller with DMA support.
+ *  - \ref dacc_module "DAC":  the Digital-to-Analog Converter Controller.
+ *  - \ref mediaLB "MediaLB": the MediaLB peripheral.
+ *  - \ref pio_capture_module "PIO Parallel Capture": the PIO Parallel Capture mode.
+ *  - \ref pwm_module "PWMC": the Pulse Width Modulation controller (PWMC).
+ *  - \ref pmc_module "PMC": the Power Management Controller (PMC).
+ *  - \ref rtc_module "RTC": the Real-time Clock (RTC) controller.
+ *  - \ref spi_module "SPI": the Serial Peripheral Interface (SPI).
+ *  - \ref rtt_module "RTT": the Real-time Timer.
+ *  - \ref rtng_module "TRNG": the True Random Number Generator.
+ *  - \ref twi_module "TWI": the Two-wire Interface (TWI).
+ *  - \ref wdt_module "WDT": the Interface for the Watchdog Timer (WDT).
+ *
+ *  For more accurate information, please look at the related peripheral section of the
+ *  Datasheet.
+ *
+ *      \ref peripherals_module "Working with Peripherals" shows detailed information of the library.
+ *  \note
+ *   Depending on the chip, not all the peripherals will be available.
+ */
+ */
+/**
+    \defgroup peripherals_module peripherals_module
+ */
+/** \defgroup peripherals_module Chip Library
+ *  \section Contents
+ *  The directory can basically be divided into several sections for their usage:
+ *  - \ref acc_module "ACC": the Analog Comparator Controller.
+ *  - \ref aes_module "AES": the Advanced Encryption Standard module.
+ *  - \ref AFEC_module "AFEC": the Analog Front-End Controller.
+ *  - \ref afe_dma_module "AFEC DMA": the Analog Front-End Controller with DMA support.
+ *  - \ref dacc_module "DAC":  the Digital-to-Analog Converter Controller.
+ *  - \ref mediaLB "MediaLB": the MediaLB peripheral.
+ *  - \ref pio_capture_module "PIO Parallel Capture": the PIO Parallel Capture mode.
+ *  - \ref pwm_module "PWMC": the Pulse Width Modulation controller (PWMC).
+ *  - \ref pmc_module "PMC": the Power Management Controller (PMC).
+ *  - \ref rtc_module "RTC": the Real-time Clock (RTC) controller.
+ *  - \ref spi_module "SPI": the Serial Peripheral Interface (SPI).
+ *  - \ref rtt_module "RTT": the Real-time Timer.
+ *  - \ref rtng_module "TRNG": the True Random Number Generator.
+ *  - \ref twi_module "TWI": the Two-wire Interface (TWI).
+ *  - \ref wdt_module "WDT": the Interface for the Watchdog Timer (WDT).
+ */
+
+/*--------------------- Module layer Start ---------------------------*/
+/**@{*/
+
+/** \defgroup acc_module Working with ACC
+ */
+ 
+/** \defgroup aes_module Working with AES
+ */
+
+/** \defgroup AFEC_module Working with AFE
+ */
+ 
+/** \defgroup afe_dma_module Working with AFE (DMA support)
+ */
+
+/** \defgroup dacc_module Working with DACC
+ */
+
+/** \defgroup mediaLB Working with MediaLB
+ */
+
+/** \defgroup pio_capture_module Working with PIO Parallel Capture Mode
+ */
+
+/** \defgroup pmc_module Working with PMC
+ */
+
+/** \defgroup rtt_module Working with Real-time Timer
+ */
+
+/** \defgroup rtc_module Working with RTC
+ */
+ 
+/** \defgroup spi_module Working with SPI
+ */
+ 
+
+/** \defgroup  rtng_module Working with RTNG
+ */
+
+
+/** \defgroup wdt_module Working with WDT
+ */
+
+ /**@}*/
+ 

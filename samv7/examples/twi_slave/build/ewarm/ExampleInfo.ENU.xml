@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>twi_slave</iar_name>               <!--App-->
+  <iar_description>  This project demonstrates the TWI peripheral in slave mode. It mimics the behavior of a serial memory, enabling the TWI master to read and write data in its internal SRAM. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>tc_capture_waveform</iar_name>               <!--App-->
+  <iar_description>  This example indicates how to use TC in capture mode to measure the pulse frequency and count the total pulse number of an external signal injected on TIOA pin. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

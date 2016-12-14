@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<flash_device>
+  <exe>$TOOLKIT_DIR$\config\flashloader\Atmel\same70q19\same70q19-qspiflash.out</exe>
+  <flash_base>0x80000000</flash_base>
+  <page>4096</page>
+  <block>32 0x10000</block>
+  <args_doc>[--flash] specifies the flash loader to program the internal flash.
+[--boot] is given, device will boot from flash after programming (GPNVM bit set).
+</args_doc>
+</flash_device>

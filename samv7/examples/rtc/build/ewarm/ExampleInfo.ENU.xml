@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>rtc</iar_name>               <!--App-->
+  <iar_description>  This basic example shows how to use the Real-Time Clock (RTC) peripheral available on the Atmel SAMV7/E7 microcontrollers. The RTC enables easy time and date management and allows the user to monitor events like a configurable alarm, second change, calendar change, and so on. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

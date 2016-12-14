@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+
+<infocenter_data version="1.0">
+  <iar_template_variant>1</iar_template_variant>
+  <iar_name>samv7-xplained USB examples</iar_name>                             <!--Family-->
+  <iar_title>USB examples</iar_title>           <!--Manufacturer Family-->
+</infocenter_data>

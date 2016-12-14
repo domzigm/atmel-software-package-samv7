@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>smc_nandflash</iar_name>               <!--App-->
+  <iar_description>  This basic nandflash example shall show how to read and write data from/to a nandflash connected to the SMC, taking ECC and Bad Block marking into account. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

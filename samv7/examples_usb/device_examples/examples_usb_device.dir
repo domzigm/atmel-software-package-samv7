@@ -1,0 +1,61 @@
+/* ----------------------------------------------------------------------------
+ *         ATMEL Microcontroller Software Support
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 2010, Atmel Corporation
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * - Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the disclaimer below.
+ *
+ * Atmel's name may not be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * DISCLAIMER: THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+ * DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * \if document_SAMV71_XULT
+ * Below are USB Device examples for samv71 microcontrollers.
+ * \elseif document_SAME70_XPLD
+ * Below are USB Device examples for same70 microcontrollers.
+ * \endif
+ *
+ * \page page_examples_usb_device USB Device Examples
+ 
+ * - \subpage usb_audio_looprec
+ * \if document_SAMV71_XULT
+ * - \subpage usb_audio_speaker
+ * \endif
+ * - \subpage usb_core
+ * - \subpage usb_cdc
+ * - \subpage usb_eem
+ * - \subpage usb_hid_keyboard
+ * - \subpage usb_hid_mouse
+ * - \subpage usb_hid_transfer
+ * - \subpage usb_massstorage
+ * - \subpage usb_hid_msd
+ * \if document_SAMV71_XULT
+ * - \subpage usb_hid_aud
+ * - \subpage usb_iad_cdc_aud
+ * \endif
+ * - \subpage usb_iad_cdc_hid
+ * - \subpage usb_iad_cdc_cdc
+ * - \subpage usb_iad_cdc_msd
+ * - \subpage usb_video
+ * - \subpage usb_video_gray
+ */
+ 

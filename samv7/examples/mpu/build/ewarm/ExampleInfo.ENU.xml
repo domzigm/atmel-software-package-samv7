@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>mpu</iar_name>               <!--App-->
+  <iar_description>  The MPU example will help new users get familiar with the MPU of cortex-m7 on Atmel's SAMV7/E7 family of microcontrollers. This basic application shows the setup of the basic MPU memory regions and how to use the MPU module. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

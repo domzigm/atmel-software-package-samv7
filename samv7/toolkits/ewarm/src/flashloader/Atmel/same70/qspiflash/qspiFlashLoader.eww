@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\qspiFlashLoader.ewp</path>
+  </project>
+  <batchBuild>
+    <batchDefinition>
+      <name>all</name>
+      <member>
+        <project>qspiFlashLoader</project>
+        <configuration>SAME70j19</configuration>
+      </member>
+      <member>
+        <project>qspiFlashLoader</project>
+        <configuration>SAME70j20</configuration>
+      </member>
+      <member>
+        <project>qspiFlashLoader</project>
+        <configuration>SAME70j21</configuration>
+      </member>
+      <member>
+        <project>qspiFlashLoader</project>
+        <configuration>SAME70n19</configuration>
+      </member>
+      <member>
+        <project>qspiFlashLoader</project>
+        <configuration>SAME70n20</configuration>
+      </member>
+      <member>
+        <project>qspiFlashLoader</project>
+        <configuration>SAME70n21</configuration>
+      </member>
+      <member>
+        <project>qspiFlashLoader</project>
+        <configuration>SAME70q19</configuration>
+      </member>
+      <member>
+        <project>qspiFlashLoader</project>
+        <configuration>SAME70q20</configuration>
+      </member>
+      <member>
+        <project>qspiFlashLoader</project>
+        <configuration>SAME70q21</configuration>
+      </member>
+    </batchDefinition>
+  </batchBuild>
+</workspace>
+
+

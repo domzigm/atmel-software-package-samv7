@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>hsmci_sdcard_fatfs</iar_name>               <!--App-->
+  <iar_description>  The hsmci_sdcard_fatfs will help you to get familiar with HSMCI interface with fatfs support on SAM Microcontrollers. It can also help you to get familiar with the SD operation flow which can be used for fast implementation of your own SD drivers and other applications related. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>afe_temp_sensor</iar_name>               <!--App-->
+  <iar_description>  The example is aimed to demonstrate the temperature sensor feature inside the device. The channel 11 is connected to the sensor by default. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>usb_video</iar_name>               <!--App-->
+  <iar_description>  The USB Video Example will help you to get familiar with the USB Device Port(UDP) and ISI interface on SAMV7/E7 Microcontrollers. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

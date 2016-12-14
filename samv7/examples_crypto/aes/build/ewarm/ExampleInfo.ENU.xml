@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>aes</iar_name>               <!--App-->
+  <iar_description> This application demonstrates the Advanced Encryption Standard (AES) peripheral integrated in some of SAMV7 micro-controllers family. It encrypts and decrypts several test values in Electronic CodeBook (ECB) and Cipher Block Chaining (CBC),OBC,OFB,TRC modes and checks them against the known answers. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

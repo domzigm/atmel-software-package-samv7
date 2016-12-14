@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>usb_iad_cdc_aud</iar_name>               <!--App-->
+  <iar_description>  The Example will help you to get familiar with the USB Framework that is used for rapid development of USB-compliant class drivers such as USB Composite device that integrates a CDC Virtual Serial Port Function and an Audio Speaker Function. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

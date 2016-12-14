@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>gmac_uip_telnetd</iar_name>               <!--App-->
+  <iar_description>  This project implements a telnet server example of the uIP TCP/IP stack. It enables the device to act as a simple telnetd server. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

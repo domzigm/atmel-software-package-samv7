@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>rtt</iar_name>               <!--App-->
+  <iar_description>  This example demonstrates the Real-Time Timer (RTT) provided on SAMV7/E7 micro-controllers. It enables the user to set an alarm and watch it being triggered when the timer reaches the corresponding value.  You can configure the rtt_module "RTT" by following steps - SetPrescaler the RTT to 1s (32768) - Initialize the ISR routine which refresh it when 1s is counted down - Enable the RTT Interrupt of the vector </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

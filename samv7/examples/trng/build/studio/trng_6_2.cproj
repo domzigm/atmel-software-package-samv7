@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>6.2</ProjectVersion>
+    <ToolchainName>com.Atmel.ARMGCC.C</ToolchainName>
+    <ProjectGuid>{c9e51a8c-f289-47ea-9002-c417c1eec9da}</ProjectGuid>
+    <avrdevice>ATSAMV71Q21</avrdevice>
+    <avrdeviceseries>none</avrdeviceseries>
+    <OutputType>Executable</OutputType>
+    <Language>C</Language>
+    <OutputFileName>$(MSBuildProjectName)</OutputFileName>
+    <OutputFileExtension>.elf</OutputFileExtension>
+    <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
+    <AssemblyName>trng</AssemblyName>
+    <Name>trng</Name>
+    <RootNamespace>trng</RootNamespace>
+    <ToolchainFlavour>Native</ToolchainFlavour>
+    <KeepTimersRunning>true</KeepTimersRunning>
+    <OverrideVtor>false</OverrideVtor>
+    <CacheFlash>true</CacheFlash>
+    <ProgFlashFromRam>true</ProgFlashFromRam>
+    <RamSnippetAddress>0x20000000</RamSnippetAddress>
+    <UncachedRange />
+    <preserveEEPROM>true</preserveEEPROM>
+    <OverrideVtorValue>exception_table</OverrideVtorValue>
+    <BootSegment>2</BootSegment>
+    <eraseonlaunchrule>1</eraseonlaunchrule>
+    <AsfFrameworkConfig>
+      <framework-data xmlns="">
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.21.0" />
+        </dependencies>
+      </framework-data>
+    </AsfFrameworkConfig>
+    <avrtool>com.atmel.avrdbg.tool.samice</avrtool>
+    <avrtoolinterface>SWD</avrtoolinterface>
+    <com_atmel_avrdbg_tool_edbg>
+      <ToolOptions>
+        <InterfaceProperties>
+          <SwdClock>2000000</SwdClock>
+        </InterfaceProperties>
+        <InterfaceName>SWD</InterfaceName>
+      </ToolOptions>
+      <ToolType>com.atmel.avrdbg.tool.edbg</ToolType>
+      <ToolNumber>ATML2407060200000059</ToolNumber>
+      <ToolName>EDBG</ToolName>
+    </com_atmel_avrdbg_tool_edbg>
+    <com_atmel_avrdbg_tool_samice>
+      <ToolOptions>
+        <InterfaceProperties>
+          <SwdClock>2000000</SwdClock>
+        </InterfaceProperties>
+        <InterfaceName>SWD</InterfaceName>
+      </ToolOptions>
+      <ToolType>com.atmel.avrdbg.tool.samice</ToolType>
+      <ToolNumber>28010796</ToolNumber>
+      <ToolName>SAM-ICE</ToolName>
+    </com_atmel_avrdbg_tool_samice>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'flash' ">
+    <ToolchainSettings>
+      <ArmGcc>
+  <armgcc.common.outputfiles.hex>True</armgcc.common.outputfiles.hex>
+  <armgcc.common.outputfiles.lss>True</armgcc.common.outputfiles.lss>
+  <armgcc.common.outputfiles.eep>True</armgcc.common.outputfiles.eep>
+  <armgcc.common.outputfiles.bin>True</armgcc.common.outputfiles.bin>
+  <armgcc.common.outputfiles.srec>True</armgcc.common.outputfiles.srec>
+  <armgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</armgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <armgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>BOARD_SAMV71_XULT</Value>
+      <Value>__SAMV71Q21__</Value>
+      <Value>flash</Value>
+      <Value>TRACE_LEVEL=4</Value>
+    </ListValues>
+  </armgcc.compiler.symbols.DefSymbols>
+  <armgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>../../../../../libraries/libboard</Value>
+      <Value>../../../../../libraries/libboard/include</Value>
+      <Value>../../../../../libraries/libchip</Value>
+      <Value>../../../../../libraries/libchip/include</Value>
+      <Value>../../../../../libraries/libchip/include/samv71</Value>
+      <Value>../../../../../libraries/libchip/include/cmsis/CMSIS/Include</Value>
+      <Value>../../../</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel\Device\ATMEL\samv71\include</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel\CMSIS\Include</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel\Device\ATMEL</Value>
+    </ListValues>
+  </armgcc.compiler.directories.IncludePaths>
+  <armgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>True</armgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>
+  <armgcc.compiler.optimization.DebugLevel>Maximum (-g3)</armgcc.compiler.optimization.DebugLevel>
+  <armgcc.compiler.warnings.AllWarnings>True</armgcc.compiler.warnings.AllWarnings>
+  <armgcc.linker.libraries.LibrarySearchPaths>
+    <ListValues>
+      <Value>../../../../../libraries/libboard/resources_v71/gcc</Value>
+    </ListValues>
+  </armgcc.linker.libraries.LibrarySearchPaths>
+  <armgcc.linker.optimization.GarbageCollectUnusedSections>True</armgcc.linker.optimization.GarbageCollectUnusedSections>
+  <armgcc.linker.memorysettings.ExternalRAM />
+  <armgcc.linker.miscellaneous.LinkerFlags>-Tsamv71q21_flash.ld</armgcc.linker.miscellaneous.LinkerFlags>
+  <armgcc.assembler.debugging.DebugLevel>Default (-g)</armgcc.assembler.debugging.DebugLevel>
+  <armgcc.preprocessingassembler.general.IncludePaths>
+    <ListValues>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel\Device\ATMEL\samv71\include</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel\CMSIS\Include</Value>
+      <Value>%24(ToolchainDir)\..\..\CMSIS_Atmel\Device\ATMEL</Value>
+    </ListValues>
+  </armgcc.preprocessingassembler.general.IncludePaths>
+  <armgcc.preprocessingassembler.debugging.DebugLevel>Default (-Wa,-g)</armgcc.preprocessingassembler.debugging.DebugLevel>
+</ArmGcc>
+    </ToolchainSettings>
+    <UsesExternalMakeFile>False</UsesExternalMakeFile>
+    <BuildTarget>all</BuildTarget>
+    <CleanTarget>clean</CleanTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\libraries\libboard\board.h">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\board.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\source\board_lowlevel.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\source\board_lowlevel.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\source\board_memories.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\source\board_memories.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\source\dbg_console.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\source\dbg_console.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\source\led.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\source\led.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\source\syscalls.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\source\syscalls.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\source\trace.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libboard\source\trace.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\chip.h">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\chip.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\compiler.h">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\compiler.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\exceptions.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\exceptions.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\mpu.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\mpu.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\pio.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\pio.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\pio_it.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\pio_it.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\pmc.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\pmc.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\supc.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\supc.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\tc.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\tc.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\timetick.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\timetick.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\uart.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\uart.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\wdt.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\wdt.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\xdmac.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\xdmac.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\xdmad.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\xdmad.c</Link>
+    </Compile>
+<Compile Include="..\..\..\..\libraries\libchip\source\trng.c">
+     <SubType>compile</SubType>
+     <Link>libraries\libchip\source\trng.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libchip\source\xdma_hardware_interface.c">
+      <SubType>compile</SubType>
+      <Link>libraries\libchip\source\xdma_hardware_interface.c</Link>
+    </Compile>
+    <Compile Include="..\..\main.c">
+      <SubType>compile</SubType>
+      <Link>main.c</Link>
+    </Compile>
+    
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Device_Startup\" />
+    <Folder Include="libraries\libboard\source" />
+    <Folder Include="libraries\libchip\source" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\libraries\libboard\resources_v71\gcc\startup_samv71.c">
+      <SubType>compile</SubType>
+      <Link>Device_Startup\startup_samv71.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\libraries\libboard\resources_v71\system_samv71.c">
+      <SubType>compile</SubType>
+      <Link>Device_Startup\system_samv71.c</Link>
+    </Compile>
+    <None Include="..\..\..\..\libraries\libboard\resources_v71\gcc\samv71q21_flash.ld">
+      <SubType>compile</SubType>
+      <Link>Device_Startup\samv71q21_flash.ld</Link>
+    </None>
+    <None Include="..\..\..\..\libraries\libboard\resources_v71\gcc\samv71q21_sram.ld">
+      <SubType>compile</SubType>
+      <Link>Device_Startup\samv71q21_sram.ld</Link>
+    </None>
+    <None Include="..\..\..\..\libraries\libboard\resources_v71\gcc\samv71_flash.ld">
+      <SubType>compile</SubType>
+      <Link>Device_Startup\samv71_flash.ld</Link>
+    </None>
+    <None Include="..\..\..\..\libraries\libboard\resources_v71\gcc\samv71_sram.ld">
+      <SubType>compile</SubType>
+      <Link>Device_Startup\samv71_sram.ld</Link>
+    </None>
+  </ItemGroup>
+  <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
+</Project>

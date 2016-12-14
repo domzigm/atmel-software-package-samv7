@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\qspi_flash.ewp</path>
+  </project>
+  <batchBuild>
+    <batchDefinition>
+      <name>flash</name>
+      <member>
+        <project>libchip_sam4s16</project>
+        <configuration>Debug</configuration>
+      </member>
+      <member>
+        <project>libboard_sam4s-ek</project>
+        <configuration>Debug</configuration>
+      </member>
+      <member>
+        <project>qspi_flash</project>
+        <configuration>flash</configuration>
+      </member>
+    </batchDefinition>
+    <batchDefinition>
+      <name>sram</name>
+      <member>
+        <project>libchip_sam4s16</project>
+        <configuration>Debug</configuration>
+      </member>
+      <member>
+        <project>libboard_sam4s-ek</project>
+        <configuration>Debug</configuration>
+      </member>
+      <member>
+        <project>qspi_flash</project>
+        <configuration>sram</configuration>
+      </member>
+    </batchDefinition>
+    <batchDefinition>
+      <name>all</name>
+      <member>
+        <project>libchip_sam4s16</project>
+        <configuration>Debug</configuration>
+      </member>
+      <member>
+        <project>libchip_sam4s16</project>
+        <configuration>Release</configuration>
+      </member>
+      <member>
+        <project>libboard_sam4s-ek</project>
+        <configuration>Debug</configuration>
+      </member>
+      <member>
+        <project>libboard_sam4s-ek</project>
+        <configuration>Release</configuration>
+      </member>
+      <member>
+        <project>qspi_flash</project>
+        <configuration>sram</configuration>
+      </member>
+      <member>
+        <project>qspi_flash</project>
+        <configuration>flash</configuration>
+      </member>
+    </batchDefinition>
+  </batchBuild>
+</workspace>
+
+

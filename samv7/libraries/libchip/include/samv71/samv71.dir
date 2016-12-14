@@ -1,0 +1,130 @@
+/* ---------------------------------------------------------------------------- */
+/*                  Atmel Microcontroller Software Support                      */
+/*                       SAM Software Package License                           */
+/* ---------------------------------------------------------------------------- */
+/* Copyright (c) 2015, Atmel Corporation                                        */
+/*                                                                              */
+/* All rights reserved.                                                         */
+/*                                                                              */
+/* Redistribution and use in source and binary forms, with or without           */
+/* modification, are permitted provided that the following condition is met:    */
+/*                                                                              */
+/* - Redistributions of source code must retain the above copyright notice,     */
+/* this list of conditions and the disclaimer below.                            */
+/*                                                                              */
+/* Atmel's name may not be used to endorse or promote products derived from     */
+/* this software without specific prior written permission.                     */
+/*                                                                              */
+/* DISCLAIMER:  THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR   */
+/* IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE   */
+/* DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR ANY DIRECT, INDIRECT,      */
+/* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT */
+/* LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,  */
+/* OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF    */
+/* LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING         */
+/* NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, */
+/* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                           */
+/* ---------------------------------------------------------------------------- */
+
+/**
+ * \defgroup sam_chip_definitions Definitions for SAM chips
+ * \defgroup SAMV71J19_definitions
+ * \ingroup sam_chip_definitions
+ * \defgroup SAMV71J20_definitions
+ * \ingroup sam_chip_definitions
+ * \defgroup SAMV71J21_definitions
+ * \ingroup sam_chip_definitions
+ * \defgroup SAMV71N19_definitions
+ * \ingroup sam_chip_definitions
+ * \defgroup SAMV71N20_definitions
+ * \ingroup sam_chip_definitions
+ * \defgroup SAMV71N21_definitions
+ * \ingroup sam_chip_definitions
+ * \defgroup SAMV71Q19_definitions
+ * \ingroup sam_chip_definitions
+ * \defgroup SAMV71Q20_definitions
+ * \ingroup sam_chip_definitions
+ * \defgroup SAMV71Q21_definitions
+ * \ingroup sam_chip_definitions
+ *
+ *
+ * \defgroup software_api_definitions Software API Definitions
+ * \defgroup SAMV71_ACC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_AES
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_AFEC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_CHIPID
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_DACC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_EFC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_GMAC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_GPBR
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_HSMCI
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_ICM
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_ISI
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_MATRIX
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_MCAN
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_MLB
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_PIO
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_PMC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_PWM
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_QSPI
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_RSTC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_RSWDT
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_RTC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_RTT
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_SDRAMC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_SMC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_SPI
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_SSC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_SUPC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_TC
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_TRNG
+ * \ingroup software_api_definitions
+ * \defgroup SAM_TWI
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_TWIHS
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_UART
+ * \ingroup software_api_definitions
+ * \defgroup SAM_UOTGHS
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_USART
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_USBHS
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_UTMI
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_WDT
+ * \ingroup software_api_definitions
+ * \defgroup SAMV71_XDMAC
+ * \ingroup software_api_definitions
+ *
+ */

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\ssc_dma_audio.ewp</path>
+  </project>
+  <batchBuild>
+    <batchDefinition>
+      <name>flash</name>
+      <member>
+        <project>ssc_dma_audio</project>
+        <configuration>flash</configuration>
+      </member>
+    </batchDefinition>
+    <batchDefinition>
+      <name>sram</name>
+      <member>
+        <project>ssc_dma_audio</project>
+        <configuration>sram</configuration>
+      </member>
+    </batchDefinition>
+    <batchDefinition>
+      <name>all</name>
+      <member>
+        <project>ssc_dma_audio</project>
+        <configuration>sram</configuration>
+      </member>
+      <member>
+        <project>ssc_dma_audio</project>
+        <configuration>flash</configuration>
+      </member>
+    </batchDefinition>
+  </batchBuild>
+</workspace>
+
+

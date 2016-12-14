@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>flashloader-qspi</iar_name>               <!--App-->
+  <iar_description>  This example demonstrates how to setup the QSPI Flash in XIP mode to execute code from QSPI flash. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

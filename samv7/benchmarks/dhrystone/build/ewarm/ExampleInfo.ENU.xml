@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>getting_started</iar_name>               <!--App-->
+  <iar_description>  The Getting Started example will help new users get familiar with Atmel's samv7 family of microcontrollers. This basic application shows the startup sequence of a chip and how to use its core peripherals. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

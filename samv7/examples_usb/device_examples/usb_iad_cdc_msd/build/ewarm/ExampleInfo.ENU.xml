@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>usb_iad_cdc_msd</iar_name>               <!--App-->
+  <iar_description>  The USB CDCMSD Project will help you to get familiar with the USB Device Port(UDP)interface and also some of the other interfaces in SAMV7/E7 Microcontrollers. Also it can help you to be familiar with the USB Framework that is used for rapid development of USB-compliant class drivers such as USB Communication Device class (CDC), and how to combine two USB functions to a single CDCMSD device (such as CDC + MSD). </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

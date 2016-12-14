@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>usb_core</iar_name>               <!--App-->
+  <iar_description>  The USB Device Enumeration Example will help you to get familiar with the USB Device Port(UDP)interface on SAMv7 Microcontrollers. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

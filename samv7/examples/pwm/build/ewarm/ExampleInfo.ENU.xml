@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>pwm</iar_name>               <!--App-->
+  <iar_description>  This example demonstrates a simple configuration of three PWM channels to generate variable duty cycle signals. The update of the duty cycle values is made automatically by the Peripheral DMA Controller . This will cause LED on the evaluation kit to glow repeatedly. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

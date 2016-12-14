@@ -1,0 +1,19 @@
+--- samv7/libraries/libchip/include/usbhs.h
++++ samv7/libraries/libchip/include/usbhs.h
+@@ -160,6 +160,16 @@ __STATIC_INLINE void USBHS_UsbMode(Usbhs *pUsbhs, USB_Mode_t Mode)
+ 		pUsbhs->USBHS_CTRL &= ~((uint32_t)USBHS_CTRL_UIMOD_DEVICE);
+ }
+ 
++
++/**
++ * \brief Enable the USB mode selection with UIMOD bit register
++ * \param pUsbhs   Pointer to an USBHS instance.
++ */
++__STATIC_INLINE void USBHS_UsbModeEnable(Usbhs *pUsbhs)
++{
++		pUsbhs->USBHS_CTRL &= ~((uint32_t)USBHS_CTRL_UIDE);
++}
++
+ /********************* USBHS_SR  *****************/
+ 
+ /**

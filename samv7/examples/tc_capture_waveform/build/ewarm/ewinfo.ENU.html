@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd"
+     xml:lang="en">
+  <head>
+    <title>Information Center for ARM - EXAMPLE PROJECTS</title>
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+    <link type="text/css" rel="stylesheet" media="all" href="file://$TOOLKIT_DIR$/doc/infocenter/style/ewic.css" />
+  </head>
+  <body>
+  <div id="topbanner"></div>
+  <div id="titlebanner_small">
+    <h2>Information Center for ARM</h2>
+  </div>
+  <div class="ppcol">
+  <table class="ppcol">
+   <tr class="link1">
+     <td></td>
+     <td></td>
+   </tr>
+  <tr class="link2">
+     <td><a href="file://$TOOLKIT_DIR$/examples/Atmel/SAMV71_Xplained_Ultra/documentation/index.html"><img class="button" src="file://$TOOLKIT_DIR$/doc/infocenter/images/buttons/documentation.png" alt="Software package" /></a></td>
+     <td><h2>SAMV71 Software Package </h2></td>
+   </tr>
+  </table>
+  </div>
+  <div class="breadcrumb"><a href="file://$TOOLKIT_DIR$/doc/infocenter/index.ENU.html">Information Center for ARM</a> | EXAMPLES</div>
+  <div class="mainblock">
+   <h2><a href="file://$TOOLKIT_DIR$/examples/Atmel/SAMV71_Xplained_Ultra/documentation/html/tc_capture_waveform.html" > <img class="button" src="file://$TOOLKIT_DIR$/doc/infocenter/images/buttons/documentation.png" alt="tc_capture_waveform" /> tc_capture_waveform</a></h2>
+   <p>
+ This example shows how to configure TC in waveform and capture mode. In capture mode, pulse signal is set as an input, RA and RB will be loaded when programmed event occurs. When TC interrupt happens, we could read RA and RB value for calculating pulse frequency and pulse number be increased. The current pulse frequency and total pulse number is output on DBGU.
+ The code can be roughly broken down as follows: <ul> <li>Select pre-defined waveform frequency and duty cycle to be generated. <li>Configure TC channel a as waveform output. <li>Configure TC channel b as capture input. <li>Configure capture Register A be loaded when rising edge of TIOA occurs. <li>Configure capture Register B be loaded when failing edge of TIOA occurs. <li>Configure an interrupt for TC and enable the RB load interrupt. <li> 'c' start capture. <li> 's' will stop capture,and dump the informations what have been captured. </ul>
+</p>
+  </div>
+  </body>
+</html>

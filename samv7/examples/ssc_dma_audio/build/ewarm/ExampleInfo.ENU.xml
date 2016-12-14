@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>ssc_dma_audio</iar_name>               <!--App-->
+  <iar_description>  This example uses the Synchronous Serial Controller (SSC) of an SAMV7x microcontroller to output an audio stream through the on-board WM8904 CODEC. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

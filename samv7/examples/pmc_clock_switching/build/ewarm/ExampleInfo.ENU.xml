@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infocenter_data version="1.0">
+  <iar_name>pmc_clock_switching</iar_name>               <!--App-->
+  <iar_description> This example shows how to switch system clock from one to another (PLLA, SLCK, MAINCK) or change to fast RC. </iar_description>  <!--App short description-->
+  <iar_curdir>$CUR_DIR$</iar_curdir>
+</infocenter_data>

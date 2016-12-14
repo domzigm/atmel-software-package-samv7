@@ -1,0 +1,174 @@
+/* ---------------------------------------------------------------------------- */
+/*                  Atmel Microcontroller Software Support                      */
+/*                       SAM Software Package License                           */
+/* ---------------------------------------------------------------------------- */
+/* Copyright (c) 2015, Atmel Corporation                                        */
+/*                                                                              */
+/* All rights reserved.                                                         */
+/*                                                                              */
+/* Redistribution and use in source and binary forms, with or without           */
+/* modification, are permitted provided that the following condition is met:    */
+/*                                                                              */
+/* - Redistributions of source code must retain the above copyright notice,     */
+/* this list of conditions and the disclaimer below.                            */
+/*                                                                              */
+/* Atmel's name may not be used to endorse or promote products derived from     */
+/* this software without specific prior written permission.                     */
+/*                                                                              */
+/* DISCLAIMER:  THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR   */
+/* IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE   */
+/* DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR ANY DIRECT, INDIRECT,      */
+/* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT */
+/* LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,  */
+/* OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF    */
+/* LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING         */
+/* NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, */
+/* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                           */
+/* ---------------------------------------------------------------------------- */
+
+/**
+ *  \page lib_board Board Library
+ *
+ *  \section Purpose
+ *  This library includes a description of the board related device drivers 
+ *  plus some source code corresponding to components driver. The firmware library 
+ *  allows any device to be used in the user application without the need for 
+ *  in-depth study of each peripheral specifications.
+ * 
+ * 
+ * 
+ * \defgroup usb_descriptors Common-used USB Descriptors
+ *
+ * \defgroup usbd_audio_speakerphone
+ * \ingroup usb_descriptors
+ * \defgroup usbd_audio_speaker
+ * \ingroup usb_descriptors
+ * \defgroup usbd_cdc
+ * \ingroup usb_descriptors
+ * \defgroup usbd_eem
+ * \ingroup usb_descriptors
+ * \defgroup usbd_hid_key
+ * \ingroup usb_descriptors
+ * \defgroup usbd_hid_mouse
+ * \ingroup usb_descriptors
+ * \defgroup usbd_composite_hidmsd
+ * \ingroup usb_descriptors
+ * \defgroup usbd_hid_tran
+ * \ingroup usb_descriptors
+ * \defgroup usbd_msd
+ * \ingroup usb_descriptors
+ * \defgroup usbd_composite_cdcmsd
+ * \ingroup usb_descriptors
+ * \defgroup usbd_composite_cdchid
+ * \ingroup usb_descriptors
+ * \defgroup usbd_composite_cdccdc
+ * \ingroup usb_descriptors
+ * \defgroup usbd_composite_cdcaud
+ * \ingroup usb_descriptors
+ * \defgroup usbd_composite_hidmsd
+ * \ingroup usb_descriptors
+ *
+ *
+ *
+ * \defgroup peripherals_module Working with Peripherals
+ * \defgroup ssc_module Working with SSC
+ * \ingroup peripherals_module
+ * \defgroup can_module Working with CAN
+ * \ingroup peripherals_module
+ * \defgroup sdram_module Working with SDRAMC
+ * \ingroup peripherals_module
+ * \defgroup tc_module Working with Timer Counter
+ * \ingroup peripherals_module
+ * \defgroup isi_module Working with ISI
+ * \ingroup peripherals_module
+ *
+ *
+ * \defgroup gmac_module Working with GMAC
+ * \ingroup peripherals_module
+ * \defgroup gmac_module
+ * \ingroup gmac_module
+ * \defgroup gmacd_module
+ * \ingroup gmac_module
+ * \defgroup gmacb_module
+ * \ingroup gmac_module
+ *
+ *
+ * \defgroup sdmad_module XDMA Drivers
+ * \ingroup dmac_module
+ * \defgroup spi_dma_module
+ * \ingroup dmac_module
+ * \defgroup uart_dma_module
+ * \ingroup dmac_module
+ * \defgroup usart_dma_module
+ * \ingroup dmac_module
+ * \defgroup usart_dma_module
+ * \ingroup dmac_module
+ * \defgroup dmad_module
+ * \ingroup dmac_module
+ * \defgroup xdmad_module
+ * \ingroup dmac_module
+ * \defgroup xdmad_dma_module
+ * \ingroup dmac_module
+ * 
+ * \defgroup dmad_defines
+ * \ingroup sdmad_module
+ * \defgroup dmad_structs
+ * \ingroup sdmad_module
+ * \defgroup dmad_functions
+ * \ingroup sdmad_module
+ * 
+ *
+ * \defgroup usb_device_stack USB Stack Device
+ * \defgroup usb_hid
+ * \ingroup usb_device_stack
+ * \defgroup usbd_hid
+ * \ingroup usb_device_stack
+ * \defgroup usb_video_class
+ * \ingroup usb_device_stack
+ * \defgroup usb_audio
+ * \ingroup usb_device_stack
+ * \defgroup usb_cdc
+ * \ingroup usb_device_stack
+ * \defgroup usb_msd
+ * \ingroup usb_device_stack
+ * \defgroup usb_general
+ * \ingroup usb_device_stack
+ * \defgroup usbd_ccid
+ * \ingroup usb_device_stack
+ * \defgroup usbd_hal
+ * \ingroup usb_device_stack
+ * \defgroup usbd_aud_fun
+ * \ingroup usb_device_stack
+ * \defgroup usbd_composite_hidaud
+ * \ingroup usb_device_stack
+ * \defgroup usbd_interface
+ * \ingroup usb_device_stack
+ * \defgroup usbd_config
+ * \ingroup usb_device_stack
+ *
+ *
+ * \defgroup cmsis_functions Functions from CMSIS
+ * \defgroup groupMath
+ * \ingroup cmsis_functions
+ * \defgroup groupFastMath
+ * \ingroup cmsis_functions
+ * \defgroup groupFilters
+ * \ingroup cmsis_functions
+ * \defgroup groupInterpolation
+ * \ingroup cmsis_functions
+ * \defgroup groupCmplxMath
+ * \ingroup cmsis_functions
+ * \defgroup groupMatrix
+ * \ingroup cmsis_functions
+ * \defgroup groupTransforms
+ * \ingroup cmsis_functions
+ * \defgroup groupController
+ * \ingroup cmsis_functions
+ * \defgroup groupStats
+ * \ingroup cmsis_functions
+ * \defgroup groupSupport
+ * \ingroup cmsis_functions
+ *
+ *
+ */
