@@ -3,6 +3,7 @@
 /*                       SAM Software Package License                           */
 /* ---------------------------------------------------------------------------- */
 /* Copyright (c) 2015, Atmel Corporation                                        */
+/* Copyright (c) 2017, Microchip                                                */
 /*                                                                              */
 /* All rights reserved.                                                         */
 /*                                                                              */
@@ -42,6 +43,7 @@
 #include "chip.h"
 #include "mcan_config.h"
 #include <assert.h>
+#include <stddef.h>
 /*---------------------------------------------------------------------------
  *      Definitions
  *---------------------------------------------------------------------------*/
@@ -49,14 +51,14 @@
 
 #define CAN_CLK_FREQ_HZ               MCAN_PROG_CLK_FREQ_HZ
 
-#define MCAN0_TSEG1                   (MCAN0_PROP_SEG + MCAN0_PHASE_SEG1)
-#define MCAN0_TSEG2                   (MCAN0_PHASE_SEG2)
+#define MCAN0_TSEG1                   (MCAN0_PROP_SEG + MCAN0_PHASE_SEG1 - 1)
+#define MCAN0_TSEG2                   (MCAN0_PHASE_SEG2 - 1)
 #define MCAN0_BRP                     ((uint32_t) (((float) CAN_CLK_FREQ_HZ / \
 									   ((float)(MCAN0_TSEG1 + MCAN0_TSEG2 + 3) *\
 										(float) MCAN0_BIT_RATE_BPS)) - 1))
 #define MCAN0_SJW                     (MCAN0_SYNC_JUMP - 1)
-#define MCAN0_FTSEG1                  (MCAN0_FAST_PROP_SEG + MCAN0_FAST_PHASE_SEG1)
-#define MCAN0_FTSEG2                  (MCAN0_FAST_PHASE_SEG2)
+#define MCAN0_FTSEG1                  (MCAN0_FAST_PROP_SEG + MCAN0_FAST_PHASE_SEG1 - 1)
+#define MCAN0_FTSEG2                  (MCAN0_FAST_PHASE_SEG2 - 1)
 #define MCAN0_FBRP                    ((uint32_t) (((float) CAN_CLK_FREQ_HZ / \
 									   ((float)(MCAN0_FTSEG1 + MCAN0_FTSEG2 + 3) * \
 										(float) MCAN0_FAST_BIT_RATE_BPS)) - 1))
@@ -84,14 +86,14 @@
 									   ((MCAN0_TX_BUF_ELMT_SZ/4) + 2))
 /* 32 elements max */
 
-#define MCAN1_TSEG1                   (MCAN1_PROP_SEG + MCAN1_PHASE_SEG1)
-#define MCAN1_TSEG2                   (MCAN1_PHASE_SEG2)
+#define MCAN1_TSEG1                   (MCAN1_PROP_SEG + MCAN1_PHASE_SEG1 - 1)
+#define MCAN1_TSEG2                   (MCAN1_PHASE_SEG2 - 1)
 #define MCAN1_BRP                     ((uint32_t) (((float) CAN_CLK_FREQ_HZ / \
 									   ((float)(MCAN1_TSEG1 + MCAN1_TSEG2 + 3) *\
 										(float) MCAN1_BIT_RATE_BPS)) - 1))
 #define MCAN1_SJW                     (MCAN1_SYNC_JUMP - 1)
-#define MCAN1_FTSEG1                  (MCAN1_FAST_PROP_SEG + MCAN1_FAST_PHASE_SEG1)
-#define MCAN1_FTSEG2                  (MCAN1_FAST_PHASE_SEG2)
+#define MCAN1_FTSEG1                  (MCAN1_FAST_PROP_SEG + MCAN1_FAST_PHASE_SEG1 - 1)
+#define MCAN1_FTSEG2                  (MCAN1_FAST_PHASE_SEG2 - 1)
 #define MCAN1_FBRP                    ((uint32_t) (((float) CAN_CLK_FREQ_HZ /\
 									   ((float)(MCAN1_FTSEG1 + MCAN1_FTSEG2 + 3) *\
 										(float) MCAN1_FAST_BIT_RATE_BPS)) - 1))
@@ -363,8 +365,7 @@
 	#error "Invalid CAN1 TX BUFFER ELEMENT SIZE"
 #endif
 
-#define CAN_11_BIT_ID_MASK                 (0x7FF)
-#define CAN_29_BIT_ID_MASK                 (0x1FFFFFFF)
+
 #define ELMT_SIZE_MASK                (0x1F)
 /* max element size is 18 words, fits in 5 bits */
 
@@ -425,6 +426,7 @@
 static const Pin pinsMcan0[] =  {PIN_MCAN0_TXD, PIN_MCAN0_RXD };
 static const Pin pinsMcan1[] =  {PIN_MCAN1_TXD, PIN_MCAN1_RXD };
 
+COMPILER_SECTION(".ram_nocache")
 static uint32_t can0MsgRam[MCAN0_STD_FLTS_WRDS +
 						   MCAN0_EXT_FLTS_WRDS +
 						   MCAN0_RX_FIFO0_WRDS +
@@ -434,6 +436,7 @@ static uint32_t can0MsgRam[MCAN0_STD_FLTS_WRDS +
 						   MCAN0_TX_DED_BUF_WRDS +
 						   MCAN0_TX_FIFO_Q_WRDS];
 
+COMPILER_SECTION(".ram_nocache")
 static uint32_t can1MsgRam[MCAN1_STD_FLTS_WRDS +
 						   MCAN1_EXT_FLTS_WRDS +
 						   MCAN1_RX_FIFO0_WRDS +
@@ -447,10 +450,10 @@ static const uint8_t dlcToMsgLength[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 16, 20,
 
 const MCan_ConfigType mcan0Config = {
 	MCAN0,
-	MCAN_BTP_BRP(MCAN0_BRP) | MCAN_BTP_TSEG1(MCAN0_TSEG1) |
-	MCAN_BTP_TSEG2(MCAN0_TSEG2) | MCAN_BTP_SJW(MCAN0_SJW),
-	MCAN_FBTP_FBRP(MCAN0_FBRP) | MCAN_FBTP_FTSEG1(MCAN0_FTSEG1) |
-	MCAN_FBTP_FTSEG2(MCAN0_FTSEG2) | MCAN_FBTP_FSJW(MCAN0_FSJW),
+	MCAN_NBTP_NBRP(MCAN0_BRP) | MCAN_NBTP_NTSEG1(MCAN0_TSEG1) |
+	MCAN_NBTP_NTSEG2(MCAN0_TSEG2) | MCAN_NBTP_NSJW(MCAN0_SJW),
+	MCAN_DBTP_DBRP(MCAN0_FBRP) | MCAN_DBTP_DTSEG1(MCAN0_FTSEG1) |
+	MCAN_DBTP_DTSEG2(MCAN0_FTSEG2) | MCAN_DBTP_DSJW(MCAN0_FSJW),
 	MCAN0_NMBR_STD_FLTS,
 	MCAN0_NMBR_EXT_FLTS,
 	MCAN0_NMBR_RX_FIFO0_ELMTS,
@@ -486,10 +489,10 @@ const MCan_ConfigType mcan0Config = {
 
 const MCan_ConfigType mcan1Config = {
 	MCAN1,
-	MCAN_BTP_BRP(MCAN1_BRP) | MCAN_BTP_TSEG1(MCAN1_TSEG1) |
-	MCAN_BTP_TSEG2(MCAN1_TSEG2) | MCAN_BTP_SJW(MCAN1_SJW),
-	MCAN_FBTP_FBRP(MCAN1_FBRP) | MCAN_FBTP_FTSEG1(MCAN1_FTSEG1) |
-	MCAN_FBTP_FTSEG2(MCAN1_FTSEG2) | MCAN_FBTP_FSJW(MCAN1_FSJW),
+	MCAN_NBTP_NBRP(MCAN1_BRP) | MCAN_NBTP_NTSEG1(MCAN1_TSEG1) |
+	MCAN_NBTP_NTSEG2(MCAN1_TSEG2) | MCAN_NBTP_NSJW(MCAN1_SJW),
+	MCAN_DBTP_DBRP(MCAN1_FBRP) | MCAN_DBTP_DTSEG1(MCAN1_FTSEG1) |
+	MCAN_DBTP_DTSEG2(MCAN1_FTSEG2) | MCAN_DBTP_DSJW(MCAN1_FSJW),
 	MCAN1_NMBR_STD_FLTS,
 	MCAN1_NMBR_EXT_FLTS,
 	MCAN1_NMBR_RX_FIFO0_ELMTS,
@@ -524,6 +527,19 @@ const MCan_ConfigType mcan1Config = {
 };
 
 
+static void MCAN_EnterInitMode(Mcan* mcan)
+{
+	uint32_t    regVal32;
+        regVal32 = mcan->MCAN_CCCR | MCAN_CCCR_INIT_ENABLED;
+	mcan->MCAN_CCCR = regVal32;
+
+	do { regVal32 = mcan->MCAN_CCCR; }
+	while (0u == (regVal32 & MCAN_CCCR_INIT_ENABLED));
+        
+        regVal32 |= MCAN_CCCR_CCE_CONFIGURABLE;
+        mcan->MCAN_CCCR = regVal32;
+}
+
 /*---------------------------------------------------------------------------
  *      Exported Functions
  *---------------------------------------------------------------------------*/
@@ -543,8 +559,7 @@ void MCAN_Init(const MCan_ConfigType *mcanConfig)
 
 	/* Both MCAN controllers use programmable clock 5 to derive bit rate */
 	// select MCK divided by 1 as programmable clock 5 output
-	PMC->PMC_PCK[5] = PMC_PCK_PRES(MCAN_PROG_CLK_PRESCALER - 1) |
-					  MCAN_PROG_CLK_SELECT;
+	PMC->PMC_PCK[5] = PMC_PCK_PRES(MCAN_PROG_CLK_PRESCALER - 1) | MCAN_PROG_CLK_SELECT;
 	PMC->PMC_SCER = PMC_SCER_PCK5;
 
 	if (MCAN0 ==  mcan) {
@@ -602,8 +617,8 @@ void MCAN_Init(const MCan_ConfigType *mcanConfig)
 	NVIC_EnableIRQ((IRQn_Type) (mCanLine0Irq + 1));
 
 	/* Configure CAN bit timing */
-	mcan->MCAN_BTP = mcanConfig->bitTiming;
-	mcan->MCAN_FBTP = mcanConfig->fastBitTiming;
+	mcan->MCAN_NBTP = mcanConfig->bitTiming;
+	mcan->MCAN_DBTP = mcanConfig->fastBitTiming;
 
 	/* Configure message RAM starting addresses & sizes */
 	mcan->MCAN_SIDFC = MAILBOX_ADDRESS((uint32_t) mcanConfig->msgRam.pStdFilts)
@@ -655,10 +670,13 @@ void MCAN_Init(const MCan_ConfigType *mcanConfig)
 	mcan->MCAN_NDAT1 = 0xFFFFFFFF;  // clear new (rx) data flags
 	mcan->MCAN_NDAT2 = 0xFFFFFFFF;  // clear new (rx) data flags
 
-	regVal32 =  mcan->MCAN_CCCR & ~(MCAN_CCCR_CME_Msk | MCAN_CCCR_CMR_Msk);
-	mcan->MCAN_CCCR = regVal32 | MCAN_CCCR_CME_ISO11898_1;
-	mcan->MCAN_CCCR = regVal32 | (MCAN_CCCR_CMR_ISO11898_1 |
-								  MCAN_CCCR_CME_ISO11898_1);
+	/**
+	 * FD operation disabled
+	 * Bit rate switch for transmissions disabled
+	 * CAN FD frame format according to ISO11898-1
+	 */
+	regVal32 =  mcan->MCAN_CCCR & ~(MCAN_CCCR_FDOE | MCAN_CCCR_BRSE | MCAN_CCCR_NISO);
+	mcan->MCAN_CCCR = regVal32;
 
 	__DSB();
 	__ISB();
@@ -676,8 +694,8 @@ void MCAN_InitFdEnable(const MCan_ConfigType *mcanConfig)
 	Mcan      *mcan = mcanConfig->pMCan;
 	uint32_t   regVal32;
 
-	regVal32 =  mcan->MCAN_CCCR & ~MCAN_CCCR_CME_Msk;
-	mcan->MCAN_CCCR = regVal32 | MCAN_CCCR_CME(1);
+	regVal32 =  mcan->MCAN_CCCR | MCAN_CCCR_FDOE;
+	mcan->MCAN_CCCR = regVal32;
 }
 
 /**
@@ -691,8 +709,8 @@ void MCAN_InitFdBitRateSwitchEnable(const MCan_ConfigType *mcanConfig)
 	Mcan      *mcan = mcanConfig->pMCan;
 	uint32_t   regVal32;
 
-	regVal32 =  mcan->MCAN_CCCR & ~MCAN_CCCR_CME_Msk;
-	mcan->MCAN_CCCR = regVal32 | MCAN_CCCR_CME(2);
+	regVal32 =  mcan->MCAN_CCCR | MCAN_CCCR_BRSE;
+	mcan->MCAN_CCCR = regVal32;
 }
 
 /**
@@ -706,7 +724,7 @@ void MCAN_InitLoopback(const MCan_ConfigType *mcanConfig)
 	Mcan *mcan = mcanConfig->pMCan;
 
 	mcan->MCAN_CCCR |= MCAN_CCCR_TEST_ENABLED;
-	//mcan->MCAN_CCCR |= MCAN_CCCR_MON_ENABLED;  // for internal loop back
+	mcan->MCAN_CCCR |= MCAN_CCCR_MON_ENABLED;  // for internal loop back
 	mcan->MCAN_TEST |= MCAN_TEST_LBCK_ENABLED;
 }
 
@@ -741,13 +759,10 @@ void MCAN_Enable(const MCan_ConfigType *mcanConfig)
 void MCAN_RequestIso11898_1(const MCan_ConfigType *mcanConfig)
 {
 	Mcan      *mcan = mcanConfig->pMCan;
-	uint32_t   regVal32;
-
-	regVal32 =  mcan->MCAN_CCCR & ~MCAN_CCCR_CMR_Msk;
-	mcan->MCAN_CCCR = regVal32 | MCAN_CCCR_CMR_ISO11898_1;
-
-	while ((mcan->MCAN_CCCR & (MCAN_CCCR_FDBS | MCAN_CCCR_FDO)) != 0)
-	{ /* wait */ }
+	
+	MCAN_EnterInitMode(mcan);
+	mcan->MCAN_CCCR &= ~MCAN_CCCR_FDOE;
+	MCAN_Enable(mcanConfig);
 }
 
 /**
@@ -759,14 +774,10 @@ void MCAN_RequestIso11898_1(const MCan_ConfigType *mcanConfig)
 void MCAN_RequestFd(const MCan_ConfigType *mcanConfig)
 {
 	Mcan      *mcan = mcanConfig->pMCan;
-	uint32_t   regVal32;
-
-	if ((mcan->MCAN_CCCR & MCAN_CCCR_CME_Msk) == MCAN_CCCR_CME(1)) {
-		regVal32 =  mcan->MCAN_CCCR & ~MCAN_CCCR_CMR_Msk;
-		mcan->MCAN_CCCR = regVal32 | MCAN_CCCR_CMR_FD;
-
-		while ((mcan->MCAN_CCCR & MCAN_CCCR_FDO) == 0) { /* wait */ }
-	}
+	
+	MCAN_EnterInitMode(mcan);
+	mcan->MCAN_CCCR  = (mcan->MCAN_CCCR & ~MCAN_CCCR_BRSE) | MCAN_CCCR_FDOE;
+	MCAN_Enable(mcanConfig);
 }
 
 /**
@@ -778,15 +789,10 @@ void MCAN_RequestFd(const MCan_ConfigType *mcanConfig)
 void MCAN_RequestFdBitRateSwitch(const MCan_ConfigType *mcanConfig)
 {
 	Mcan      *mcan = mcanConfig->pMCan;
-	uint32_t   regVal32;
-
-	if ((mcan->MCAN_CCCR & MCAN_CCCR_CME_Msk) == MCAN_CCCR_CME(2)) {
-		regVal32 =  mcan->MCAN_CCCR & ~MCAN_CCCR_CMR_Msk;
-		mcan->MCAN_CCCR = regVal32 | MCAN_CCCR_CMR_FD_BITRATE_SWITCH;
-
-		while ((mcan->MCAN_CCCR & (MCAN_CCCR_FDBS | MCAN_CCCR_FDO)) !=
-				(MCAN_CCCR_FDBS | MCAN_CCCR_FDO)) { /* wait */ }
-	}
+	
+	MCAN_EnterInitMode(mcan);
+	mcan->MCAN_CCCR |= MCAN_CCCR_BRSE;
+	MCAN_Enable(mcanConfig);
 }
 
 /**
@@ -871,12 +877,20 @@ uint8_t   *MCAN_ConfigTxDedBuffer(const MCan_ConfigType *mcanConfig,
  * \param mcanConfig  Pointer to a MCAN instance.
  * \param buffer  Pointer to buffer.
  */
-void MCAN_SendTxDedBuffer(const MCan_ConfigType *mcanConfig, uint8_t buffer)
+void MCAN_SendTxDedBuffer(const MCan_ConfigType *mcanConfig, uint8_t buffer, uint8_t mode)
 {
 	Mcan *mcan = mcanConfig->pMCan;
-
-	if (buffer < mcanConfig->nmbrTxDedBufElmts)
-		mcan->MCAN_TXBAR = (1 << buffer);
+	uint32_t *pThisTxBuf = 0;
+	if(buffer < mcanConfig->nmbrTxDedBufElmts)
+        {
+          if(1 == mode)
+          {
+		pThisTxBuf = mcanConfig->msgRam.pTxDedBuf + (buffer *
+					 (mcanConfig->txBufElmtSize & ELMT_SIZE_MASK));
+                pThisTxBuf[1] |= (1 << 20) | (1 << 21);
+          }
+          mcan->MCAN_TXBAR = (1 << buffer);
+        }
 }
 
 /**
@@ -888,7 +902,7 @@ void MCAN_SendTxDedBuffer(const MCan_ConfigType *mcanConfig, uint8_t buffer)
  * \param data  Pointer to data.
  */
 uint32_t MCAN_AddToTxFifoQ(const MCan_ConfigType *mcanConfig,
-							uint32_t id, MCan_IdType idType, MCan_DlcType dlc, uint8_t *data)
+							uint32_t id, MCan_IdType idType, MCan_DlcType dlc, uint8_t *data, uint8_t mode)
 {
 	Mcan *mcan = mcanConfig->pMCan;
 	uint32_t   putIdx = 255;
@@ -898,24 +912,38 @@ uint32_t MCAN_AddToTxFifoQ(const MCan_ConfigType *mcanConfig,
 	uint8_t    cnt;
 
 	// Configured for FifoQ and FifoQ not full?
-	if ((mcanConfig->nmbrTxFifoQElmts > 0) &&
-		((mcan->MCAN_TXFQS & MCAN_TXFQS_TFQF) == 0)) {
+	if ((mcanConfig->nmbrTxFifoQElmts > 0) && ((mcan->MCAN_TXFQS & MCAN_TXFQS_TFQF) == 0)) {
+          
 		putIdx = (mcan->MCAN_TXFQS & MCAN_TXFQS_TFQPI_Msk) >> MCAN_TXFQS_TFQPI_Pos;
 		pThisTxBuf = mcanConfig->msgRam.pTxDedBuf + (putIdx *
 					 (mcanConfig->txBufElmtSize & ELMT_SIZE_MASK));
-
+                
 		if (idType == CAN_STD_ID)
-			*pThisTxBuf++ = ((id << 18) & (CAN_11_BIT_ID_MASK << 18));
+			*pThisTxBuf++ = ((id << 18u) & (CAN_11_BIT_ID_MASK << 18u));
 		else
 			*pThisTxBuf++ = BUFFER_XTD_MASK | (id & CAN_29_BIT_ID_MASK);
 
-		*pThisTxBuf++ = (uint32_t) dlc << 16;
-		pTxData = (uint8_t *) pThisTxBuf;
+                if(0 == mode && dlc > 8u)
+                  dlc = (MCan_DlcType)8u;
+                
+		*pThisTxBuf = (uint32_t) dlc << 16u;
 		msgLength = dlcToMsgLength[dlc];
 
+                if(1u == mode) {
+                  *pThisTxBuf |= (1u << 21u);
+                } else if(2u == mode)
+                {
+                  *pThisTxBuf |= (1u << 20u) | (1u << 21u);
+                }
+                pThisTxBuf++;
+                pTxData = (uint8_t *) pThisTxBuf;
+                
 		for (cnt = 0; cnt < msgLength; cnt++)
 			*pTxData++ = *data++;
 
+                pThisTxBuf = mcanConfig->msgRam.pTxDedBuf + (putIdx *
+					 (mcanConfig->txBufElmtSize & ELMT_SIZE_MASK));
+                
 		/* enable transmit from buffer to set TC interrupt bit in IR, but
 		interrupt will not happen unless TC interrupt is enabled */
 		mcan->MCAN_TXBTIE = (1 << putIdx);
@@ -1075,10 +1103,6 @@ void MCAN_GetRxDedBuffer(const MCan_ConfigType *mcanConfig,
 		// copy the data from the buffer to the mailbox
 		pRxData = (uint8_t *) pThisRxBuf;
 
-		SCB_CleanDCache_by_Addr((uint32_t *)pRxData, pRxMailbox->info.length);
-		SCB_CleanDCache_by_Addr((uint32_t *) & (pRxMailbox->data[0]),
-								pRxMailbox->info.length);
-
 		for (idx = 0; idx < pRxMailbox->info.length; idx++)
 			pRxMailbox->data[idx] = *pRxData++;
 
@@ -1161,6 +1185,42 @@ uint32_t MCAN_GetRxFifoBuffer(const MCan_ConfigType *mcanConfig,
 	}
 
 	return (fill_level);
+}
+
+void MCAN_ConfigRxFifoFilter(const MCan_ConfigType *mcanConfig,
+				 MCan_FifoType fifo, uint8_t filter, uint32_t id,
+				 MCan_IdType idType, uint32_t mask)
+{
+  uint32_t *pThisRxFilt = 0;
+  uint32_t   filterTemp;
+
+  if (idType == CAN_STD_ID) {
+    
+    if ((filter < mcanConfig->nmbrStdFilts) && (id <= CAN_11_BIT_ID_MASK) && (mask <= CAN_11_BIT_ID_MASK)) {
+      
+      pThisRxFilt = mcanConfig->msgRam.pStdFilts + filter;
+      filterTemp = (uint32_t) STD_FILT_SFT_RANGE | (id << 16) | mask;
+
+      if (fifo == CAN_FIFO_0)
+        *pThisRxFilt = STD_FILT_SFEC_FIFO0 | filterTemp;
+      else if (fifo == CAN_FIFO_1)
+        *pThisRxFilt = STD_FILT_SFEC_FIFO1 | filterTemp;
+    }
+  } else { // extended ID
+  
+    if ((filter < mcanConfig->nmbrExtFilts) && (id <= CAN_29_BIT_ID_MASK) && (mask <= CAN_29_BIT_ID_MASK)) {
+      
+      pThisRxFilt = mcanConfig->msgRam.pExtFilts + (2 * filter);
+
+      // 2 words per filter
+      if (fifo == CAN_FIFO_0)
+        *pThisRxFilt++ = EXT_FILT_EFEC_FIFO0 | id;
+      else if (fifo == CAN_FIFO_1)
+        *pThisRxFilt++ = EXT_FILT_EFEC_FIFO1 | id;
+
+      *pThisRxFilt = (uint32_t) EXT_FILT_EFT_RANGE | mask;
+    }
+  }
 }
 
 /**@}*/
