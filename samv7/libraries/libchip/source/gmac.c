@@ -3,6 +3,7 @@
 /*                       SAM Software Package License                           */
 /* ---------------------------------------------------------------------------- */
 /* Copyright (c) 2015, Atmel Corporation                                        */
+/* Copyright (c) 2017, Microchip                                                */
 /*                                                                              */
 /* All rights reserved.                                                         */
 /*                                                                              */
@@ -498,7 +499,7 @@ uint32_t GMAC_GetDMAConfig(Gmac *pGmac, gmacQueList_t queueIdx)
 	if (!queueIdx)
 		return pGmac->GMAC_DCFGR;
 	else
-		return pGmac->GMAC_RBSRPQ[queueIdx - 1];;
+		return pGmac->GMAC_RBSRPQ[queueIdx - 1];
 }
 
 /**
