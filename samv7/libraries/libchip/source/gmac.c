@@ -440,7 +440,7 @@ void GMAC_SetAddress32(Gmac *pGmac, uint8_t bIndex, uint32_t dwMacT,
 void GMAC_SetAddress64(Gmac *pGmac, uint8_t bIndex, uint64_t ddwMac)
 {
 	pGmac->GMAC_SA[bIndex].GMAC_SAB = (uint32_t)ddwMac;
-	pGmac->GMAC_SA[bIndex].GMAC_SAT = (uint32_t)(ddwMac > 32);
+	pGmac->GMAC_SA[bIndex].GMAC_SAT = (uint32_t)(ddwMac >> 32);
 }
 
 
