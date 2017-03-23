@@ -51,25 +51,25 @@
 
 #define CAN_CLK_FREQ_HZ               MCAN_PROG_CLK_FREQ_HZ
 
-#define MCAN0_TSEG1                   (MCAN0_PROP_SEG + MCAN0_PHASE_SEG1 - 1)
-#define MCAN0_TSEG2                   (MCAN0_PHASE_SEG2 - 1)
+#define MCAN0_TSEG1                   (MCAN0_PROP_SEG + MCAN0_PHASE_SEG1 - 1u)
+#define MCAN0_TSEG2                   (MCAN0_PHASE_SEG2 - 1u)
 #define MCAN0_BRP                     ((uint32_t) (((float) CAN_CLK_FREQ_HZ / \
-									   ((float)(MCAN0_TSEG1 + MCAN0_TSEG2 + 3) *\
-										(float) MCAN0_BIT_RATE_BPS)) - 1))
-#define MCAN0_SJW                     (MCAN0_SYNC_JUMP - 1)
-#define MCAN0_FTSEG1                  (MCAN0_FAST_PROP_SEG + MCAN0_FAST_PHASE_SEG1 - 1)
-#define MCAN0_FTSEG2                  (MCAN0_FAST_PHASE_SEG2 - 1)
+									   ((float)(MCAN0_TSEG1 + MCAN0_TSEG2 + 3u) *\
+										(float) MCAN0_BIT_RATE_BPS)) - 1u))
+#define MCAN0_SJW                     (MCAN0_SYNC_JUMP - 1u)
+#define MCAN0_FTSEG1                  (MCAN0_FAST_PROP_SEG + MCAN0_FAST_PHASE_SEG1 - 1u)
+#define MCAN0_FTSEG2                  (MCAN0_FAST_PHASE_SEG2 - 1u)
 #define MCAN0_FBRP                    ((uint32_t) (((float) CAN_CLK_FREQ_HZ / \
-									   ((float)(MCAN0_FTSEG1 + MCAN0_FTSEG2 + 3) * \
-										(float) MCAN0_FAST_BIT_RATE_BPS)) - 1))
-#define MCAN0_FSJW                    (MCAN0_FAST_SYNC_JUMP - 1)
+									   ((float)(MCAN0_FTSEG1 + MCAN0_FTSEG2 + 3u) * \
+										(float) MCAN0_FAST_BIT_RATE_BPS)) - 1u))
+#define MCAN0_FSJW                    (MCAN0_FAST_SYNC_JUMP - 1u)
 
 #define MCAN0_STD_FLTS_WRDS           (MCAN0_NMBR_STD_FLTS)
 /* 128 max filters */
-#define MCAN0_EXT_FLTS_WRDS           (MCAN0_NMBR_EXT_FLTS * 2)
+#define MCAN0_EXT_FLTS_WRDS           (MCAN0_NMBR_EXT_FLTS * 2u)
 /* 64 max filters */
 #define MCAN0_RX_FIFO0_WRDS           (MCAN0_NMBR_RX_FIFO0_ELMTS * \
-									   ((MCAN0_RX_FIFO0_ELMT_SZ/4) + 2))
+									   ((MCAN0_RX_FIFO0_ELMT_SZ/4u) + 2u))
 /* 64 elements max */
 #define MCAN0_RX_FIFO1_WRDS           (MCAN0_NMBR_RX_FIFO1_ELMTS *\
 									   ((MCAN0_RX_FIFO1_ELMT_SZ/4) + 2))
@@ -77,48 +77,48 @@
 #define MCAN0_RX_DED_BUFS_WRDS            (MCAN0_NMBR_RX_DED_BUF_ELMTS * \
 		((MCAN0_RX_BUF_ELMT_SZ/4) + 2))
 /* 64 elements max */
-#define MCAN0_TX_EVT_FIFO_WRDS        (MCAN0_NMBR_TX_EVT_FIFO_ELMTS * 2)
+#define MCAN0_TX_EVT_FIFO_WRDS        (MCAN0_NMBR_TX_EVT_FIFO_ELMTS * 2u)
 /* 32 elements max */
 #define MCAN0_TX_DED_BUF_WRDS         (MCAN0_NMBR_TX_DED_BUF_ELMTS * \
-									   ((MCAN0_TX_BUF_ELMT_SZ/4) + 2))
+									   ((MCAN0_TX_BUF_ELMT_SZ/4u) + 2u))
 /* 32 elements max */
 #define MCAN0_TX_FIFO_Q_WRDS          (MCAN0_NMBR_TX_FIFO_Q_ELMTS *\
-									   ((MCAN0_TX_BUF_ELMT_SZ/4) + 2))
+									   ((MCAN0_TX_BUF_ELMT_SZ/4u) + 2u))
 /* 32 elements max */
 
-#define MCAN1_TSEG1                   (MCAN1_PROP_SEG + MCAN1_PHASE_SEG1 - 1)
-#define MCAN1_TSEG2                   (MCAN1_PHASE_SEG2 - 1)
+#define MCAN1_TSEG1                   (MCAN1_PROP_SEG + MCAN1_PHASE_SEG1 - 1u)
+#define MCAN1_TSEG2                   (MCAN1_PHASE_SEG2 - 1u)
 #define MCAN1_BRP                     ((uint32_t) (((float) CAN_CLK_FREQ_HZ / \
-									   ((float)(MCAN1_TSEG1 + MCAN1_TSEG2 + 3) *\
-										(float) MCAN1_BIT_RATE_BPS)) - 1))
-#define MCAN1_SJW                     (MCAN1_SYNC_JUMP - 1)
-#define MCAN1_FTSEG1                  (MCAN1_FAST_PROP_SEG + MCAN1_FAST_PHASE_SEG1 - 1)
-#define MCAN1_FTSEG2                  (MCAN1_FAST_PHASE_SEG2 - 1)
+									   ((float)(MCAN1_TSEG1 + MCAN1_TSEG2 + 3u) *\
+										(float) MCAN1_BIT_RATE_BPS)) - 1u))
+#define MCAN1_SJW                     (MCAN1_SYNC_JUMP - 1u)
+#define MCAN1_FTSEG1                  (MCAN1_FAST_PROP_SEG + MCAN1_FAST_PHASE_SEG1 - 1u)
+#define MCAN1_FTSEG2                  (MCAN1_FAST_PHASE_SEG2 - 1u)
 #define MCAN1_FBRP                    ((uint32_t) (((float) CAN_CLK_FREQ_HZ /\
-									   ((float)(MCAN1_FTSEG1 + MCAN1_FTSEG2 + 3) *\
-										(float) MCAN1_FAST_BIT_RATE_BPS)) - 1))
-#define MCAN1_FSJW                    (MCAN1_FAST_SYNC_JUMP - 1)
+									   ((float)(MCAN1_FTSEG1 + MCAN1_FTSEG2 + 3u) *\
+										(float) MCAN1_FAST_BIT_RATE_BPS)) - 1u))
+#define MCAN1_FSJW                    (MCAN1_FAST_SYNC_JUMP - 1u)
 
 #define MCAN1_STD_FLTS_WRDS           (MCAN1_NMBR_STD_FLTS)
 /* 128 max filters */
-#define MCAN1_EXT_FLTS_WRDS           (MCAN1_NMBR_EXT_FLTS * 2)
+#define MCAN1_EXT_FLTS_WRDS           (MCAN1_NMBR_EXT_FLTS * 2u)
 /* 64 max filters */
 #define MCAN1_RX_FIFO0_WRDS           (MCAN1_NMBR_RX_FIFO0_ELMTS * \
-									   ((MCAN1_RX_FIFO0_ELMT_SZ/4) + 2))
+									   ((MCAN1_RX_FIFO0_ELMT_SZ/4u) + 2u))
 /* 64 elements max */
 #define MCAN1_RX_FIFO1_WRDS           (MCAN1_NMBR_RX_FIFO1_ELMTS *\
-									   ((MCAN1_RX_FIFO1_ELMT_SZ/4) + 2))
+									   ((MCAN1_RX_FIFO1_ELMT_SZ/4u) + 2u))
 /* 64 elements max */
 #define MCAN1_RX_DED_BUFS_WRDS            (MCAN1_NMBR_RX_DED_BUF_ELMTS * \
-		((MCAN1_RX_BUF_ELMT_SZ/4) + 2))
+		((MCAN1_RX_BUF_ELMT_SZ/4u) + 2u))
 /* 64 elements max */
-#define MCAN1_TX_EVT_FIFO_WRDS        (MCAN1_NMBR_TX_EVT_FIFO_ELMTS * 2)
+#define MCAN1_TX_EVT_FIFO_WRDS        (MCAN1_NMBR_TX_EVT_FIFO_ELMTS * 2u)
 /* 32 elements max */
 #define MCAN1_TX_DED_BUF_WRDS         (MCAN1_NMBR_TX_DED_BUF_ELMTS * \
-									   ((MCAN1_TX_BUF_ELMT_SZ/4) + 2))
+									   ((MCAN1_TX_BUF_ELMT_SZ/4u) + 2u))
 /* 32 elements max */
 #define MCAN1_TX_FIFO_Q_WRDS          (MCAN1_NMBR_TX_FIFO_Q_ELMTS * \
-									   ((MCAN1_TX_BUF_ELMT_SZ/4) + 2))
+									   ((MCAN1_TX_BUF_ELMT_SZ/4u) + 2u))
 /* 32 elements max */
 
 /* validate CAN0 entries */
@@ -446,7 +446,7 @@ static uint32_t can1MsgRam[MCAN1_STD_FLTS_WRDS +
 						   MCAN1_TX_DED_BUF_WRDS +
 						   MCAN1_TX_FIFO_Q_WRDS];
 
-static const uint8_t dlcToMsgLength[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 16, 20, 24, 32, 48, 64 };
+static const uint8_t dlcToMsgLength[] = { 0u, 1u, 2u, 3u, 4u, 5u, 6u, 7u, 8u, 12u, 16u, 20u, 24u, 32u, 48u, 64u };
 
 const MCan_ConfigType mcan0Config = {
 	MCAN0,
@@ -462,13 +462,13 @@ const MCan_ConfigType mcan0Config = {
 	MCAN0_NMBR_TX_EVT_FIFO_ELMTS,
 	MCAN0_NMBR_TX_DED_BUF_ELMTS,
 	MCAN0_NMBR_TX_FIFO_Q_ELMTS,
-	(MCAN0_RX_FIFO0_DATA_SIZE << 29) | ((MCAN0_RX_FIFO0_ELMT_SZ / 4) + 2),
+	(MCAN0_RX_FIFO0_DATA_SIZE << 29u) | ((MCAN0_RX_FIFO0_ELMT_SZ / 4u) + 2u),
 	/* element size in WORDS */
-	(MCAN0_RX_FIFO1_DATA_SIZE << 29) | ((MCAN0_RX_FIFO1_ELMT_SZ / 4) + 2),
+	(MCAN0_RX_FIFO1_DATA_SIZE << 29u) | ((MCAN0_RX_FIFO1_ELMT_SZ / 4u) + 2u),
 	/* element size in WORDS */
-	(MCAN0_RX_BUF_DATA_SIZE << 29) | ((MCAN0_RX_BUF_ELMT_SZ / 4) + 2),
+	(MCAN0_RX_BUF_DATA_SIZE << 29u) | ((MCAN0_RX_BUF_ELMT_SZ / 4u) + 2u),
 	/* element size in WORDS */
-	(MCAN0_TX_BUF_DATA_SIZE << 29) | ((MCAN0_TX_BUF_ELMT_SZ / 4) + 2),
+	(MCAN0_TX_BUF_DATA_SIZE << 29u) | ((MCAN0_TX_BUF_ELMT_SZ / 4u) + 2u),
 	/* element size in WORDS */
 	{
 		&can0MsgRam[0],
@@ -501,13 +501,13 @@ const MCan_ConfigType mcan1Config = {
 	MCAN1_NMBR_TX_EVT_FIFO_ELMTS,
 	MCAN1_NMBR_TX_DED_BUF_ELMTS,
 	MCAN1_NMBR_TX_FIFO_Q_ELMTS,
-	(MCAN1_RX_FIFO0_DATA_SIZE << 29) | ((MCAN1_RX_FIFO0_ELMT_SZ / 4) + 2),
+	(MCAN1_RX_FIFO0_DATA_SIZE << 29u) | ((MCAN1_RX_FIFO0_ELMT_SZ / 4u) + 2u),
 	/* element size in WORDS */
-	(MCAN1_RX_FIFO1_DATA_SIZE << 29) | ((MCAN1_RX_FIFO1_ELMT_SZ / 4) + 2),
+	(MCAN1_RX_FIFO1_DATA_SIZE << 29u) | ((MCAN1_RX_FIFO1_ELMT_SZ / 4u) + 2u),
 	/* element size in WORDS */
-	(MCAN1_RX_BUF_DATA_SIZE << 29) | ((MCAN1_RX_BUF_ELMT_SZ / 4) + 2),
+	(MCAN1_RX_BUF_DATA_SIZE << 29u) | ((MCAN1_RX_BUF_ELMT_SZ / 4u) + 2u),
 	/* element size in WORDS */
-	(MCAN1_TX_BUF_DATA_SIZE << 29) | ((MCAN1_TX_BUF_ELMT_SZ / 4) + 2),
+	(MCAN1_TX_BUF_DATA_SIZE << 29u) | ((MCAN1_TX_BUF_ELMT_SZ / 4u) + 2u),
 	/* element size in WORDS */
 	{
 		&can1MsgRam[0],
@@ -559,7 +559,7 @@ void MCAN_Init(const MCan_ConfigType *mcanConfig)
 
 	/* Both MCAN controllers use programmable clock 5 to derive bit rate */
 	// select MCK divided by 1 as programmable clock 5 output
-	PMC->PMC_PCK[5] = PMC_PCK_PRES(MCAN_PROG_CLK_PRESCALER - 1) | MCAN_PROG_CLK_SELECT;
+	PMC->PMC_PCK[5] = PMC_PCK_PRES(MCAN_PROG_CLK_PRESCALER - 1u) | MCAN_PROG_CLK_SELECT;
 	PMC->PMC_SCER = PMC_SCER_PCK5;
 
 	if (MCAN0 ==  mcan) {
@@ -567,18 +567,18 @@ void MCAN_Init(const MCan_ConfigType *mcanConfig)
 		// Enable MCAN peripheral clock
 		PMC_EnablePeripheral(ID_MCAN0);
 		// Configure Message RAM Base Address
-		regVal32 = MATRIX->CCFG_CAN0 & 0x000001FF;
+		regVal32 = MATRIX->CCFG_CAN0 & 0x000001FFu;
 		MATRIX->CCFG_CAN0 = regVal32 |
-							((uint32_t) mcanConfig->msgRam.pStdFilts & 0xFFFF0000);
+							((uint32_t) mcanConfig->msgRam.pStdFilts & 0xFFFF0000u);
 		mCanLine0Irq = MCAN0_IRQn;
 	} else if (MCAN1 ==  mcan) {
 		PIO_Configure(pinsMcan1, PIO_LISTSIZE(pinsMcan1));
 		// Enable MCAN peripheral clock
 		PMC_EnablePeripheral(ID_MCAN1);
 		// Configure Message RAM Base Address
-		regVal32 = MATRIX->CCFG_SYSIO & 0x0000FFFF;
+		regVal32 = MATRIX->CCFG_SYSIO & 0x0000FFFFu;
 		MATRIX->CCFG_SYSIO = regVal32 | ((uint32_t) mcanConfig->msgRam.pStdFilts &
-										  0xFFFF0000);
+										  0xFFFF0000u);
 		mCanLine0Irq = MCAN1_IRQn;
 	} else
 		return;
@@ -597,7 +597,7 @@ void MCAN_Init(const MCan_ConfigType *mcanConfig)
 					 | MCAN_GFC_ANFE(2) | MCAN_GFC_ANFS(2);
 
 	// Extended ID Filter AND mask
-	mcan->MCAN_XIDAM = 0x1FFFFFFF;
+	mcan->MCAN_XIDAM = 0x1FFFFFFFu;
 
 	/* Interrupt configuration - leave initialization with all interrupts off */
 	// Disable all interrupts
@@ -608,13 +608,13 @@ void MCAN_Init(const MCan_ConfigType *mcanConfig)
 	// Disable both interrupt LINE 0 & LINE 1
 	mcan->MCAN_ILE = 0x00;
 	// Clear all interrupt flags
-	mcan->MCAN_IR = 0xFFCFFFFF;
+	mcan->MCAN_IR = 0xFFCFFFFFu;
 	/* Enable NVIC - but no interrupts will happen since all sources are
 	    disabled in MCAN_IE */
 	NVIC_ClearPendingIRQ(mCanLine0Irq);
 	NVIC_EnableIRQ(mCanLine0Irq);
-	NVIC_ClearPendingIRQ((IRQn_Type) (mCanLine0Irq + 1));
-	NVIC_EnableIRQ((IRQn_Type) (mCanLine0Irq + 1));
+	NVIC_ClearPendingIRQ((IRQn_Type) (mCanLine0Irq + 1u));
+	NVIC_EnableIRQ((IRQn_Type) (mCanLine0Irq + 1u));
 
 	/* Configure CAN bit timing */
 	mcan->MCAN_NBTP = mcanConfig->bitTiming;
@@ -638,13 +638,13 @@ void MCAN_Init(const MCan_ConfigType *mcanConfig)
 	mcan->MCAN_TXBC = MAILBOX_ADDRESS((uint32_t) mcanConfig->msgRam.pTxDedBuf)
 					  | MCAN_TXBC_NDTB(mcanConfig->nmbrTxDedBufElmts)
 					  | MCAN_TXBC_TFQS(mcanConfig->nmbrTxFifoQElmts);
-	mcan->MCAN_RXESC = ((mcanConfig->rxBufElmtSize >> (29 - MCAN_RXESC_RBDS_Pos)) &
+	mcan->MCAN_RXESC = ((mcanConfig->rxBufElmtSize >> (29u - MCAN_RXESC_RBDS_Pos)) &
 						MCAN_RXESC_RBDS_Msk) |
-					   ((mcanConfig->rxFifo1ElmtSize >> (29 - MCAN_RXESC_F1DS_Pos)) &
+					   ((mcanConfig->rxFifo1ElmtSize >> (29u - MCAN_RXESC_F1DS_Pos)) &
 						MCAN_RXESC_F1DS_Msk) |
-					   ((mcanConfig->rxFifo0ElmtSize >> (29 - MCAN_RXESC_F0DS_Pos)) &
+					   ((mcanConfig->rxFifo0ElmtSize >> (29u - MCAN_RXESC_F0DS_Pos)) &
 						MCAN_RXESC_F0DS_Msk);
-	mcan->MCAN_TXESC = ((mcanConfig->txBufElmtSize >> (29 - MCAN_TXESC_TBDS_Pos)) &
+	mcan->MCAN_TXESC = ((mcanConfig->txBufElmtSize >> (29u - MCAN_TXESC_TBDS_Pos)) &
 						MCAN_TXESC_TBDS_Msk);
 
 	/* Configure Message Filters */
@@ -663,12 +663,12 @@ void MCAN_Init(const MCan_ConfigType *mcanConfig)
 
 	while (cntr > 0) {
 		*pMsgRam = EXT_FILT_EFEC_DISABLE;
-		pMsgRam = pMsgRam + 2;
+		pMsgRam = pMsgRam + 2u;
 		cntr--;
 	}
 
-	mcan->MCAN_NDAT1 = 0xFFFFFFFF;  // clear new (rx) data flags
-	mcan->MCAN_NDAT2 = 0xFFFFFFFF;  // clear new (rx) data flags
+	mcan->MCAN_NDAT1 = 0xFFFFFFFFu;  // clear new (rx) data flags
+	mcan->MCAN_NDAT2 = 0xFFFFFFFFu;  // clear new (rx) data flags
 
 	/**
 	 * FD operation disabled
@@ -724,7 +724,7 @@ void MCAN_InitLoopback(const MCan_ConfigType *mcanConfig)
 	Mcan *mcan = mcanConfig->pMCan;
 
 	mcan->MCAN_CCCR |= MCAN_CCCR_TEST_ENABLED;
-	mcan->MCAN_CCCR |= MCAN_CCCR_MON_ENABLED;  // for internal loop back
+	// mcan->MCAN_CCCR |= MCAN_CCCR_MON_ENABLED;  // for internal loop back
 	mcan->MCAN_TEST |= MCAN_TEST_LBCK_ENABLED;
 }
 
@@ -859,11 +859,11 @@ uint8_t   *MCAN_ConfigTxDedBuffer(const MCan_ConfigType *mcanConfig,
 					 (mcanConfig->txBufElmtSize & ELMT_SIZE_MASK));
 
 		if (idType == CAN_STD_ID)
-			*pThisTxBuf++ = ((id << 18) & (CAN_11_BIT_ID_MASK << 18));
+			*pThisTxBuf++ = ((id << 18u) & (CAN_11_BIT_ID_MASK << 18u));
 		else
 			*pThisTxBuf++ = BUFFER_XTD_MASK | (id & CAN_29_BIT_ID_MASK);
 
-		*pThisTxBuf++ = (uint32_t) dlc << 16;
+		*pThisTxBuf++ = (uint32_t) dlc << 16u;
 		/* enable transmit from buffer to set TC interrupt bit in IR, but
 		interrupt will not happen unless TC interrupt is enabled*/
 		mcan->MCAN_TXBTIE = (1 << buffer);
@@ -887,9 +887,9 @@ void MCAN_SendTxDedBuffer(const MCan_ConfigType *mcanConfig, uint8_t buffer, uin
           {
 		pThisTxBuf = mcanConfig->msgRam.pTxDedBuf + (buffer *
 					 (mcanConfig->txBufElmtSize & ELMT_SIZE_MASK));
-                pThisTxBuf[1] |= (1 << 20) | (1 << 21);
+                pThisTxBuf[1] |= (1u << 20u) | (1u << 21u);
           }
-          mcan->MCAN_TXBAR = (1 << buffer);
+          mcan->MCAN_TXBAR = (1u << buffer);
         }
 }
 
@@ -905,7 +905,7 @@ uint32_t MCAN_AddToTxFifoQ(const MCan_ConfigType *mcanConfig,
 							uint32_t id, MCan_IdType idType, MCan_DlcType dlc, uint8_t *data, uint8_t mode)
 {
 	Mcan *mcan = mcanConfig->pMCan;
-	uint32_t   putIdx = 255;
+	uint32_t   putIdx = 255u;
 	uint32_t *pThisTxBuf = 0;
 	uint8_t   *pTxData;
 	uint8_t    msgLength;
@@ -985,14 +985,14 @@ void MCAN_ConfigRxBufferFilter(const MCan_ConfigType *mcanConfig,
 				&& (id <= CAN_11_BIT_ID_MASK)) {
 				pThisRxFilt = mcanConfig->msgRam.pStdFilts + filter;
 				// 1 word per filter
-				*pThisRxFilt = STD_FILT_SFEC_BUFFER | (id << 16) |
+				*pThisRxFilt = STD_FILT_SFEC_BUFFER | (id << 16u) |
 							   STD_FILT_SFID2_RX_BUFFER | buffer;
 			}
 		} else {
 			// extended ID
 			if ((filter < mcanConfig->nmbrExtFilts) &&
 				(id <= CAN_29_BIT_ID_MASK)) {
-				pThisRxFilt = mcanConfig->msgRam.pExtFilts + (2 * filter);
+				pThisRxFilt = mcanConfig->msgRam.pExtFilts + (2u * filter);
 				// 2 words per filter
 				*pThisRxFilt++ = (uint32_t) EXT_FILT_EFEC_BUFFER | id;
 				*pThisRxFilt = EXT_FILT_EFID2_RX_BUFFER | buffer;
@@ -1024,7 +1024,7 @@ void MCAN_ConfigRxClassicFilter(const MCan_ConfigType *mcanConfig,
 			&& (mask <= CAN_11_BIT_ID_MASK)) {
 			pThisRxFilt = mcanConfig->msgRam.pStdFilts + filter;
 			// 1 word per filter
-			filterTemp = (uint32_t) STD_FILT_SFT_CLASSIC | (id << 16) | mask;
+			filterTemp = (uint32_t) STD_FILT_SFT_CLASSIC | (id << 16u) | mask;
 
 			if (fifo == CAN_FIFO_0)
 				*pThisRxFilt = STD_FILT_SFEC_FIFO0 | filterTemp;
@@ -1036,7 +1036,7 @@ void MCAN_ConfigRxClassicFilter(const MCan_ConfigType *mcanConfig,
 		if ((filter < mcanConfig->nmbrExtFilts)
 			&& (id <= CAN_29_BIT_ID_MASK)
 			&& (mask <= CAN_29_BIT_ID_MASK)) {
-			pThisRxFilt = mcanConfig->msgRam.pExtFilts + (2 * filter);
+			pThisRxFilt = mcanConfig->msgRam.pExtFilts + (2u * filter);
 
 			// 2 words per filter
 			if (fifo == CAN_FIFO_0)
@@ -1059,10 +1059,10 @@ uint8_t MCAN_IsNewDataInRxDedBuffer(const MCan_ConfigType *mcanConfig,
 {
 	Mcan *mcan = mcanConfig->pMCan;
 
-	if (buffer < 32)
-		return (mcan->MCAN_NDAT1 & (1 << buffer));
-	else if (buffer < 64)
-		return (mcan->MCAN_NDAT1 & (1 << (buffer - 32)));
+	if (buffer < 32u)
+		return (mcan->MCAN_NDAT1 & (1u << buffer));
+	else if (buffer < 64u)
+		return (mcan->MCAN_NDAT1 & (1u << (buffer - 32u)));
 	else
 		return 0;
 }
@@ -1093,11 +1093,11 @@ void MCAN_GetRxDedBuffer(const MCan_ConfigType *mcanConfig,
 			pRxMailbox->info.id = tempRy & BUFFER_EXT_ID_MASK;
 		} else {
 			// standard ID
-			pRxMailbox->info.id = (tempRy & BUFFER_STD_ID_MASK) >> 18;
+			pRxMailbox->info.id = (tempRy & BUFFER_STD_ID_MASK) >> 18u;
 		}
 
 		tempRy = *pThisRxBuf++;  // word R1 contains DLC & time stamp
-		dlc = (tempRy & BUFFER_DLC_MASK) >> 16;
+		dlc = (tempRy & BUFFER_DLC_MASK) >> 16u;
 		pRxMailbox->info.length = dlcToMsgLength[dlc];
 		pRxMailbox->info.timestamp = tempRy & BUFFER_RXTS_MASK;
 		// copy the data from the buffer to the mailbox
@@ -1108,10 +1108,10 @@ void MCAN_GetRxDedBuffer(const MCan_ConfigType *mcanConfig,
 
 		/* clear the new data flag for the buffer */
 
-		if (buffer < 32)
-			mcan->MCAN_NDAT1 = (1 << buffer);
+		if (buffer < 32u)
+			mcan->MCAN_NDAT1 = (1u << buffer);
 		else
-			mcan->MCAN_NDAT1 = (1 << (buffer - 32));
+			mcan->MCAN_NDAT1 = (1u << (buffer - 32u));
 
 	}
 }
@@ -1166,11 +1166,11 @@ uint32_t MCAN_GetRxFifoBuffer(const MCan_ConfigType *mcanConfig,
 			pRxMailbox->info.id = tempRy & BUFFER_EXT_ID_MASK;
 		} else {
 			// standard ID
-			pRxMailbox->info.id = (tempRy & BUFFER_STD_ID_MASK) >> 18;
+			pRxMailbox->info.id = (tempRy & BUFFER_STD_ID_MASK) >> 18u;
 		}
 
 		tempRy = *pThisRxBuf++;  // word R1 contains DLC & timestamps
-		dlc = (tempRy & BUFFER_DLC_MASK) >> 16;
+		dlc = (tempRy & BUFFER_DLC_MASK) >> 16u;
 		pRxMailbox->info.length = dlcToMsgLength[dlc];
 		pRxMailbox->info.timestamp = tempRy & BUFFER_RXTS_MASK;
 		/* copy the data from the buffer to the mailbox */
@@ -1199,7 +1199,7 @@ void MCAN_ConfigRxFifoFilter(const MCan_ConfigType *mcanConfig,
     if ((filter < mcanConfig->nmbrStdFilts) && (id <= CAN_11_BIT_ID_MASK) && (mask <= CAN_11_BIT_ID_MASK)) {
       
       pThisRxFilt = mcanConfig->msgRam.pStdFilts + filter;
-      filterTemp = (uint32_t) STD_FILT_SFT_RANGE | (id << 16) | mask;
+      filterTemp = (uint32_t) STD_FILT_SFT_RANGE | (id << 16u) | mask;
 
       if (fifo == CAN_FIFO_0)
         *pThisRxFilt = STD_FILT_SFEC_FIFO0 | filterTemp;
@@ -1210,7 +1210,7 @@ void MCAN_ConfigRxFifoFilter(const MCan_ConfigType *mcanConfig,
   
     if ((filter < mcanConfig->nmbrExtFilts) && (id <= CAN_29_BIT_ID_MASK) && (mask <= CAN_29_BIT_ID_MASK)) {
       
-      pThisRxFilt = mcanConfig->msgRam.pExtFilts + (2 * filter);
+      pThisRxFilt = mcanConfig->msgRam.pExtFilts + (2u * filter);
 
       // 2 words per filter
       if (fifo == CAN_FIFO_0)
