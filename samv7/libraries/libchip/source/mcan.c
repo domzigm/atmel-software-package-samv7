@@ -889,6 +889,7 @@ void MCAN_SendTxDedBuffer(const MCan_ConfigType *mcanConfig, uint8_t buffer, uin
 					 (mcanConfig->txBufElmtSize & ELMT_SIZE_MASK));
                 pThisTxBuf[1] |= (1u << 20u) | (1u << 21u);
           }
+          memory_barrier();
           mcan->MCAN_TXBAR = (1u << buffer);
         }
 }
@@ -948,6 +949,7 @@ uint32_t MCAN_AddToTxFifoQ(const MCan_ConfigType *mcanConfig,
 		interrupt will not happen unless TC interrupt is enabled */
 		mcan->MCAN_TXBTIE = (1 << putIdx);
 		// request to send
+    memory_barrier();
 		mcan->MCAN_TXBAR = (1 << putIdx);
 	}
 
